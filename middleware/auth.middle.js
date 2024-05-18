@@ -1,0 +1,29 @@
+const { verifyToken } = require("../utils/generateToken")
+
+async function checkAuth(req, res, next) {
+    try {
+        console.log("req.headers", req.headers)
+        if (!req.headers.authorization) {
+            return sendError(res, 400, 'Authorization header not provided.')
+        }
+        
+        const token = req.headers.authorization.split(' ').pop()
+        const tokenData = await verifyToken(token)
+        
+        if (!tokenData._id) {
+            return sendError(res, 409, 'Invalid Token Bearer: The provided token is invalid or has expired.')
+        }
+        
+        req.tokenId = tokenData._id;
+        next()
+    } catch (e) {
+        console.error(e)
+        return sendError(res, 401, 'Invalid Token Bearer: The provided token is invalid or has expired.')
+    }
+}
+
+function sendError(res, statusCode, message) {
+    res.status(statusCode).send({ error: message })
+}
+
+module.exports = checkAuth
