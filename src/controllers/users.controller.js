@@ -1,12 +1,13 @@
 const { httpError } = require('../helpers/handleError')
 const userModel = require('../models/user.models')
+const userService = require('../services/userService');
 
 async function getUsers (req, res) {
     try {
-        const listAll = await userModel.find({})
-        res.send({ data: listAll })
-    } catch (e) {
-        httpError(res, e)
+        const users = await userService.findAllUsers();
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(500).json({ error: 'Error al buscar todos los usuarios' });
     }
 }
 

@@ -6,13 +6,14 @@ async function tokenSign(user, timeSession) {
             _id: user._id,
             role: user.role
         },
-        process.env.JWT_SECRET, { expiresIn: timeSession, }
+        'docpresta-cabrera', 
+        { expiresIn: timeSession, }
     );
 }
 
 async function verifyToken(token) {
     try {
-        return jwt.verify(token, process.env.JWT_SECRET)
+        return jwt.verify(token, 'docpresta-cabrera')
     } catch (e) {
         return null
     }

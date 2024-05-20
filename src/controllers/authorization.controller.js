@@ -1,7 +1,7 @@
 const { tokenSign } = require("../utils/generateToken")
 const { compare, encrypt } = require("../utils/handleBcrypt")
 
-const userModel = require('../models/user.models')
+const { User } = require('../models/index.models')
 const { httpError } = require("../helpers/handleError")
 
 const privilegedRoles = ["admin"];
@@ -9,7 +9,8 @@ const privilegedRoles = ["admin"];
 async function loginCtrl(req, res) {
     try {
         const { email, password } = req.body;
-        const user = await userModel.findOne({ email });
+        const user = await User.findOne({ where: { email } });
+        
         if (!user) {
             res.status(404);
             return res.send({ error: 'User not found' });
@@ -51,7 +52,7 @@ async function registerCtrl(req, res) {
         } = req.body
 
         const passwordHash = await encrypt(password)
-        const registerUser = await userModel.create({
+        const registerUser = await User.create({
             firstName,          
             lastName,          
             email,          
@@ -79,7 +80,7 @@ async function checkToken(req, res) {
 
     const userId = req.tokenId;
 
-    const user = await userModel.findById(userId);
+    const user = await User.findById(userId);
     if (!user) {
         res.status(404);
         return res.send({ error: 'User not found' });
