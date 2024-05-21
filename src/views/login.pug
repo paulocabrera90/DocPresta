@@ -1,0 +1,26 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/stylesheets/login.css')
+  body
+    .wrapper.fadeInDown
+      #formContent
+        // Icon
+        .fadeIn.first
+          img#icon(src="http://danielzawadzki.com/codepen/01/icon.svg", alt="Doc Presta")
+        // Login Form
+        form(id="loginForm")
+          input(type="text", id="login", class="fadeIn second", name="login", placeholder="Email")
+          input(type="password", id="password", class="fadeIn third", name="login", placeholder="Contraseña")
+          input(type="submit", class="fadeIn fourth", value="Iniciar sesion")
+        // Remind Password
+        #formFooter
+          a.underlineHover(href="#") Registrarme 
+
+  script(src='/javascripts/login.js')
+  script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js')
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js')
+  script(src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js")
+  script(src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js")

@@ -1,6 +1,6 @@
 const { tokenSign } = require("../utils/generateToken")
-const { compare, encrypt } = require("../utils/handleBcrypt")
-
+const { encrypt } = require("../utils/handleBcrypt")
+const authService = require('../services/authorization.service');
 const { User } = require('../models/index.models')
 const { httpError } = require("../helpers/handleError")
 
@@ -9,33 +9,11 @@ const privilegedRoles = ["admin"];
 async function loginCtrl(req, res) {
     try {
         const { email, password } = req.body;
-        const user = await User.findOne({ where: { email } });
+        const userData = await authService.login(email, password);
         
-        if (!user) {
-            res.status(404);
-            return res.send({ error: 'User not found' });
-        }
-
-        const checkPassword = await compare(password, user.password);
-
-        const timeSession = privilegedRoles.includes(user.role) ? "8h" : "2h";
-        const tokenSession = await tokenSign(user, timeSession);
-        if (checkPassword) {
-            return res.send({
-                data: { id: user.id, fullName: fullName(user), email: user.email, role: user.role },
-                tokenSession
-            });
-        }
-
-        if (!checkPassword) {
-            res.status(409)
-            return res.send({
-                error: 'Invalid password'
-            });
-        }
-        
+        res.render('home', {userData} );
     } catch (error) {        
-        httpError(res, error);
+            httpError(res, error);        
     }
 }
 
