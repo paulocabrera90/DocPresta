@@ -4,21 +4,20 @@ async function checkAuth(req, res, next) {
     try {
         console.log("req.headers", req.headers)
         if (!req.headers.authorization) {
-            return sendError(res, 400, 'Authorization header not provided.')
+            res.render('error', {statusCode: 400, message: 'Authorization header not provided.'});
         }
         
         const token = req.headers.authorization.split(' ').pop()
         const tokenData = await verifyToken(token)
         
         if (!tokenData._id) {
-            return sendError(res, 409, 'Invalid Token Bearer: The provided token is invalid or has expired.')
+            res.render('error', {statusCode: 409, message: 'Invalid Token Bearer: The provided token is invalid or has expired.'})//  sendError(res, 409, 'Invalid Token Bearer: The provided token is invalid or has expired.')
         }
-        
         req.tokenId = tokenData._id;
         next()
     } catch (e) {
         console.error(e)
-        return sendError(res, 401, 'Invalid Token Bearer: The provided token is invalid or has expired.')
+        res.render('error', {statusCode: 401, message: 'Invalid Token Bearer: The provided token is invalid or has expired.'})// sendError(res, 401, 'Invalid Token Bearer: The provided token is invalid or has expired.')
     }
 }
 

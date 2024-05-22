@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
       };
       const url = "http://localhost:4200/api/authorization/login";
 
+      window.location.href = "http://localhost:4200/api/home";
       fetch(url, {
         method: "POST",
         headers: {
@@ -21,15 +22,15 @@ document.addEventListener("DOMContentLoaded", function() {
           throw new Error("Error en la solicitud");
         }
         console.log("Login successful");
-        window.location.href = "/api/home";
-
+        localStorage.setItem("token", data.tokenSession);
+        //window.location.href = "http://localhost:4200/api/home";
         return response.json();
-        // Aquí puedes redirigir a otra página o realizar otras acciones después del inicio de sesión exitoso
       })
       .catch(error => {
         console.error("Error al iniciar sesión:", error.message);
         // Aquí puedes manejar el error, por ejemplo, mostrar un mensaje de error al usuario
       });
     });
+    
   });
   

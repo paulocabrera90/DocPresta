@@ -1,6 +1,22 @@
-extends home
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Error
+    link(rel="stylesheet", href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css")
+    link(rel='stylesheet', href='/stylesheets/error.css')      
 
-block content
-  h1= message
-  h2= error.status
-  pre #{error.stack}
+  body
+    .container.error-container
+      .row
+        .col-md-6.mx-auto.text-center
+          if statusCode && message
+            .error-message
+              strong Error #{statusCode}:
+              span= message
+          else
+            .error-message
+              strong Error:
+              span Something went wrong.
+          a.btn.btn-primary(href="/") Ir al login!

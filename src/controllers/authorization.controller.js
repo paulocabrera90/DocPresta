@@ -10,8 +10,11 @@ async function loginCtrl(req, res) {
     try {
         const { email, password } = req.body;
         const userData = await authService.login(email, password);
+        console.log("userData", userData)
+
+        res.header('Authorization', `Bearer ${userData.tokenSession}`);
+        res.render('home', { data: userData });
         
-        res.render('home', {userData} );
     } catch (error) {        
             httpError(res, error);        
     }
