@@ -12,12 +12,12 @@ async function checkAuth(req, res, next) {
         console.log("token checkAuth", token)
         const tokenData = await verifyToken(token)
         
-        if (!tokenData._id) {
+        if (!tokenData.id) {
             //res.status(500).render("./register", {err: "Please fill all the form elements"});    
             res.render('error', {statusCode: 409, message: 'Invalid Token Bearer: The provided token is invalid or has expired.'})//  sendError(res, 409, 'Invalid Token Bearer: The provided token is invalid or has expired.')
         }
         
-        req.tokenId = tokenData._id;
+        req.tokenId = tokenData.id;
         console.log("FIN checkAuth")
         next();
     } catch (e) {

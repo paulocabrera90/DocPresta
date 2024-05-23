@@ -1,0 +1,51 @@
+/* Estilos para el contenedor principal */
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-top: 20px;
+  }
+  
+  /* Estilos para cada tarjeta */
+  .card {
+    width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+  
+  /* Estilos para el encabezado de la tarjeta */
+  .card-header {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+  
+  /* Estilos para el cuerpo de la tarjeta */
+  .card-body {
+    padding: 15px;
+  }
+  
+  /* Estilos para los elementos de texto */
+  p {
+    margin: 5px 0;
+  }
+  
+  /* Estilos para la lista de medicamentos */
+  ul {
+    padding-left: 20px;
+  }
+  
+  /* Estilos para los elementos de la lista */
+  li {
+    margin-bottom: 5px;
+  }
+  
+  container-presta-list {
+    width: 85%;
+    margin-right: 10px;
+}
+  
