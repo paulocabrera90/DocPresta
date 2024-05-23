@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 async function tokenSign(user, timeSession) {
     return jwt.sign(
         {
-            _id: user._id,
+            id: user.id,
             role: user.role
         },
         'docpresta-cabrera', 

@@ -1,5 +1,6 @@
-async function goHome (req, res){  
-    res.render('home');
+
+async function goHome (req, res){ 
+    res.render('home');    
 }
 
 module.exports= { 
