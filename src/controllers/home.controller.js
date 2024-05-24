@@ -46,7 +46,7 @@ async function goHome (req, res){
         // Otras prestaciones médicas...
       ];
       
-    res.render('presta-list', {prestacionesMedicas});    
+    res.render('medical-record-list', {prestacionesMedicas});    
 }
 
 module.exports= { 

@@ -30,3 +30,24 @@ body {
     margin-left: 250px;
     padding: 20px;
 }
+
+
+.submenu {
+    padding-left: 16px;
+    display: none;
+}
+
+.submenu a {
+    padding: 8px 8px 8px 32px;
+    color: #818181;
+}
+
+.submenu:hover {
+    display: block;
+}
+
+
+.submenu a:hover {
+    color: #f1f1f1;
+    display: block;
+}

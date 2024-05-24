@@ -8,7 +8,7 @@
   
   /* Estilos para cada tarjeta */
   .card {
-    width: 300px;
+    width: 100%;
     border: 1px solid #ccc;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -48,4 +48,51 @@
     width: 85%;
     margin-right: 10px;
 }
-  
+
+
+/*Formulario medicalRecordNew*/
+
+.medical-record-new {
+  font-family: Arial, sans-serif;
+  width: 82%;
+  margin-right:3%;
+  padding: 20px;
+  background-color: #3498db;
+  color: #fff;
+  border-radius: 5px;
+}
+
+.medical-record-new h2 {
+  color: #f7fafc;
+  margin-top: 20px;
+}
+
+.medical-record-new label {
+  display: block;
+  margin-top: 10px;
+}
+
+.medical-record-new input[type="text"],
+.medical-record-new input[type="date"],
+.medical-record-new textarea,
+.medical-record-new select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  border: 1px solid #2980b9;
+  border-radius: 4px;
+}
+
+.medical-record-new input[type="submit"] {
+  background-color: #2980b9;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.medical-record-new input[type="submit"]:hover {
+  background-color: #21618c;
+}

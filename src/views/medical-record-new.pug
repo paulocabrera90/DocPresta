@@ -1,0 +1,68 @@
+extends home
+
+block content
+  .medical-record-new
+    form(action="/guardar", method="post" id="form-medical-record-new")
+      // Datos del profesional
+      h2 Datos del Profesional
+      .container-profesional
+        label(for="profesional_nombre") Nombre:
+        input(type="text", name="profesional_nombre", id="profesional_nombre", required)
+        label(for="profesional_apellido") Apellido:
+        input(type="text", name="profesional_apellido", id="profesional_apellido", required)
+        label(for="profesional_documento") Documento:
+        input(type="text", name="profesional_documento", id="profesional_documento", required)
+        label(for="profesional_profesion") Profesión:
+        input(type="text", name="profesional_profesion", id="profesional_profesion", required)
+        label(for="profesional_especialidad") Especialidad:
+        input(type="text", name="profesional_especialidad", id="profesional_especialidad", required)
+        label(for="profesional_domicilio") Domicilio:
+        input(type="text", name="profesional_domicilio", id="profesional_domicilio", required)
+        label(for="profesional_matricula") Matrícula:
+        input(type="text", name="profesional_matricula", id="profesional_matricula", required)
+
+      // Datos del paciente
+      h2 Datos del Paciente
+      .container-paciente
+        label(for="paciente_nombre") Nombre:
+        input(type="text", name="paciente_nombre", id="paciente_nombre", required)
+        label(for="paciente_apellido") Apellido:
+        input(type="text", name="paciente_apellido", id="paciente_apellido", required)
+        label(for="paciente_documento") Documento:
+        input(type="text", name="paciente_documento", id="paciente_documento", required)
+        label(for="paciente_fecha_nacimiento") Fecha de Nacimiento:
+        input(type="date", name="paciente_fecha_nacimiento", id="paciente_fecha_nacimiento", required)
+        label(for="paciente_sexo") Sexo:
+        select(name="paciente_sexo", id="paciente_sexo", required)
+            option(value="masculino") Masculino
+            option(value="femenino") Femenino
+            option(value="otro") Otro
+        label(for="paciente_obra_social") Obra Social:
+        input(type="text", name="paciente_obra_social", id="paciente_obra_social", required)
+        label(for="paciente_plan") Plan:
+        input(type="text", name="paciente_plan", id="paciente_plan", required)
+
+      // Detalles de la prescripción
+      h2 Detalles de la Prescripción
+      .container-prescripcion
+        label(for="diagnostico") Diagnóstico:
+        textarea(name="diagnostico", id="diagnostico", rows="4", required)
+        label(for="fecha_prescripcion") Fecha de la Prescripción:
+        input(type="date", name="fecha_prescripcion", id="fecha_prescripcion", required)
+        label(for="vigencia") Vigencia:
+        input(type="text", name="vigencia", id="vigencia")
+
+      // Medicamentos
+      h2 Medicamentos
+      .container-medicamentos
+        label(for="medicamentos") Medicamentos:
+        textarea(name="medicamentos", id="medicamentos", rows="4", required)
+
+      // Prestaciones
+      h2 Prestaciones
+      .container-prestaciones
+        label(for="prestaciones") Prestaciones:
+        textarea(name="prestaciones", id="prestaciones", rows="4", required)
+
+      // Botón de enviar
+      button(type="submit") Guardar
