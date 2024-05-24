@@ -96,3 +96,19 @@
 .medical-record-new input[type="submit"]:hover {
   background-color: #21618c;
 }
+
+.container-profesional,
+.container-paciente {
+  display: flex;
+  justify-content: space-between;
+  
+}
+
+.column {
+  width: 48%;
+}
+
+.search-dni {
+  display: flex;
+  align-items: baseline;
+}
