@@ -1,6 +1,7 @@
 const globalConstants = require('./const/globalConst')
 const join = globalConstants.JOIN;
 const dirname = globalConstants.DIRNAME;
+const sequelizeSync = require("./models/index.models")
 
 var createError = require('http-errors');
 var express = require('express');
@@ -14,7 +15,7 @@ const configurationApi = (app) => {
   // view engine setup
   app.set('views', join(dirname, 'views'));
   app.set('view engine', 'pug');
-
+  
   app.use(logger('dev'));
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
