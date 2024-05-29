@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             unique: true,
           },
-          as: 'Profesiones',
+          as: 'Profesion',
         });
     
         models.Profesion.hasOne(Speciality, {

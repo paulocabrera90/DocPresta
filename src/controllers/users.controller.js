@@ -1,6 +1,6 @@
 const { httpError } = require('../helpers/handleError')
 const userModel = require('../models/user.models')
-const userService = require('../services/userService');
+const userService = require('../services/user.service');
 
 async function getUsers (req, res) {
     try {

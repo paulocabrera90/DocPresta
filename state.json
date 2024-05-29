@@ -1,0 +1,26 @@
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE2OTYzNTA1LCJleHAiOjE3MTY5NzA3MDV9.IvnI-w1ahLC-1Jp9GbuqJbeKCZ06_2pLMpzpxFPQv7k",
+    "user": {
+        "id": 1,
+        "username": "pauloc",
+        "hashPassword": "$2a$10$Ap9SF4uShR.YiHsVqHVIHOx1AaPXxGiAHeyJ1R4.hFEptoOBcLSVu",
+        "rol": "ADMIN",
+        "email": "pauloc@gmail.com",
+        "state": true,
+        "creationDate": "2024-05-29T00:31:08.000Z",
+        "modificationDate": "2024-05-29T00:31:08.000Z",
+        "personId": 1,
+        "Person": {
+            "id": 1,
+            "firstName": "Paulo",
+            "lastName": "Cabreraa",
+            "birthDate": "1990-01-31T00:23:30.000Z",
+            "numberDocument": "35104957",
+            "typeDocument": "DNI",
+            "sex": "Masculino",
+            "state": true,
+            "creationDate": "2024-05-29T00:23:30.000Z",
+            "ModificationDate": "2024-05-29T00:23:30.000Z"
+        }
+    }
+}

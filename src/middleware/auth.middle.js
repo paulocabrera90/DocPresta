@@ -1,15 +1,14 @@
+const storage = require("../storage/session");
 const { verifyToken } = require("../utils/generateToken");
 
 async function checkAuth(req, res, next) {
     try {
-        console.log("req.headers checkAuth", req.query.token)
-        if (!req.query.token) {
+        if (!storage.state.token) {
             res.render('error', {statusCode: 400, message: 'Authorization header not provided.'});
         }
         
         //const token = req.headers.authorization.split(' ').pop();
-        const token = req.query.token;
-        console.log("token checkAuth", token)
+        const token = storage.state.token;
         const tokenData = await verifyToken(token)
         
         if (!tokenData.id) {
@@ -18,7 +17,6 @@ async function checkAuth(req, res, next) {
         }
         
         req.tokenId = tokenData.id;
-        console.log("FIN checkAuth")
         next();
     } catch (e) {
         console.error(e)

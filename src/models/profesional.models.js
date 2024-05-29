@@ -27,7 +27,7 @@ const {
           allowNull: false,
           unique: true,
         },
-        as: 'Specialities',
+        as: 'Speciality',
       });
     
       models.Speciality.hasOne(Profesional, {

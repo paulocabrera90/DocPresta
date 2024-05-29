@@ -22,6 +22,10 @@ const {
     }
 
     PlanOS.init({
+        name: {
+          type: DataTypes.STRING,
+          defaultValue: true,
+      },
         state: {
             type: DataTypes.BOOLEAN,
             defaultValue: true,

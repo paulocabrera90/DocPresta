@@ -9,4 +9,4 @@ async function findAllUsers() {
     }
   }
 
-module.exports = { findUserById, findAllUsers};
+module.exports = { findAllUsers};

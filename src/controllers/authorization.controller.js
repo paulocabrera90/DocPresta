@@ -24,22 +24,23 @@ async function registerCtrl(req, res) {
     try {
         
         const {   
-            firstName,          
-            lastName,          
+            username,
             email,          
             password,          
             profilePic,          
-            role  
+            rol 
         } = req.body
 
         const passwordHash = await encrypt(password)
         const registerUser = await User.create({
-            firstName,          
-            lastName,          
+            username,
             email,          
-            password: passwordHash,          
-            profilePic,          
-            role 
+            hashPassword: passwordHash,          
+            profilePic,
+            state: true,
+            crationDate: Date.now(),
+            modificationDate: Date.now(),
+            rol
         })
 
         const responseData = {

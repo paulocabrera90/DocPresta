@@ -13,12 +13,12 @@ module.exports = (sequelize, DataTypes) => {
           allowNull: false,
           unique: true,
         },
-        as: 'Users',
+        as: 'User',
       });
     
       models.User.hasOne(Patient, {
         foreignKey: 'userId',
-        as: 'Patients',
+        as: 'Patient',
       });
     
       Patient.belongsTo(models.PlanOS, {
@@ -27,12 +27,12 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             unique: true,
           },
-          as: 'PlanesOS',
+          as: 'PlaneOS',
         });
         
         models.PlanOS.hasOne(Patient, {
           foreignKey: 'planOSId',
-          as: 'Patients',
+          as: 'Patient',
         });
     }
   }

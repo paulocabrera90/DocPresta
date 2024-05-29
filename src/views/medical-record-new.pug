@@ -7,25 +7,22 @@ block content
       h2 Datos del Profesional
       .container-profesional
         .column
-            label(for="profesional_documento") Documento:
-            .search-dni                
-                input(type="text", name="profesional_documento", id="profesional_documento", required)
-                button(type="submit")
-                    i.fa.fa-search  Buscar
+            label(for="profesional_documento") Documento:  
+            input(type="text", name="profesional_documento", id="profesional_documento", required, value= person.numberDocument, disabled=true)
             label(for="profesional_profesion") Profesión:
-            input(type="text", name="profesional_profesion", id="profesional_profesion", required)
+            input(type="text", name="profesional_profesion", id="profesional_profesion", required, value=profesion.code+"-"+profesion.description, disabled=true)
             label(for="profesional_nombre") Nombre:
-            input(type="text", name="profesional_nombre", id="profesional_nombre", required)
+            input(type="text", name="profesional_nombre", id="profesional_nombre", required, value= person.firstName, disabled=true)
             label(for="profesional_apellido") Apellido:
-            input(type="text", name="profesional_apellido", id="profesional_apellido", required)
+            input(type="text", name="profesional_apellido", id="profesional_apellido", required, value= person.lastName, disabled=true)
             
         .column            
             label(for="profesional_especialidad") Especialidad:
-            input(type="text", name="profesional_especialidad", id="profesional_especialidad", required)
+            input(type="text", name="profesional_especialidad", id="profesional_especialidad", required, value= profesional.legalAddress, disabled=true)
             label(for="profesional_domicilio") Domicilio:
-            input(type="text", name="profesional_domicilio", id="profesional_domicilio", required)
+            input(type="text", name="profesional_domicilio", id="profesional_domicilio", required, value= profesional.legalAddress, disabled=true)
             label(for="profesional_matricula") Matrícula:
-            input(type="text", name="profesional_matricula", id="profesional_matricula", required)
+            input(type="text", name="profesional_matricula", id="profesional_matricula", required, value= profesional.registrationNumber, disabled=true)
       // Prestaciones
       h2 Prestaciones
       .container-prestaciones

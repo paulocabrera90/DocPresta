@@ -11,7 +11,7 @@ const routes_init = () => {
   router.use('/authorization', authorizationRoutes);
   router.use('/users', usersRoutes);
   router.use('/medical-record', medicalRecordRoutes);
-  router.get('/home', goHome);
+  router.get('/home', checkAuth, goHome);
   
   router.use('/', (req, res) => {
     res.render('login');

@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
       };
       const url = "http://localhost:4200/api/authorization/login";
      
+      window.location.href = `http://localhost:4200/api/home`;
       fetch(url, {
         method: "POST",
         headers: {
@@ -22,8 +23,7 @@ document.addEventListener("DOMContentLoaded", function() {
         } 
         return response.json();
       }).then(data => {
-        localStorage.setItem('tokenSession', data.userData.tokenSession);      
-        redirectToHomePage(data.userData.tokenSession)
+       // redirectToHomePage(data.userData.tokenSession)
     })
       .catch(error => {
         console.error("Error al iniciar sesión:", error.message);
@@ -47,8 +47,8 @@ function redirectToHomePage(tokenSession) {
         }
         // Redirigir al usuario a la página de inicio
         console.log("LLego api/home")
-        const url = `http://localhost:4200/api/home?token=${tokenSession}`;
-        window.location.href = url;
+        const url = `http://localhost:4200/api/home`;
+        window.location.href = `http://localhost:4200/api/home`;
     }).catch(error => {
         console.error("Error al redirigir al usuario:", error.message);
         // Aquí puedes manejar el error, por ejemplo, mostrar un mensaje de error al usuario
