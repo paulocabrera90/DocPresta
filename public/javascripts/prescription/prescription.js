@@ -39,8 +39,14 @@ document.addEventListener("DOMContentLoaded", function() {
   }
   
   function showPopup(data) {
-    $('#patientInfo').text(`Nombre: ${data.firstName} ${data.lastName}\nEmail: ${data.email}\nDNI: ${data.numberDocument}`);
-    $('.overlay, .popup').show();
+   // $('#patientInfo').text(`Nombre: ${data.firstName} ${data.lastName}\nEmail: ${data.email}\nDNI: ${data.numberDocument}`);
+   let patientInfoHtml = `
+        <p>Nombre: ${data.firstName} ${data.lastName}</p>
+        <p>Email: ${data.email}</p>
+        <p>DNI: ${data.numberDocument}</p>
+    `;
+   $('#patientInfo').html(patientInfoHtml); 
+   $('.overlay, .popup').show();
   }
   
   function hidePopup() {

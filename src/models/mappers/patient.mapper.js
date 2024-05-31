@@ -10,7 +10,8 @@ const mapPatientData = (data) => {
         email: data.User.email,
         userId: data.User.id,
         planOSId: data.User.Patient.planOSId,
-        statePatient: data.User.Patient.state
+        planOSName: data.User.Patient.PlanOS.name,
+
     };
 };
 

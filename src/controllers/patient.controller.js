@@ -1,4 +1,4 @@
-const { Patient, User, Person } = require('../models/index.models');
+const { Patient, User, Person, PlanOS } = require('../models/index.models');
 const { mapPatientData } = require('../models/mappers/patient.mapper');
 
 async function getPatientController (req, res) {
@@ -12,7 +12,12 @@ async function getPatientController (req, res) {
                 where: { rol: 'PACIENTE' },
                 include: {
                     model: Patient,
-                    as: 'Patient'
+                    as: 'Patient',
+                    include: {
+                        model: PlanOS,
+                        as: 'PlanOS',
+                        where: { id: 11},
+                    }
                 }
             }
          });
@@ -20,8 +25,9 @@ async function getPatientController (req, res) {
         if (!patient || !patient.User || !patient.User.Patient) {
             return res.status(404).json({ message: 'Patient not found' });
         }
-        const mappedData = mapPatientData(patient.dataValues);
-        console.log("patient", mappedData);
+        const mappedData = mapPatientData(patient);
+        
+        console.log("patient", patient.User.Patient);
         res.status(200).json({ data: mappedData}) ;
         //res.render("medical-record-new",{ patient: mappedData});
     } catch (error) {

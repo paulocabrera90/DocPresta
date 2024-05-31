@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             unique: true,
           },
-          as: 'PlaneOS',
+          as: 'PlanOS',
         });
         
         models.PlanOS.hasOne(Patient, {
