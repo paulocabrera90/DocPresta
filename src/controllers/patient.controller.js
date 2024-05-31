@@ -1,9 +1,9 @@
 const { Patient, User, Person } = require('../models/index.models');
+const { mapPatientData } = require('../models/mappers/patient.mapper');
 
 async function getPatientController (req, res) {
     try {
         const dni = req.params.dni;
-        console.log("DNI", dni)
         const patient = await Person.findOne({ 
             where: { numberDocument: dni },
             include: {
@@ -17,14 +17,15 @@ async function getPatientController (req, res) {
             }
          });
 
-         if (!patient || !patient.User || !patient.User.Patient) {
+        if (!patient || !patient.User || !patient.User.Patient) {
             return res.status(404).json({ message: 'Patient not found' });
         }
-
-        console.log("patient", patient)
-        res.status(200).json(patient);
+        const mappedData = mapPatientData(patient.dataValues);
+        console.log("patient", mappedData);
+        res.status(200).json({ data: mappedData}) ;
+        //res.render("medical-record-new",{ patient: mappedData});
     } catch (error) {
-        res.status(500).json({ error: 'Error al buscar todos los usuarios. ' + error });
+        res.status(500).json({ error: 'Error to get patient: ' + error });
     }
 }
 
