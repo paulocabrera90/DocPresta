@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
           allowNull: false,
           unique: true,
         },
-        as: 'Person', // Nombre del alias para la asociación
+        as: 'Person',
       });
 
       

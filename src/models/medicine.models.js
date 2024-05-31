@@ -3,7 +3,40 @@ const {
   Model
 } = require('sequelize');
         module.exports = (sequelize, DataTypes) => {
-    class Medicine extends Model {} //agregar las relaciones con medicamentos
+    class Medicine extends Model {
+        
+        static associate(models) {
+            Medicine.belongsToMany(
+                models.ConcentratedMedicine, 
+                { through: 'ConcentratedMedicine_Medicine' }
+            );
+
+            Medicine.belongsToMany(
+                models.QuantityMed, 
+                { through: 'QuantityMed_Medicine' }
+            );
+
+            Medicine.belongsToMany(
+                models.PharmaForm, 
+                { through: 'PharmaForm_Medicine' }
+            );
+
+            Medicine.belongsTo(models.ComercialMedicine, {
+                foreignKey: {
+                  name: 'comercialMedicineId',
+                  allowNull: false,
+                  unique: true,
+                },
+                as: 'ComercialMedicine',
+            });
+        
+              
+            models.ComercialMedicine.hasOne(Medicine, {
+                foreignKey: 'comercialMedicineId',
+                as: 'Medicine',
+            });
+        }
+    }
 
     Medicine.init({
         name: {
@@ -13,6 +46,7 @@ const {
         code: {
             type: DataTypes.STRING,
             defaultValue: true,
+            unique: true,
         },
         creationDate: {
             type: DataTypes.DATE,
