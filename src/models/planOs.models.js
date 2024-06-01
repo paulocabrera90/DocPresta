@@ -11,7 +11,7 @@ const {
                 allowNull: false,
                 unique: true,
               },
-              as: 'socialWork', // Nombre del alias para la asociación
+              as: 'SocialWork',
             });      
             
             models.SocialWork.hasOne(PlanOS, {

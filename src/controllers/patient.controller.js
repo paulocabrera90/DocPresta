@@ -1,4 +1,4 @@
-const { Patient, User, Person, PlanOS } = require('../models/index.models');
+const { Patient, User, Person, PlanOS, SocialWork } = require('../models/index.models');
 const { mapPatientData } = require('../models/mappers/patient.mapper');
 
 async function getPatientController (req, res) {
@@ -16,7 +16,10 @@ async function getPatientController (req, res) {
                     include: {
                         model: PlanOS,
                         as: 'PlanOS',
-                        where: { id: 11},
+                        include: {
+                            model: SocialWork,
+                            as: 'SocialWork',
+                        }
                     }
                 }
             }

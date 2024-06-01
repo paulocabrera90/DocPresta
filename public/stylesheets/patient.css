@@ -44,7 +44,7 @@
   
   /* Estilo para el overlay */
   .overlay {
-    display: none; /* Escondido por defecto */
+    display: none;
     position: fixed;
     left: 0;
     top: 0;
@@ -66,7 +66,6 @@
     font-size: 16px;
     color: #000; /* Letras negras */
     margin: 15px 0;
-    white-space: pre-wrap; /* Para mantener los saltos de línea */
   }
   
   /* Estilo para los botones */
@@ -79,12 +78,12 @@
     cursor: pointer;
   }
   
-  #acceptButton {
+  #acceptButtonPopup {
     background-color: #4CAF50; /* Verde */
     color: white;
   }
   
-  #cancelButton {
+  #cancelButtonPopup {
     background-color: #f44336; /* Rojo */
     color: white;
   }
