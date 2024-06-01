@@ -1,11 +1,13 @@
 document.addEventListener("DOMContentLoaded", function() {
     const button = document.getElementById("button-searchDni");
+    const inputField = document.getElementById('prestaciones-dni');
+    
     let patientGlobal = {};
     
     if (button) {
       button.addEventListener("click", function(event) {
         event.preventDefault();
-        const dni = $('#prestaciones-dni').val().trim();
+        const dni = inputField.value.trim();
   
         if (!isValidDNI(dni)) {
           alert('Ingrese un DNI válido de 8 dígitos.');

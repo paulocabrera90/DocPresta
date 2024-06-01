@@ -36,7 +36,7 @@ block content
       .container-paciente
         .column
             label(for="paciente_documento") Documento:
-            .search-dni                            
+            .search-dni                      
                   input(type="text", name="prestaciones-dni", id="prestaciones-dni", required)
                   button(id="button-searchDni" type="submit")
                     i.fa.fa-search  Buscar  
@@ -55,7 +55,7 @@ block content
         .column
             label(for="paciente_sexo") Sexo:
             select(name="paciente_sexo", id="paciente_sexo", required)
-                option(value="")
+                option(value="") Seleccione Sexo
                 option(value="MALE") MASCULINO
                 option(value="FEMALE") FEMENINO
                 option(value="OTHER") OTRO
