@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     const button = document.getElementById("button-searchDni");
-  
+    let patientGlobal = {};
+    
     if (button) {
       button.addEventListener("click", function(event) {
         event.preventDefault();
@@ -11,29 +12,30 @@ document.addEventListener("DOMContentLoaded", function() {
           return;
         }
   
-        $.ajax({
-          url: `http://localhost:4200/api/users/${dni}`,
-          method: 'GET',
-          success: function(response) {
+        fetch(`http://localhost:4200/api/users/${dni}`)
+        .then(response => response.json())
+        .then(response => {
             if (response.data) {
-              showPopup(response.data);
+              patientGlobal=response.data;
+              showPopup(patientGlobal);
             } else {
-              alert('Paciente no encontrado.');
+                alert('Paciente no encontrado.');
             }
-          },
-          error: function() {
+        })
+        .catch(() => {
             alert('Error al buscar el paciente.');
-          }
         });
       });
-  
-      $('#acceptButtonPopup, #acceptButtonPopup, .overlay').click(function() {
-        hidePopup();
-      });
 
-      $('#acceptButtonPopup').click(function() {
-        acceptPopup();
-    });
+      document.getElementById('acceptButtonPopup').addEventListener('click', function() {
+        acceptPopup(patientGlobal);
+      });
+    
+      document.querySelectorAll('#acceptButtonPopup, #cancelButtonPopup, .overlay').forEach(element => {
+        element.addEventListener('click', function() {
+            hidePopup();
+        });
+      });
     }
   });
   
@@ -55,33 +57,34 @@ document.addEventListener("DOMContentLoaded", function() {
       <p>Obra Social: ${data.socialWork}</p>
       <p>Plan de Obra Social: ${data.planOSName}</p>
     `;
-   $('#patientInfo').html(patientInfoHtml); 
-   $('.overlay, .popup').show();
+    document.getElementById('patientInfo').innerHTML = patientInfoHtml; 
+    document.querySelector('.overlay').style.display = 'block';
+    document.querySelector('.popup').style.display = 'block';
   }
   
   function hidePopup() {
-    $('.overlay, .popup').hide();
-  }
-  
-  function acceptPopup() {
-    const patientData = {
-        firstName: $('#patientInfo').find('p:nth-child(1)').text().split(': ')[1].split(' ')[0],
-        lastName: $('#patientInfo').find('p:nth-child(1)').text().split(': ')[1].split(' ')[1],
-        email: $('#patientInfo').find('p:nth-child(2)').text().split(': ')[1],
-        numberDocument: $('#patientInfo').find('p:nth-child(3)').text().split(': ')[1],
-        age: $('#patientInfo').find('p:nth-child(4)').text().split(': ')[1],
-        typeDocument: $('#patientInfo').find('p:nth-child(5)').text().split(': ')[1],
-        sex: $('#patientInfo').find('p:nth-child(6)').text().split(': ')[1],
-        socialWork: $('#patientInfo').find('p:nth-child(8)').text().split(': ')[1],
-        planOSName: $('#patientInfo').find('p:nth-child(9)').text().split(': ')[1],
-    };
+    document.querySelector('.overlay').style.display = 'none';
+    document.querySelector('.popup').style.display = 'none';
+}
 
-    $('#paciente_nombre').val(patientData.firstName);
-    $('#paciente_apellido').val(patientData.lastName);
-    $('#prestaciones-dni').val(patientData.numberDocument);
-    $('#paciente_obra_social').val(patientData.socialWork);
-    $('#paciente_plan').val(patientData.planOSName);
-    $('#paciente_sexo').val(patientData.sex.toUpperCase() === 'FEMENINO' ? 'FEMALE' : patientData.sex.toUpperCase() === 'MASCULINO' ? 'MALE' : 'OTHER');
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+  
+  function acceptPopup(patientGlobal) {
+    const birthDate = formatDate(patientGlobal.birthDate);
+
+    document.getElementById('paciente_nombre').value = patientGlobal.firstName;
+    document.getElementById('paciente_apellido').value = patientGlobal.lastName;
+    document.getElementById('prestaciones-dni').value = patientGlobal.numberDocument;
+    document.getElementById('paciente_fecha_nacimiento').value = birthDate;
+    document.getElementById('paciente_obra_social').value = patientGlobal.socialWork.name;
+    document.getElementById('paciente_plan').value = patientGlobal.planOSName;
+    document.getElementById('paciente_sexo').value = patientGlobal.sex.toUpperCase() === 'FEMENINO' ? 'FEMALE' : patientGlobal.sex.toUpperCase() === 'MASCULINO' ? 'MALE' : 'OTHER';
 
     hidePopup();
 }

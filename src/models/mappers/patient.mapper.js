@@ -3,6 +3,7 @@ const mapPatientData = (data) => {
         firstName: data.firstName,
         lastName: data.lastName,
         age: ageBirth(data.birthDate) + ' años',
+        birthDate: data.birthDate,
         numberDocument: data.numberDocument,
         typeDocument: data.typeDocument,
         sex: data.sex,
@@ -10,7 +11,7 @@ const mapPatientData = (data) => {
         email: data.User.email,
         userId: data.User.id,
         planOSName: data.User.Patient.PlanOS.name,
-        socialWork: data.User.Patient.PlanOS.SocialWork.name
+        socialWork: data.User.Patient.PlanOS.SocialWork
     };
 }; 
 
