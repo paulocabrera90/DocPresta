@@ -1,5 +1,5 @@
 {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3MjUyNDI5LCJleHAiOjE3MTcyNTk2Mjl9.IRASBCCTCjw6J0iPdBK9HPMY3Qqeh2RikOD43AwdXlo",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3MzEwNTY2LCJleHAiOjE3MTczMTc3NjZ9.E022WHXyxfzw0dPbtZw1yFfiuqDj0jclzT2-H-3EJL0",
     "user": {
         "id": 1,
         "username": "pauloc",
@@ -13,7 +13,7 @@
         "Person": {
             "id": 1,
             "firstName": "Paulo",
-            "lastName": "Cabreraa",
+            "lastName": "Cabrera",
             "birthDate": "1990-01-31T00:23:30.000Z",
             "numberDocument": "35104957",
             "typeDocument": "DNI",

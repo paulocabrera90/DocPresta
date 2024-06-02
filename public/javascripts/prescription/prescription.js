@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function() {
       <p>Tipo de documento: ${data.typeDocument}</p>
       <p>Sexo: ${data.sex}</p>
       <p>Rol: ${data.rol}</p>
-      <p>Obra Social: ${data.socialWork}</p>
+      <p>Obra Social: ${data.socialWork.name}</p>
       <p>Plan de Obra Social: ${data.planOSName}</p>
     `;
     document.getElementById('patientInfo').innerHTML = patientInfoHtml; 

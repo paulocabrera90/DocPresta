@@ -1,0 +1,28 @@
+extends home
+
+block content
+    container-presta-list
+        header
+        h1 Lista de Profesionales
+        container-card
+             each prof in profesional
+                .card
+                    .card-header  #{prof.Speciality.name}
+                    .card-body
+                        p.card-text
+                        | <strong>Nombre:</strong> #{prof.userId}
+                        br
+                        | <strong>Dirección Legal:</strong> #{prof.legalAddress}
+                        br
+                        | <strong>Número de Registro:</strong> #{prof.registrationNumber}
+                        br
+                        | <strong>ID REFEPS:</strong> #{prof.idREFEPS}
+                        br
+                        | <strong>Especialidad:</strong> #{prof.Speciality.name}
+                        br
+                        | <strong>Descripción:</strong> #{prof.Speciality.description}
+                        br
+                        | <strong>Fecha de Creación:</strong> #{prof.creationDate.toISOString().split('T')[0]}
+                        br
+                        | <strong>Última Modificación:</strong> #{prof.modificationDate.toISOString().split('T')[0]}
+        

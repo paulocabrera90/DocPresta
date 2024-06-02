@@ -12,7 +12,7 @@ const {
           allowNull: false,
           unique: true,
         },
-        as: 'Users',
+        as: 'User',
       });
     
       models.User.hasOne(Profesional, {
