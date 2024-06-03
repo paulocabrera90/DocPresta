@@ -3,14 +3,13 @@ extends home
 block content
     container-presta-list
         header
-        h1 Lista de Profesionales
+            h1 Lista de Profesionales
         container-card
-             each prof in profesional
+            each prof in profesionals
                 .card
-                    .card-header  #{prof.Speciality.name}
+                    .card-header #{prof.firstName} #{prof.lastName} - ID REFEPS: #{prof.idREFEPS}
                     .card-body
-                        p.card-text
-                        | <strong>Nombre:</strong> #{prof.userId}
+                        p
                         br
                         | <strong>Dirección Legal:</strong> #{prof.legalAddress}
                         br
@@ -18,11 +17,14 @@ block content
                         br
                         | <strong>ID REFEPS:</strong> #{prof.idREFEPS}
                         br
-                        | <strong>Especialidad:</strong> #{prof.Speciality.name}
+                        | <strong>Especialidad:</strong> #{prof.name}
                         br
-                        | <strong>Descripción:</strong> #{prof.Speciality.description}
+                        | <strong>Código:</strong> #{prof.code}
                         br
-                        | <strong>Fecha de Creación:</strong> #{prof.creationDate.toISOString().split('T')[0]}
+                        | <strong>Descripción:</strong> #{prof.description}
                         br
-                        | <strong>Última Modificación:</strong> #{prof.modificationDate.toISOString().split('T')[0]}
-        
+                        | <strong>Fecha de Nacimiento:</strong> #{new Date(prof.birthDate).toISOString().split('T')[0]}
+                        br
+                        | <strong>Documento:</strong> #{prof.numberDocument} (#{prof.typeDocument})
+                        br
+                        | <strong>Sexo:</strong> #{prof.sex}

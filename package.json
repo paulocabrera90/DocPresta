@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "nodemon ./app.js",
-    "generate-migrations": "sequelize-auto-migrations -d models -e sqlite -n MigrationName"
+    "dev": "nodemon ./app.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

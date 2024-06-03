@@ -19,7 +19,7 @@ async function login(email, password) {
     if (!user) {
         throw new Error('User not found');
     }
-
+    
     const checkPassword = await compare(password, user.hashPassword);
 
     if (!checkPassword) {
@@ -36,7 +36,7 @@ async function login(email, password) {
 
     return {
         id: user.id,
-        fullName: fullName(user),
+        fullName: user.username,
         email: user.email,
         role: user.role,
         tokenSession

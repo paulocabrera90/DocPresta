@@ -46,7 +46,7 @@ async function registerCtrl(req, res) {
             email: registerUser.email,            
             firstName: registerUser.firstName,
             lastName: registerUser.lastName,
-            role: registerUser.role
+            rol: registerUser.rol
         };
 
         res.send({ data: responseData })

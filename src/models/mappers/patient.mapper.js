@@ -20,4 +20,4 @@ function ageBirth(birthDate) {
     return age;
 }
 
-module.exports = { mapPatientData}
+module.exports = { mapPatientData }
