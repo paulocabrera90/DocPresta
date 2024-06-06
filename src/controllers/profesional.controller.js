@@ -1,5 +1,5 @@
 const { httpError } = require('../helpers/handleError');
-const { Profesional, Speciality, User, Person, sequelize } = require('../models/index.models');
+const { Profesional, Speciality, User, Person, sequelize, Profesion } = require('../models/index.models');
 const { mapProfesionalData } = require('../models/mappers/profesional.mapper');
 const { encrypt } = require('../utils/handleBcrypt');
 
@@ -24,11 +24,20 @@ async function getListAllProfesional(req, res){
 
         const listMapProfesional = profesional.map(mapProfesionalData);
 
-        res.render('profesional-landing', { profesionals: listMapProfesional });
-
-       // res.json(profesional.map(mapProfesionalData));
+        res.render('profesional-landing', { profesionals: listMapProfesional });       
 
     } catch(error) {
+        httpError(res, error);
+    }
+}
+
+async function newProfesional(req, res) {
+    try {
+        const profesions = await Profesion.findAll();
+        const specialities = await Speciality.findAll();
+        res.json('profesional-new',{ specialities, profesions });
+        
+    } catch (error) {
         httpError(res, error);
     }
 }
@@ -40,8 +49,8 @@ async function createProfesional(req, res) {
             legalAddress, registrationNumber, idREFEPS, specialityId, passwordHash, 
             username, email
         } = req.body;
+        console.log("req.body", req.body)
 
-        // Crear la nuevo Person
         const newPerson = await Person.create({
             firstName,
             lastName,
@@ -79,9 +88,29 @@ async function createProfesional(req, res) {
         }, { transaction });
 
         await transaction.commit();
-        //res.redirect('/profesionales');
-        res.status(201).json(newProfesional);
+        res.redirect('/api/profesionals');
     } catch (error) {
+        await transaction.rollback();
+        httpError(res, error);
+    }
+}
+
+async function deleteProfesional(req, res) {
+    const { id } = req.params; 
+    const transaction = await sequelize.transaction();
+
+    try {
+        
+        await Profesional.destroy({
+            where: { id },
+            transaction
+        });
+
+        await transaction.commit();
+        
+        res.redirect('/api/profesionals');
+    } catch (error) {
+       
         await transaction.rollback();
         httpError(res, error);
     }
@@ -89,5 +118,7 @@ async function createProfesional(req, res) {
 
 module.exports= { 
     getListAllProfesional,
-    createProfesional
+    createProfesional,
+    newProfesional,
+    deleteProfesional
 }

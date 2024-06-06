@@ -1,5 +1,6 @@
 const mapProfesionalData = (originalObject) => {
     return {
+        id: originalObject.id,
         legalAddress: originalObject.legalAddress,
         registrationNumber: originalObject.registrationNumber,
         idREFEPS: originalObject.idREFEPS,

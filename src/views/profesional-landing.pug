@@ -3,7 +3,10 @@ extends home
 block content
     container-presta-list
         header
-            h1 Lista de Profesionales
+            .title-header-cards
+                h1 Lista de Profesionales
+            a(href="/api/profesional/new" id="newElementCard" class="btn btn-primary") Nuevo
+        hr(style="margin-top: 20px; margin-bottom: 20px;")
         container-card
             each prof in profesionals
                 .card
@@ -28,3 +31,10 @@ block content
                         | <strong>Documento:</strong> #{prof.numberDocument} (#{prof.typeDocument})
                         br
                         | <strong>Sexo:</strong> #{prof.sex}
+                        br
+                
+                    .card-footer
+                        a(href=`/profesional/edit/${prof.id}` class="btn btn-secondary") Editar
+
+                        form(id='formDeleteCard' data-id=prof.id method='post' action="/api/profesional")
+                            button(id='btnFormDeleteCard' type='submit' class="btn btn-danger" onclick="confirmDelete()") Eliminar

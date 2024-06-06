@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     const button = document.getElementById("button-searchDni");
     const inputField = document.getElementById('prestaciones-dni');
-    
+        
     let patientGlobal = {};
     
     if (button) {
