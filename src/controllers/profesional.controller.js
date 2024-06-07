@@ -108,7 +108,7 @@ async function deleteProfesional(req, res) {
 
         await transaction.commit();
         
-        res.redirect('/api/profesionals');
+        res.json( {id} );
     } catch (error) {
        
         await transaction.rollback();
