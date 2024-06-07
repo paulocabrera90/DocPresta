@@ -1,9 +1,8 @@
 extends home
 
 block content
-    .container-profesional-new
-         
-        form(action=profesional ? "/api/profesional/update" : "/api/profesional/create" method="post") //CAPAZZ Q ARME LOS FETCHS
+    .container-profesional-new         
+        form(data-id=profesional ? "update" : "create") //CAPAZZ Q ARME LOS FETCHS
             h1 #{profesional ? 'Editar' : 'Crear'} Profesional
             label(for="firstName") First Name:
             input(type="text" name="firstName" id="firstName" value=profesional ? profesional.firstName : '')
@@ -75,6 +74,6 @@ block content
             label(for="passwordHash" visible=profesional ? 'true' : 'false') Password:
             input(type="password" name="passwordHash" id="passwordHash" visible=profesional ? 'true' : 'false')
 
-            button(type="submit") #{profesional ? 'Actualizar' : 'Crear'}
-
+            button(id='btnFormNewProf' type="submit" onClick='profesionalPersistence()') #{profesional ? 'Actualizar' : 'Crear'}
+                     
     script(type="application/json" id="specialitiesData")!= JSON.stringify(specialities)

@@ -34,3 +34,7 @@ document.getElementById('specialityInput').addEventListener('change', function()
 
     specialityIdInput.value = selectedSpecialityId;
 });
+
+function profesionalPersistence(){
+  
+}
