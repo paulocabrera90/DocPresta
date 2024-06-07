@@ -99,7 +99,9 @@ input[type="number"],
 input[type="email"],
 input[type="password"],
 #specialityInput,
-#profesionInput {
+#profesionInput, 
+#sex,
+#typeDocument {
   width: calc(100% - 22px);
   padding: 10px;
   border: 2px solid #5fbae9;

@@ -34,7 +34,7 @@ block content
                         br
                 
                     .card-footer
-                        a(href=`/profesional/edit/${prof.id}` class="btn btn-secondary") Editar
+                        a(href=`/api/profesional/${prof.id}` class="btn btn-secondary") Editar
 
                         form(id='formDeleteCard' data-id=prof.id)
                             button(id='btnFormDeleteCard' type='submit' class="btn btn-danger" onclick="confirmDelete()") Eliminar

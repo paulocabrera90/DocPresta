@@ -9,7 +9,11 @@ async function getListAllProfesional(req, res){
             include: [
                 {
                     model: Speciality,
-                    as: 'Speciality'
+                    as: 'Speciality',
+                    include: {
+                        model: Profesion,
+                        as: 'Profesion'
+                    }
                 },
                 {
                     model: User,
@@ -31,11 +35,59 @@ async function getListAllProfesional(req, res){
     }
 }
 
+async function getProfesionalById(req, res){
+    const { id } = req.params;
+    try {
+        const profesional = await Profesional.findOne({
+            where: { id },
+            include: [
+                {
+                    model: Speciality,
+                    as: 'Speciality',
+                    include: {
+                        model: Profesion,
+                        as: 'Profesion'
+                    }
+                },
+                {
+                    model: User,
+                    as: 'User',
+                    include: {
+                        model: Person,
+                        as: 'Person',
+                    }
+                }
+            ]
+        });        
+
+        if (!profesional) {
+            return res.render('profesional-new', { 
+                profesions: await Profesion.findAll(), 
+                specialities: await Speciality.findAll()
+            });
+        }
+
+        const mapProfesional = mapProfesionalData(profesional);
+        res.render('profesional-new', { 
+            profesional: mapProfesional, 
+            profesions: await Profesion.findAll(), 
+            specialities: await Speciality.findAll() 
+        });   
+
+        //res.json(mapProfesional); 
+    } catch(error) {
+        httpError(res, error);
+    }
+}
+
 async function newProfesional(req, res) {
     try {
         const profesions = await Profesion.findAll();
         const specialities = await Speciality.findAll();
-        res.json('profesional-new',{ specialities, profesions });
+        return res.render('profesional-new', { 
+            profesions: await Profesion.findAll(), 
+            specialities: await Speciality.findAll()
+        });
         
     } catch (error) {
         httpError(res, error);
@@ -120,5 +172,6 @@ module.exports= {
     getListAllProfesional,
     createProfesional,
     newProfesional,
-    deleteProfesional
+    deleteProfesional,
+    getProfesionalById
 }

@@ -29,7 +29,7 @@ async function login(email, password) {
     const timeSession = privilegedRoles.includes(user.role) ? "8h" : "2h";
     const tokenSession = await tokenSign(user, timeSession);
 
-    storage.setState({
+    await storage.setState({
         token: tokenSession,
         user:user.dataValues
     })

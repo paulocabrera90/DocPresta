@@ -1,4 +1,5 @@
 const { Router } = require("express");
+const fs = require('fs').promises;
 const authorizationRoutes = require("./authorization.routes");
 const medicalRecordRoutes = require("./medical-record.routes");
 const profesionalRoutes = require("./profesional.routes");
@@ -15,7 +16,14 @@ const routes_init = () => {
   router.use('/profesional', profesionalRoutes);
   router.get('/home', checkAuth, goHome);
   
-  router.use('/', (req, res) => {
+  router.use('/',  (req, res) => {
+  //   try {
+  //     await fs.unlink('./state.json');
+  //     console.log('Archivo eliminado con éxito');
+  // } catch (error) {
+  //     console.error('Error al eliminar el archivo:', error);
+  // }
+
     res.render('login');
   });
   
