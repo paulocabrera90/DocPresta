@@ -1,0 +1,40 @@
+extends home
+
+block content
+    container-presta-list
+        header
+            .title-header-cards
+                h1 Lista de Profesionales
+            a(href="/api/profesional/new" id="newElementCard" class="btn btn-primary") Nuevo
+        hr(style="margin-top: 20px; margin-bottom: 20px;")
+        container-card
+            each prof in profesionals
+                .card
+                    .card-header #{prof.firstName} #{prof.lastName} - ID REFEPS: #{prof.idREFEPS}
+                    .card-body
+                        p
+                        br
+                        | <strong>Dirección Legal:</strong> #{prof.legalAddress}
+                        br
+                        | <strong>Número de Registro:</strong> #{prof.registrationNumber}
+                        br
+                        | <strong>ID REFEPS:</strong> #{prof.idREFEPS}
+                        br
+                        | <strong>Especialidad:</strong> #{prof.name}
+                        br
+                        | <strong>Código:</strong> #{prof.code}
+                        br
+                        | <strong>Descripción:</strong> #{prof.description}
+                        br
+                        | <strong>Fecha de Nacimiento:</strong> #{new Date(prof.birthDate).toISOString().split('T')[0]}
+                        br
+                        | <strong>Documento:</strong> #{prof.numberDocument} (#{prof.typeDocument})
+                        br
+                        | <strong>Sexo:</strong> #{prof.sex}
+                        br
+                
+                    .card-footer
+                        a(href=`/api/profesional/${prof.id}` class="btn btn-secondary") Editar
+
+                        form(id='formDeleteCard' data-id=prof.id)
+                            button(id='btnFormDeleteCard' type='submit' class="btn btn-danger" onclick="confirmDelete()") Eliminar

@@ -1,54 +1,18 @@
-const { Patient, User, Person, PlanOS, SocialWork, Profesional } = require('../models/index.models');
-const { mapPatientData } = require('../models/mappers/patient.mapper');
 const { httpError } = require('../helpers/handleError');
+const { Profesional, Speciality, User, Person, sequelize, Profesion } = require('../models/index.models');
+const { mapProfesionalData } = require('../models/mappers/profesional.mapper');
+const { encrypt } = require('../utils/handleBcrypt');
 
-async function getPatient (req, res) {
+async function getListAllProfesional(req, res){
     try {
-        const dni = req.params.dni;
-        const patient = await Person.findOne({ 
-            where: { numberDocument: dni },
-            include: {
-                model: User,
-                as: 'User',
-                where: { rol: 'PACIENTE' },
-                include: {
-                    model: Patient,
-                    as: 'Patient',
-                    include: {
-                        model: PlanOS,
-                        as: 'PlanOS',
-                        include: {
-                            model: SocialWork,
-                            as: 'SocialWork',
-                        }
-                    }
-                }
-            }
-         });
-
-        if (!patient || !patient.User || !patient.User.Patient) {
-            return res.status(404).json({ message: 'Patient not found' });
-        }
-        const mappedData = mapPatientData(patient);
-        
-        console.log("patient", patient.User.Patient);
-        res.status(200).json({ data: mappedData}) ;
-        //res.render("medical-record-new",{ patient: mappedData});
-    } catch (error) {
-        res.status(500).json({ error: 'Error to get patient: ' + error });
-    }
-}
-
-async function getListAllPatients(req, res){
-    try {
-        const patient = await Patient.findAll({
+        const profesional = await Profesional.findAll({
             include: [
                 {
-                    model: PlanOS,
-                    as: 'PlanOS',
+                    model: Speciality,
+                    as: 'Speciality',
                     include: {
-                        model: SocialWork,
-                        as: 'SocialWork'
+                        model: Profesion,
+                        as: 'Profesion'
                     }
                 },
                 {
@@ -62,24 +26,66 @@ async function getListAllPatients(req, res){
             ]
         });
 
-        console.log(patient);
-        const listMapPatient = patient.map(mapPatientData);
+        const listMapProfesional = profesional.map(mapProfesionalData);
 
-        res.render('patient-landing', { 
-            patients: listMapPatient
-         });       
-        //res.json({data:listMapPatient})
+        res.render('profesional-landing', { profesionals: listMapProfesional });       
 
     } catch(error) {
         httpError(res, error);
     }
 }
 
-async function newPatient(req, res) {
+async function getProfesionalById(req, res){
+    const { id } = req.params;
     try {
-        return res.render('patient-new', { 
-            planesOS: await Patient.findAll(),
-            socialsWork: await SocialWork.findAll()
+        const profesional = await Profesional.findOne({
+            where: { id },
+            include: [
+                {
+                    model: Speciality,
+                    as: 'Speciality',
+                    include: {
+                        model: Profesion,
+                        as: 'Profesion'
+                    }
+                },
+                {
+                    model: User,
+                    as: 'User',
+                    include: {
+                        model: Person,
+                        as: 'Person',
+                    }
+                }
+            ]
+        });        
+
+        if (!profesional) {
+            return res.render('profesional-new', { 
+                profesions: await Profesion.findAll(), 
+                specialities: await Speciality.findAll()
+            });
+        }
+
+        const mapProfesional = mapProfesionalData(profesional);
+
+        res.render('profesional-new', { 
+            profesional: mapProfesional, 
+            profesions: await Profesion.findAll(), 
+            specialities: await Speciality.findAll() 
+        });   
+
+        //res.json(mapProfesional); 
+    } catch(error) {
+        httpError(res, error);
+    }
+}
+
+async function newProfesional(req, res) {
+    try {
+        return res.render('profesional-new', { 
+            profesions: await Profesion.findAll(), 
+            specialities: await Speciality.findAll()
         });
         
     } catch (error) {
@@ -87,8 +93,7 @@ async function newPatient(req, res) {
     }
 }
 
-
-async function createPatient(req, res) {
+async function createProfesional(req, res) {
     const transaction = await sequelize.transaction();
     try {
         const {firstName, lastName, birthDate, numberDocument, typeDocument, sex,
@@ -141,8 +146,7 @@ async function createPatient(req, res) {
     }
 }
 
-
-async function deletePatient(req, res) {
+async function deleteProfesional(req, res) {
     const { id } = req.params; 
     const transaction = await sequelize.transaction();
 
@@ -163,4 +167,10 @@ async function deletePatient(req, res) {
     }
 }
 
-module.exports = { getPatient, getListAllPatients, newPatient, createPatient, deletePatient}
+module.exports= { 
+    getListAllProfesional,
+    createProfesional,
+    newProfesional,
+    deleteProfesional,
+    getProfesionalById
+}

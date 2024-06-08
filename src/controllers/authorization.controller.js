@@ -10,9 +10,7 @@ async function loginCtrl(req, res) {
     try {
         const { email, password } = req.body;
         const userData = await authService.login(email, password);
-
-        res.header('Authorization', `Bearer ${userData.tokenSession}`);
-       // res.status(200).render('home', { data: userData });
+        
         res.json({ userData });
         
     } catch (error) {        
@@ -48,7 +46,7 @@ async function registerCtrl(req, res) {
             email: registerUser.email,            
             firstName: registerUser.firstName,
             lastName: registerUser.lastName,
-            role: registerUser.role
+            rol: registerUser.rol
         };
 
         res.send({ data: responseData })

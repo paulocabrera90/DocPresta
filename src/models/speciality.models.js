@@ -15,11 +15,6 @@ module.exports = (sequelize, DataTypes) => {
           as: 'Profesion',
         });
     
-        models.Profesion.hasOne(Speciality, {
-          foreignKey: 'profesionId',
-          as: 'Specialities',
-        });
-    
       }
 
     }

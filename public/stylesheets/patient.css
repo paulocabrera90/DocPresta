@@ -1,31 +1,4 @@
-/* .popup {
-    display: none;
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    border: 1px solid #ccc;
-    background: #fff;
-    padding: 20px;
-    z-index: 1000;
-  }
-  
-  .overlay {
-    display: none;
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-  }
-  
-  .patientInfo{
-    color:aqua;
-  } */
-
-  /* Estilo para el popup */
+ /* Estilo para el popup */
 .popup {
     display: none; /* Escondido por defecto */
     position: fixed;
@@ -44,7 +17,7 @@
   
   /* Estilo para el overlay */
   .overlay {
-    display: none; /* Escondido por defecto */
+    display: none;
     position: fixed;
     left: 0;
     top: 0;
@@ -66,7 +39,6 @@
     font-size: 16px;
     color: #000; /* Letras negras */
     margin: 15px 0;
-    white-space: pre-wrap; /* Para mantener los saltos de línea */
   }
   
   /* Estilo para los botones */
@@ -79,12 +51,12 @@
     cursor: pointer;
   }
   
-  #acceptButton {
+  #acceptButtonPopup {
     background-color: #4CAF50; /* Verde */
     color: white;
   }
   
-  #cancelButton {
+  #cancelButtonPopup {
     background-color: #f44336; /* Rojo */
     color: white;
   }
@@ -92,4 +64,65 @@
   #acceptButton:hover, #cancelButton:hover {
     opacity: 0.8;
   }
+/* Estilo para el profesional new */
+
+.container-profesional-new {
+  display: flex;
+  justify-content: space-between;
+  width: 85%;
+  margin: 25px
+}
+
+form {
+  background-color: #fff;
+  padding: 20px;
+  border: 2px solid #5fbae9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+h1 {
+  text-align: center;
+  color: #56baed;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+#specialityInput,
+#profesionInput, 
+#sex,
+#typeDocument {
+  width: calc(100% - 22px);
+  padding: 10px;
+  border: 2px solid #5fbae9;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #56baed;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #3a9ac6;
+}
   

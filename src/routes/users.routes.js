@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { getPatientController } = require('../controllers/patient.controller');
+//const { getPatientController } = require('../controllers/patient.controller');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -8,6 +8,6 @@ router.get('/', function(req, res, next) {
 });
 
 /* GET patient with dni */
-router.get('/:dni', getPatientController);
+//router.get('/:dni', getPatientController);
 
 module.exports = router;

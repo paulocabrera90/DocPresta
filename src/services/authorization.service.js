@@ -19,7 +19,7 @@ async function login(email, password) {
     if (!user) {
         throw new Error('User not found');
     }
-
+    
     const checkPassword = await compare(password, user.hashPassword);
 
     if (!checkPassword) {
@@ -29,14 +29,14 @@ async function login(email, password) {
     const timeSession = privilegedRoles.includes(user.role) ? "8h" : "2h";
     const tokenSession = await tokenSign(user, timeSession);
 
-    storage.setState({
+    await storage.setState({
         token: tokenSession,
         user:user.dataValues
     })
 
     return {
         id: user.id,
-        fullName: fullName(user),
+        fullName: user.username,
         email: user.email,
         role: user.role,
         tokenSession

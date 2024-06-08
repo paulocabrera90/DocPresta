@@ -1,14 +1,17 @@
-const usersModels = require("../models/user.models")
-const { verifyToken } = require("../utils/generateToken")
+
+const storage = require("../storage/session");
+const { verifyToken } = require("../utils/generateToken");
+const { User } = require('../models/index.models');
 
 const checkRoleAuth = (roles, flagBo) => async (req, res, next) => {
     try {
-        const token = req.headers.authorization.split(' ').pop()
-        const tokenData = await verifyToken(token)
-        userData = await usersModels.findById(tokenData._id)
+        const token = storage.state.token;
+        const tokenData = await verifyToken(token);
+        console.log("Verify token", tokenData);
+        userData = await User.findOne({ where: { id: tokenData.id } })
         
         console.log("userData", userData)    
-        if ([].concat(roles).map(role => role.toLowerCase()).includes(userData.role.toLowerCase())) {
+        if ([].concat(roles).map(rol => rol.toLowerCase()).includes(userData.rol.toLowerCase())) {
             next()
         } else {
             res.status(401)

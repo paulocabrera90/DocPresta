@@ -1,19 +1,22 @@
 const jwt = require('jsonwebtoken');
+const JWT_SECRET = "docpresta_cabrera";
 
 async function tokenSign(user, timeSession) {
     return jwt.sign(
         {
             id: user.id,
-            role: user.role
+            rol: user.rol,
+            email: user.email,
+            state: user.state
         },
-        'docpresta-cabrera', 
+        JWT_SECRET, 
         { expiresIn: timeSession, }
     );
 }
 
 async function verifyToken(token) {
     try {
-        return jwt.verify(token, 'docpresta-cabrera')
+        return jwt.verify(token, JWT_SECRET)
     } catch (e) {
         return null
     }

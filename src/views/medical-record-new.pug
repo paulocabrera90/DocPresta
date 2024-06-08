@@ -30,22 +30,22 @@ block content
             .search-dni                           
                 input(type="text", name="prestaciones", id="prestaciones", required)
                 button(id="button-searchPrestaci" type="submit")
-                  i.fa.fa-search  Buscar
-            .overlay
-            .popup
-                h2 Paciente
-                p#patientInfo
-                button#acceptButton(type="button") Aceptar
-                button#cancelButton(type="button") Cancelar
+                  i.fa.fa-search  Buscar           
       // Datos del paciente
       h2 Datos del Paciente
       .container-paciente
         .column
             label(for="paciente_documento") Documento:
-            .search-dni                            
+            .search-dni                      
                   input(type="text", name="prestaciones-dni", id="prestaciones-dni", required)
-                  button(id="button-searchDni" type="submit")
+                  button(id="button-searchDni" type="submit" class="btn btn-danger")
                     i.fa.fa-search  Buscar  
+            .overlay
+            .popup
+                h2 Paciente
+                p#patientInfo
+                button#acceptButtonPopup(type="button") Agregar
+                button#cancelButtonPopup(type="button") Cancelar
             label(for="paciente_nombre") Nombre:
             input(type="text", name="paciente_nombre", id="paciente_nombre", required)
             label(for="paciente_apellido") Apellido:
@@ -55,9 +55,10 @@ block content
         .column
             label(for="paciente_sexo") Sexo:
             select(name="paciente_sexo", id="paciente_sexo", required)
-                option(value="MALE") Masculino
-                option(value="FAME") Femenino
-                option(value="OTHER") Otro
+                option(value="") Seleccione Sexo
+                option(value="MALE") MASCULINO
+                option(value="FEMALE") FEMENINO
+                option(value="OTHER") OTRO
             label(for="paciente_obra_social") Obra Social:
             input(type="text", name="paciente_obra_social", id="paciente_obra_social", required)
             label(for="paciente_plan") Plan:
