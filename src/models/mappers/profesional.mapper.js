@@ -12,7 +12,7 @@ const mapProfesionalData = (originalObject) => {
         descriptionSpeciality: originalObject.Speciality.description,
         firstName: originalObject.User.Person.firstName,
         lastName: originalObject.User.Person.lastName,
-        birthDate: originalObject.User.Person.birthDate,
+        birthDate: originalObject.User.Person.birthDate, 
         numberDocument: originalObject.User.Person.numberDocument,
         typeDocument: originalObject.User.Person.typeDocument,
         sex: originalObject.User.Person.sex,

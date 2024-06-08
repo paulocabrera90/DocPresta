@@ -1,5 +1,5 @@
 var express = require('express');
-const { getListAllProfesional, createProfesional, newProfesional, deleteProfesional, getProfesionalById} = require('../controllers/profesional.controller');
+const { getListAllProfesional, createProfesional, updateProfesional, newProfesional, deleteProfesional, getProfesionalById} = require('../controllers/profesional.controller');
 const checkAuth = require('../middleware/auth.middle');
 const checkRoleAuth = require('../middleware/roleAuth.middle');
 
@@ -13,7 +13,7 @@ router.post('/create', checkAuth, checkRoleAuth(['ADMIN']), createProfesional);
 
 router.get('/:id', checkAuth, checkRoleAuth(['ADMIN']), getProfesionalById);
 
-router.patch('/:id');
+router.patch('/update/:id', checkAuth, checkRoleAuth(['ADMIN']), updateProfesional);
 
 router.delete('/:id',checkAuth, checkRoleAuth(['ADMIN']), deleteProfesional);
 

@@ -58,7 +58,9 @@ async function getProfesionalById(req, res){
                     }
                 }
             ]
-        });        
+        });
+
+        //res.json(profesional); 
 
         if (!profesional) {
             return res.render('profesional-new', { 
@@ -72,9 +74,8 @@ async function getProfesionalById(req, res){
             profesional: mapProfesional, 
             profesions: await Profesion.findAll(), 
             specialities: await Speciality.findAll() 
-        });   
+        });
 
-        //res.json(mapProfesional); 
     } catch(error) {
         httpError(res, error);
     }
@@ -168,10 +169,80 @@ async function deleteProfesional(req, res) {
     }
 }
 
+async function updateProfesional(req, res) {
+    const transaction = await sequelize.transaction();
+    try {
+        const {id} = req.params;
+        const {
+            firstName, lastName, birthDate, numberDocument, typeDocument, sex,
+            legalAddress, registrationNumber, idREFEPS, specialityId, 
+            username, email, passwordHash
+        } = req.body;
+
+        console.log("req.body", req.body);
+
+        const existingPerson = await Person.findOne({
+            where: { id }
+        }, { transaction });
+
+        if (!existingPerson) {
+            throw new Error('Person not found'); //ARMAR EL CREATE DE PERSON
+        }
+
+        await Person.update({
+            firstName,
+            lastName,
+            birthDate,
+            numberDocument,
+            typeDocument,
+            sex
+        }, {
+            where: { id: existingPerson.id },
+            transaction
+        });
+
+        const existingUser = await User.findOne({
+            where: { personId: existingPerson.id }
+        }, { transaction });
+
+        if (!existingUser) {
+            throw new Error('User not found'); // ARMAR EL CREATE DE USER
+        }
+
+        const hashPassword = passwordHash ? await encrypt(passwordHash) : existingUser.hashPassword;
+
+        await User.update({
+            username,
+            email,
+            hashPassword
+        }, {
+            where: { id: existingUser.id },
+            transaction
+        });
+
+        await Profesional.update({
+            legalAddress,
+            registrationNumber,
+            idREFEPS,
+            specialityId
+        }, {
+            where: { userId: existingUser.id },
+            transaction
+        });
+
+        await transaction.commit();
+        res.redirect('/api/profesionals');
+    } catch (error) {
+        await transaction.rollback();
+        httpError(res, error);
+    }
+}
+
 module.exports= { 
     getListAllProfesional,
     createProfesional,
     newProfesional,
     deleteProfesional,
-    getProfesionalById
+    getProfesionalById,
+    updateProfesional
 }
