@@ -2,93 +2,69 @@ extends home
 
 block content
     .container-profesional-new         
-        form(action=profesional ? "/api/profesional/update" : "/api/profesional/create" method="post") //CAPAZZ Q ARME LOS FETCHS
+        form(action=profesional ? "/api/profesional/update" : "/api/profesional/create" data-id=profesional ?profesional.id: '' method="post")
             h1 #{profesional ? 'Editar' : 'Crear'} Profesional
             label(for="firstName") Nombre:
-            input(type="text" name="firstName" id="firstName" value=profesional ? profesional.firstName : '')
+                input(type="text" name="firstName" id="firstName" value=profesional ? profesional.firstName : '')
 
             label(for="lastName") Apellido:
-            input(type="text" name="lastName" id="lastName" value=profesional ? profesional.lastName : '')
+                input(type="text" name="lastName" id="lastName" value=profesional ? profesional.lastName : '')
 
             label(for="birthDate") Fecha Nacimiento:
-            input(type="date" name="birthDate" id="birthDate" value=(profesional && profesional.birthDate ? new Date(profesional.birthDate).toISOString().split('T')[0] : ''))
+                input(type="date" name="birthDate" id="birthDate" value=(profesional && profesional.birthDate ? new Date(profesional.birthDate).toISOString().split('T')[0] : ''))
 
             label(for="numberDocument") N° Documento:
-            input(type="text" name="numberDocument" id="numberDocument" value=profesional ? profesional.numberDocument : ''  disabled=profesional)
+                input(type="text" name="numberDocument" id="numberDocument" value=profesional ? profesional.numberDocument : '')
 
             label(for="typeDocument") Tipo Documento:
-            select(name="typeDocument" id="typeDocument" disabled=profesional)
-                option(value="DNI" selected=profesional && profesional.typeDocument == 'DNI') DNI
-                option(value="Pasaporte" selected=profesional && profesional.typeDocument == 'Pasaporte') Pasaporte
-                option(value="Otro" selected=profesional && profesional.typeDocument == 'Otro') Otros
+                select(name="typeDocument" id="typeDocument")
+                    option(value="" ) Seleccione un Tipo
+                    option(value="DNI" selected=profesional && profesional.typeDocument == 'DNI') DNI
+                    option(value="Pasaporte" selected=profesional && profesional.typeDocument == 'Pasaporte') Pasaporte
+                    option(value="Otro" selected=profesional && profesional.typeDocument == 'Otro') Otros
 
             label(for="sex") Sexo:
-            select(name="sex" id="sex")
-                option(value="Masculino" selected=profesional && profesional.sex == 'Masculino') Masculino
-                option(value="Femenino" selected=profesional && profesional.sex == 'Femenino') Femenino
-                option(value="Otros" selected=profesional && profesional.sex == 'Otros') Otros
+                select(name="sex" id="sex")
+                    option(value="" ) Seleccione un Sexo
+                    option(value="Masculino" selected=profesional && profesional.sex == 'Masculino') Masculino
+                    option(value="Femenino" selected=profesional && profesional.sex == 'Femenino') Femenino
+                    option(value="Otros" selected=profesional && profesional.sex == 'Otros') Otros
 
             label(for="legalAddress") Domicilio fiscal:
-            input(type="text" name="legalAddress" id="legalAddress" value=profesional ? profesional.legalAddress : '')
+                input(type="text" name="legalAddress" id="legalAddress" value=profesional ? profesional.legalAddress : '')
 
             label(for="registrationNumber") Matricula:
-            input(type="text" name="registrationNumber" id="registrationNumber" value=profesional ? profesional.registrationNumber : '')
+                input(type="text" name="registrationNumber" id="registrationNumber" value=profesional ? profesional.registrationNumber : '')
 
             label(for="idREFEPS") ID-REFEPS:
-            input(type="text" name="idREFEPS" id="idREFEPS" value=profesional ? profesional.idREFEPS : '')
-<<<<<<< HEAD
-
-            //- label(for="profesionInput") Profesion:
-            //- input(list="profesionList" id="profesionInput" placeholder="Escriba una Profesion")
-            //- datalist(id="profesionList")
-            //-     option(value="" selected) Seleccione una Profesion
-            //-     each profesion in profesions
-            //-         option(value=profesion.name data-id=profesion.id)= profesion.name
-
-            //- label(for="specialityInput") Especialidad:
-            //- input(list="specialityList" id="specialityInput" placeholder="Escriba una Especialidad")
-            //- datalist(id="specialityList")
-            //-     option(value="" selected) Seleccione una Especialidad
-
-=======
+                input(type="text" name="idREFEPS" id="idREFEPS" value=profesional ? profesional.idREFEPS : '')
             
->>>>>>> 30f7bac8498f93dca8042e8be2dddc2aff605a06
             label(for="profesionInput") Profesion:
-            input(list="profesionList" id="profesionInput" name="profesionInput" placeholder="Escriba una Profesion" value=profesional ? profesional.profesionName : '')
-            datalist(id="profesionList")
-                option(value="" selected=!profesional) Seleccione una Profesion
-                each profesion in profesions
-<<<<<<< HEAD
-                    option(value=profesion.name selected=(profesional && profesional.profesionName == profesion.name))= profesion.name
-=======
-                    option(value=profesion.name selected=profesional && profesional.profesionName == profesion.name)= profesion.name
->>>>>>> 30f7bac8498f93dca8042e8be2dddc2aff605a06
+                input(list="profesionList" id="profesionInput" name="profesionInput" placeholder="Escriba una Profesion" value=profesional ? profesional.profesionName : '')
+                datalist(id="profesionList")
+                    option(value="" selected=!profesional) Seleccione una Profesión
+                    each profesion in profesions
+                        option(value=profesion.name selected=profesional && profesional.profesionName == profesion.name data-id=profesion.id)= profesion.name
 
             label(for="specialityInput") Especialidad:
-            input(list="specialityList" id="specialityInput" name="specialityInput" placeholder="Escriba una Especialidad" value=profesional ? profesional.nameSpeciality : '')
-            datalist(id="speciality")
-<<<<<<< HEAD
-                 option(value="" selected=!profesional) Seleccione una Especialidad
-                 each speciality in specialities
-                     option(value=speciality.name selected=(profesional && profesional.nameSpeciality == speciality.name))= speciality.name
-=======
-                option(value="" selected=!profesional) Seleccione una Especialidad
-                each speciality in specialities
-                    option(value=speciality.name selected=profesional && profesional.nameSpeciality == speciality.name)= speciality.name
->>>>>>> 30f7bac8498f93dca8042e8be2dddc2aff605a06
+                input(list="specialityList" id="specialityInput" name="specialityInput" placeholder="Escriba una Especialidad" value=profesional ? profesional.nameSpeciality : '')
+                datalist(id="specialityList")  // Asegúrate de que el id sea 'specialityList'
+                    option(value="" selected=!profesional) Seleccione una Especialidad
+                    each speciality in specialities
+                        option(value=speciality.name selected=profesional && profesional.nameSpeciality == speciality.name)= speciality.name
 
             input(type="hidden" name="specialityId" id="specialityId")
-
-            label(for="username") Username:
-            input(type="text" name="username" id="username" value=profesional ? profesional.username : '')
             
             if !profesional
-                label(for="email") Email:
-                input(type="email" name="email" id="email" value=profesional ? profesional.email : '' disabled=profesional)
+                h3 Usuario
+                label(for="username") Username:
+                    input(type="text" name="username" id="username" value=profesional ? profesional.username : '')
+                label(for="email", readonly=profesional) Email:
+                    input(type="email" name="email" id="email" value=profesional ? profesional.email : '')
         
-                label(for="passwordHash") Password:
-                input(type="password" name="passwordhash" id="passwordHash")
+                label(for="passwordHash", readonly=profesional) Password:
+                    input(type="password" name="passwordhash" id="passwordHash")
 
             button(id='btnFormNewProf' type="submit") #{profesional ? 'Actualizar' : 'Crear'}
-                      
+
     script(type="application/json" id="specialitiesData")!= JSON.stringify(specialities)

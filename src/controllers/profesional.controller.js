@@ -60,10 +60,15 @@ async function getProfesionalById(req, res){
             ]
         });
 
-        //res.json(profesional); 
+        // res.json({
+        //     profes:mapProfesionalData(profesional), 
+        //     profesions: await Profesion.findAll(), 
+        //     specialities: await Speciality.findAll()
+        // }); 
 
         if (!profesional) {
             return res.render('profesional-new', { 
+                profesional: '',
                 profesions: await Profesion.findAll(), 
                 specialities: await Speciality.findAll()
             });
@@ -98,10 +103,10 @@ async function createProfesional(req, res) {
     const transaction = await sequelize.transaction();
     try {
         const {firstName, lastName, birthDate, numberDocument, typeDocument, sex,
-            legalAddress, registrationNumber, idREFEPS, specialityId, passwordHash, 
+            legalAddress, registrationNumber, idREFEPS, specialityId, passwordhash, 
             username, email
         } = req.body;
-        console.log("req.body", req.body)
+        console.log("req.body create", req.body)
 
         const newPerson = await Person.create({
             firstName,
@@ -115,12 +120,13 @@ async function createProfesional(req, res) {
             ModificationDate: new Date()
         }, { transaction });
 
-        const password = await encrypt(passwordHash)
+        console.log("passwordHash:", passwordhash);
+        const encryptedPassword = await encrypt(passwordhash);
 
         const registerUser = await User.create({
             username,
             email,          
-            hashPassword: password,          
+            hashPassword: encryptedPassword,          
             profilePic: '',
             state: true,
             crationDate: Date.now(),
@@ -140,7 +146,8 @@ async function createProfesional(req, res) {
         }, { transaction });
 
         await transaction.commit();
-        res.redirect('/api/profesionals');
+        console.log("Create professional successfully")
+        res.json({message: "Create professional successfully"});
     } catch (error) {
         await transaction.rollback();
         httpError(res, error);
@@ -178,14 +185,41 @@ async function updateProfesional(req, res) {
             username, email, passwordHash
         } = req.body;
 
-        console.log("req.body", req.body);
+        console.log("req.body update", req.body);
 
-        const existingPerson = await Person.findOne({
+        const existingProfesional = await Profesional.findOne({
             where: { id }
         }, { transaction });
 
+        if (!existingProfesional) {
+            throw new Error('Profesional not found');
+        }
+
+        const existingUser = await User.findOne({
+            where: { id: existingProfesional.userId }
+        }, { transaction });
+
+        if (!existingUser) {
+            throw new Error('User not found');
+        }
+
+       // const hashPassword = passwordHash ? await encrypt(passwordHash) : existingUser.hashPassword;
+
+        await User.update({
+            username,
+            email,
+            modificationDate: Date.now(),
+        }, {
+            where: { id: existingUser.id },
+            transaction
+        });
+
+        const existingPerson = await Person.findOne({
+            where: { id: existingUser.personId }
+        }, { transaction });
+
         if (!existingPerson) {
-            throw new Error('Person not found'); //ARMAR EL CREATE DE PERSON
+            throw new Error('Person not found');
         }
 
         await Person.update({
@@ -194,43 +228,28 @@ async function updateProfesional(req, res) {
             birthDate,
             numberDocument,
             typeDocument,
-            sex
+            sex,
+            modificationDate: Date.now(),
         }, {
-            where: { id: existingPerson.id },
+            where: { id: existingPerson.id , numberDocument: existingPerson.numberDocument},
             transaction
-        });
-
-        const existingUser = await User.findOne({
-            where: { personId: existingPerson.id }
-        }, { transaction });
-
-        if (!existingUser) {
-            throw new Error('User not found'); // ARMAR EL CREATE DE USER
-        }
-
-        const hashPassword = passwordHash ? await encrypt(passwordHash) : existingUser.hashPassword;
-
-        await User.update({
-            username,
-            email,
-            hashPassword
-        }, {
-            where: { id: existingUser.id },
-            transaction
-        });
+        });       
 
         await Profesional.update({
             legalAddress,
             registrationNumber,
             idREFEPS,
-            specialityId
+            specialityId,
+            modificationDate: Date.now(),
         }, {
-            where: { userId: existingUser.id },
+            where: { userId: existingUser.id, id },
             transaction
         });
 
         await transaction.commit();
-        res.redirect('/api/profesionals');
+        console.log("Updated for professional successfully")
+        res.json({message: "Updated for professional successfully"});
+
     } catch (error) {
         await transaction.rollback();
         httpError(res, error);

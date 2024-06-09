@@ -1,26 +1,26 @@
 {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sIjoiQURNSU4iLCJlbWFpbCI6InBhdWxvY0BnbWFpbC5jb20iLCJzdGF0ZSI6dHJ1ZSwiaWF0IjoxNzE3ODE5ODk4LCJleHAiOjE3MTc4MjcwOTh9.-fFAxVT6vNfW9RhsSO-HY8WLGz1oMWCmKe1aDWQF85I",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sIjoiQURNSU4iLCJlbWFpbCI6InBhdWxvY0BnbWFpbC5jb20iLCJzdGF0ZSI6dHJ1ZSwiaWF0IjoxNzE3OTUyMzEzLCJleHAiOjE3MTc5NTk1MTN9.YPY31kDQr_G_-EK1pXGcokN-tpBRpVKFsFmCm3pAFdk",
     "user": {
         "id": 1,
-        "username": "gdcabrera",
-        "hashPassword": "$2a$10$VllSnjrFZF/GKPNyUzs8Zu1dYLP.zSyTzZ7mudBcFJb2i7foqjA.m",
+        "username": "pauloc",
+        "hashPassword": "$2a$10$Ap9SF4uShR.YiHsVqHVIHOx1AaPXxGiAHeyJ1R4.hFEptoOBcLSVu",
         "rol": "ADMIN",
-        "email": "gdcabrera93@gmail.com",
+        "email": "pauloc@gmail.com",
         "state": true,
-        "creationDate": "2024-06-07T00:00:00.000Z",
-        "modificationDate": "2024-06-07T00:00:00.000Z",
+        "creationDate": "2024-05-29T00:31:08.000Z",
+        "modificationDate": "2024-05-29T00:31:08.000Z",
         "personId": 1,
         "Person": {
             "id": 1,
-            "firstName": "Gonzalo",
+            "firstName": "Paulo",
             "lastName": "Cabrera",
-            "birthDate": "1993-01-22T00:00:00.000Z",
-            "numberDocument": "37132383",
+            "birthDate": "1990-01-31T00:23:30.000Z",
+            "numberDocument": "35104957",
             "typeDocument": "DNI",
             "sex": "Masculino",
             "state": true,
-            "creationDate": "2024-06-07T00:00:00.000Z",
-            "ModificationDate": "2024-06-07T00:00:00.000Z"
+            "creationDate": "2024-05-29T00:23:30.000Z",
+            "ModificationDate": "2024-05-29T00:23:30.000Z"
         }
     }
 }
