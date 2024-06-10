@@ -65,25 +65,6 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Ocurrio un error. Intente nuevamente.');
         });
     });
-
-    function initProfesionList() {
-        profesionOptions.forEach(option => {
-            const optionElement = document.createElement('option');
-            optionElement.value = option.name;
-            optionElement.textContent = option.name;
-            profesionList.appendChild(optionElement);
-        });
-    }
-    
-    function initSpecialityList() {
-        specialityList.innerHTML = '<option value="" selected>Seleccione una Especialidad</option>';
-        specialities.forEach(speciality => {
-            const option = document.createElement('option');
-            option.value = speciality.name;
-            option.textContent = speciality.name;
-            specialityList.appendChild(option);
-        });
-    }
     
 });
 
@@ -98,27 +79,4 @@ document.getElementById('specialityInput').addEventListener('change', function()
 
     specialityIdInput.value = selectedSpecialityId;
 });
-
-function profesionalPersistence(event){
-  if (window.confirm("¿Estás seguro de que deseas eliminar este profesional?")) {
-    const form = event.target.closest("form");
-    const isUpdate = form.getAttribute("data-update");
-    
-    fetch(`/api/profesional/${profId}`, {
-        method: 'DELETE'
-    })
-    .then(response => {
-        if (response.ok) {
-            console.log("Profesional eliminado con éxito");
-            alert(`Profesional con ID ${profId} eliminado con éxito`); 
-        } else {
-            console.error("Error al eliminar el profesional");
-        }
-    })
-    .catch(error => {
-        console.error("Error al enviar la solicitud DELETE", error);
-    });
-  }
-}
-
 

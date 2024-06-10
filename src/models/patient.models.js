@@ -25,7 +25,6 @@ module.exports = (sequelize, DataTypes) => {
           foreignKey: {
             name: 'planOSId',
             allowNull: false,
-            unique: true,
           },
           as: 'PlanOS',
         });

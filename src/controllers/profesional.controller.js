@@ -60,6 +60,9 @@ async function getProfesionalById(req, res){
             ]
         });
 
+        if (!profesional || !profesional.User || !profesional.User.Person) {
+            return res.status(404).json({ message: 'Profesional not found' });
+        }
         // res.json({
         //     profes:mapProfesionalData(profesional), 
         //     profesions: await Profesion.findAll(), 
@@ -120,7 +123,6 @@ async function createProfesional(req, res) {
             ModificationDate: new Date()
         }, { transaction });
 
-        console.log("passwordHash:", passwordhash);
         const encryptedPassword = await encrypt(passwordhash);
 
         const registerUser = await User.create({
@@ -147,7 +149,7 @@ async function createProfesional(req, res) {
 
         await transaction.commit();
         console.log("Create professional successfully")
-        res.json({message: "Create professional successfully"});
+        res.status(200).json({message: "Create professional successfully"});
     } catch (error) {
         await transaction.rollback();
         httpError(res, error);
@@ -159,9 +161,46 @@ async function deleteProfesional(req, res) {
     const transaction = await sequelize.transaction();
 
     try {
+
+        console.log("req.params delete :", id);
+
+        const existingProfesional = await Profesional.findOne({
+            where: { id },
+            transaction
+        });
+
+        if (!existingProfesional) {
+            throw new Error('Profesional not found');
+        }
+
+        const existingUser = await User.findOne({
+            where: { id: existingProfesional.userId }
+        }, { transaction });
+
+        if (!existingUser) {
+            throw new Error('User not found');
+        }
+
+        const existingPerson = await Person.findOne({
+            where: { id: existingUser.personId }
+        }, { transaction });
+
+        if (!existingPerson) {
+            throw new Error('Person not found');
+        }
         
         await Profesional.destroy({
             where: { id },
+            transaction
+        });
+
+        await User.destroy( {
+            where: { id: existingUser.id },
+            transaction
+        });
+
+        await Person.destroy( {
+            where: { id: existingPerson.id , numberDocument: existingPerson.numberDocument},
             transaction
         });
 

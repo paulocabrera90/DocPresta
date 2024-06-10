@@ -14,27 +14,28 @@ block content
                     .card-body
                         p
                         br
+                        | <strong>Documento:</strong> (#{prof.typeDocument})-#{prof.numberDocument} 
+                        br
                         | <strong>Dirección Legal:</strong> #{prof.legalAddress}
+                        br
+                        | <strong>Sexo:</strong> #{prof.sex}
                         br
                         | <strong>Número de Registro:</strong> #{prof.registrationNumber}
                         br
                         | <strong>ID REFEPS:</strong> #{prof.idREFEPS}
                         br
-                        | <strong>Especialidad:</strong> #{prof.name}
+                        | <strong>Especialidad:</strong> #{prof.nameSpeciality}
                         br
-                        | <strong>Código:</strong> #{prof.code}
+                        | <strong>Código:</strong> #{prof.profesionCode}
                         br
-                        | <strong>Descripción:</strong> #{prof.description}
+                        | <strong>Descripción:</strong> #{prof.profesionDescription}
                         br
-                        | <strong>Fecha de Nacimiento:</strong> #{new Date(prof.birthDate).toISOString().split('T')[0]}
-                        br
-                        | <strong>Documento:</strong> #{prof.numberDocument} (#{prof.typeDocument})
-                        br
-                        | <strong>Sexo:</strong> #{prof.sex}
+                        | <strong>Fecha de Nacimiento:</strong> #{new Date(prof.birthDate).toISOString().split('T')[0]}                       
+                        
                         br
                 
                     .card-footer
-                        a(href=`/api/profesional/${prof.id}` class="btn btn-secondary") Editar
+                        a(href=`/api/patient/${prof.id}` class="btn btn-secondary") Editar
 
-                        form(id='formDeleteCard' data-id=prof.id)
-                            button(id='btnFormDeleteCard' type='submit' class="btn btn-danger" onclick="confirmDelete()") Eliminar
+                        form(id='formDeleteCard' data-id=prof.id data-module="profesional")
+                            button(id='btnFormDeleteCard' type='submit' class="btn btn-danger" onclick="confirmDelete(event)") Eliminar

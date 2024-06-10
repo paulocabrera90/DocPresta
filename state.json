@@ -1,5 +1,5 @@
 {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sIjoiQURNSU4iLCJlbWFpbCI6InBhdWxvY0BnbWFpbC5jb20iLCJzdGF0ZSI6dHJ1ZSwiaWF0IjoxNzE3OTUyMzEzLCJleHAiOjE3MTc5NTk1MTN9.YPY31kDQr_G_-EK1pXGcokN-tpBRpVKFsFmCm3pAFdk",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sIjoiQURNSU4iLCJlbWFpbCI6InBhdWxvY0BnbWFpbC5jb20iLCJzdGF0ZSI6dHJ1ZSwiaWF0IjoxNzE3OTk3MDcyLCJleHAiOjE3MTgwMDQyNzJ9.hdIrXxDOM0HkDPwxEQYb4QBJrUVc3sXuulkfjkdXyUQ",
     "user": {
         "id": 1,
         "username": "pauloc",
@@ -12,9 +12,9 @@
         "personId": 1,
         "Person": {
             "id": 1,
-            "firstName": "Paulo",
+            "firstName": "Paulo Nicolas",
             "lastName": "Cabrera",
-            "birthDate": "1990-01-31T00:23:30.000Z",
+            "birthDate": "1990-01-31T00:00:00.000Z",
             "numberDocument": "35104957",
             "typeDocument": "DNI",
             "sex": "Masculino",

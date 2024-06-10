@@ -64,9 +64,9 @@
   #acceptButton:hover, #cancelButton:hover {
     opacity: 0.8;
   }
-/* Estilo para el profesional new */
+/* Estilo para el patient new */
 
-.container-profesional-new {
+.container-patient-new {
   display: flex;
   justify-content: space-between;
   width: 85%;
@@ -98,8 +98,8 @@ input[type="date"],
 input[type="number"],
 input[type="email"],
 input[type="password"],
-#specialityInput,
-#profesionInput, 
+#socialWorkInput,
+#planOSInput, 
 #sex,
 #typeDocument {
   width: calc(100% - 22px);

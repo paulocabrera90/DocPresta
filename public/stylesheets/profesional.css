@@ -1,0 +1,62 @@
+/* Estilo para el profesional new */
+
+.container-profesional-new {
+    display: flex;
+    justify-content: space-between;
+    width: 85%;
+    margin: 25px
+  }
+  
+  form {
+    background-color: #fff;
+    padding: 20px;
+    border: 2px solid #5fbae9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+  }
+  
+  h1 {
+    text-align: center;
+    color: #56baed;
+  }
+  
+  label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  input[type="text"],
+  input[type="date"],
+  input[type="number"],
+  input[type="email"],
+  input[type="password"],
+  #specialityInput,
+  #profesionInput, 
+  #sex,
+  #typeDocument {
+    width: calc(100% - 22px);
+    padding: 10px;
+    border: 2px solid #5fbae9;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+  }
+  
+  button {
+    width: 100%;
+    padding: 10px;
+    background-color: #56baed;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #3a9ac6;
+  }
+    

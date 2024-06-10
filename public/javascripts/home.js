@@ -1,18 +1,23 @@
 
-function confirmDelete() {
-    if (window.confirm("¿Estás seguro de que deseas eliminar este profesional?")) {
-        const form = event.target.closest("form");
-        const profId = form.getAttribute("data-id");
-        
-        fetch(`/api/profesional/${profId}`, {
+function confirmDelete(event) {
+    event.preventDefault();
+
+    const form = event.target.closest("form");
+    const id = form.getAttribute("data-id");
+    const module = form.getAttribute("data-module");
+    console.log(module);
+    if (window.confirm("¿Estás seguro de que deseas eliminar este "+ module+"?")) {
+        const url = "/api/" + module + "/" + id;
+        fetch(url, {
             method: 'DELETE'
         })
         .then(response => {
             if (response.ok) {
-                console.log("Profesional eliminado con éxito");
-                alert(`Profesional con ID ${profId} eliminado con éxito`); 
+                console.log(module+ " eliminado con éxito");
+                alert(`${module} con ID ${id} eliminado con éxito`); 
+                location.reload();
             } else {
-                console.error("Error al eliminar el profesional");
+                console.error("Error al eliminar el " + module);
             }
         })
         .catch(error => {

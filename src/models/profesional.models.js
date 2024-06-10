@@ -30,7 +30,7 @@ const {
         as: 'Speciality',
       });
     
-      models.Speciality.hasOne(Profesional, {
+      models.Speciality.hasMany(Profesional, {
         foreignKey: 'specialityId',
         as: 'Profesionals',
       });
