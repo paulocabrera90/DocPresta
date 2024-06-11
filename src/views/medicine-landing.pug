@@ -1,0 +1,69 @@
+extends home
+
+block content
+    //- container-presta-list
+    //-     header
+    //-         .title-header-cards
+    //-             h1 Lista de Pacientes
+    //-         a(href="/api/patient/new" id="newElementCard" class="btn btn-success") Nuevo
+    //-     hr(style="margin-top: 20px; margin-bottom: 20px;")
+    //-     container-card
+    //-         each pat in patients
+    //-             .card
+    //-                 .card-header #{pat.firstName} #{pat.lastName}
+    //-                 .card-body
+    //-                     p
+    //-                     | <strong>Fecha de Nacimiento:</strong> #{new Date(pat.birthDate).toISOString().split('T')[0]}
+    //-                     br
+    //-                     | <strong>Documento:</strong> #{pat.typeDocument}- #{pat.numberDocument}
+    //-                     br
+    //-                     | <strong>Sexo:</strong> #{pat.sex}
+    //-                     br
+    //-                     | <strong>Obra Social - Plan :</strong> #{pat.socialWorkName} - #{pat.planOSName}
+    //-                     br
+                
+    //-                 .card-footer
+    //-                     a(href=`/api/patient/${pat.id}` class="btn btn-secondary") Editar
+
+    //-                     form(id='formDeleteCard' data-id=pat.id data-module="patient")
+    //-                         button(id='btnFormDeleteCard' type='submit' class="btn btn-danger" onclick="confirmDelete()") Eliminar
+    container-presta-list
+        header
+            .title-header-cards
+                h1 Lista de Medicamentos
+            a(href="/api/medicine/new" id="newElementCard" class="btn btn-success") Nuevo
+        hr(style="margin-top: 20px; margin-bottom: 20px;")
+
+        container-card      
+            each medicine in medicines
+                .card
+                    .card-body.row 
+                        .col-md-3
+                            h5.card-title #{medicine.name} - Código: #{medicine.code}
+                            p.card-text
+                            if medicine.ComercialMedicine
+                            h6 
+                                strong Nombre Comercial: 
+                                | #{medicine.ComercialMedicine.name}
+                        .col-md-3
+                            if medicine.ConcentratedMedicine.length > 0
+                                h6 
+                                    strong Concentración:
+                                each item in medicine.ConcentratedMedicine
+                                    p - #{item.quantity} #{item.magnitude}
+                            if medicine.QuantityMed.length > 0
+                                h6
+                                    strong Cantidad/es:
+                                each item in medicine.QuantityMed
+                                    p - Cantidad: #{item.quantity} unidades
+                            if medicine.PharmaForm.length > 0
+                                h6 
+                                    strong Forma Farmacéutica
+                                each form in medicine.PharmaForm
+                                    p - #{form.name}
+                    .card-footer
+                        a(href=`/api/medicine/${medicine.id}` class="btn btn-secondary") Editar
+
+                        form(id='formDeleteCard' data-id=medicine.id data-module="medicine")
+                            button(id='btnFormDeleteCard' type='submit' class="btn btn-danger" onclick="confirmDelete()") Eliminar
+    

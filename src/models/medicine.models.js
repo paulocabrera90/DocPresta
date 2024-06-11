@@ -7,18 +7,24 @@ const {
         
         static associate(models) {
             Medicine.belongsToMany(
-                models.ConcentratedMedicine, 
-                { through: 'ConcentratedMedicine_Medicine' }
+                models.ConcentratedMedicine, { 
+                    through: 'ConcentratedMedicine_Medicine',
+                    as: 'ConcentratedMedicine'
+                }
             );
 
             Medicine.belongsToMany(
-                models.QuantityMed, 
-                { through: 'QuantityMed_Medicine' }
+                models.QuantityMed, { 
+                    through: 'QuantityMed_Medicine',
+                    as: 'QuantityMed' 
+                }
             );
 
             Medicine.belongsToMany(
                 models.PharmaForm, 
-                { through: 'PharmaForm_Medicine' }
+                { through: 'PharmaForm_Medicine',
+                    as: 'PharmaForm' }
+                
             );
 
             Medicine.belongsTo(models.ComercialMedicine, {
