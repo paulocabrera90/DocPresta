@@ -41,6 +41,19 @@ const {
                 foreignKey: 'comercialMedicineId',
                 as: 'Medicine',
             });
+
+            Medicine.belongsTo(models.FamilyMedicine, {
+                foreignKey: {
+                  name: 'familyMedicineId',
+                  allowNull: false,
+                },
+                as: 'FamilyMedicine',
+            });
+
+            models.FamilyMedicine.hasOne(Medicine, {
+                foreignKey: 'familyMedicineId',
+                as: 'Medicine',
+            });
         }
     }
 
@@ -53,6 +66,10 @@ const {
             type: DataTypes.STRING,
             defaultValue: true,
             unique: true,
+        },
+        state: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: true,
         },
         creationDate: {
             type: DataTypes.DATE,

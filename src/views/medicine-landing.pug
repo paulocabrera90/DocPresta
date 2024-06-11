@@ -1,32 +1,6 @@
 extends home
 
 block content
-    //- container-presta-list
-    //-     header
-    //-         .title-header-cards
-    //-             h1 Lista de Pacientes
-    //-         a(href="/api/patient/new" id="newElementCard" class="btn btn-success") Nuevo
-    //-     hr(style="margin-top: 20px; margin-bottom: 20px;")
-    //-     container-card
-    //-         each pat in patients
-    //-             .card
-    //-                 .card-header #{pat.firstName} #{pat.lastName}
-    //-                 .card-body
-    //-                     p
-    //-                     | <strong>Fecha de Nacimiento:</strong> #{new Date(pat.birthDate).toISOString().split('T')[0]}
-    //-                     br
-    //-                     | <strong>Documento:</strong> #{pat.typeDocument}- #{pat.numberDocument}
-    //-                     br
-    //-                     | <strong>Sexo:</strong> #{pat.sex}
-    //-                     br
-    //-                     | <strong>Obra Social - Plan :</strong> #{pat.socialWorkName} - #{pat.planOSName}
-    //-                     br
-                
-    //-                 .card-footer
-    //-                     a(href=`/api/patient/${pat.id}` class="btn btn-secondary") Editar
-
-    //-                     form(id='formDeleteCard' data-id=pat.id data-module="patient")
-    //-                         button(id='btnFormDeleteCard' type='submit' class="btn btn-danger" onclick="confirmDelete()") Eliminar
     container-presta-list
         header
             .title-header-cards

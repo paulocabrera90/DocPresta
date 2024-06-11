@@ -10,43 +10,45 @@ async function getMedicineById (req, res) {
             where: { id },
             include: [
                 {
-                    model: PlanOS,
-                    as: 'PlanOS',
-                    include: {
-                        model: SocialWork,
-                        as: 'SocialWork'
-                    }
+                    model: ConcentratedMedicine,
+                    as: 'ConcentratedMedicine'
                 },
                 {
-                    model: User,
-                    as: 'User',
-                    include: {
-                        model: Person,
-                        as: 'Person',
-                    }
+                    model: QuantityMed,
+                    as: 'QuantityMed'
+                },
+                {
+                    model: PharmaForm,
+                    as: 'PharmaForm'
+                },
+                {
+                    model: ComercialMedicine,
+                    as: 'ComercialMedicine'
                 }
             ]
         });
 
-        if (!medicine || !medicine.User || !medicine.User.Person) {
+        if (!medicine) {
             return res.status(404).json({ message: 'Medicine not found' });
         }
-        //res.json({data: mapMedicineData(medicine)})
-        if (!medicine) {
-            return res.render('medicine-new', { 
-                medicine: '',
-                plansOS: await PlanOS.findAll(),
-                socialsWork: await SocialWork.findAll()
-            });
-        }
 
-        const mapMedicine = mapMedicineData(medicine);
+        // if (!medicine) {
+        //     return res.render('medicine-new', { 
+        //         medicine: ''
+        //     });
+        // }
 
-        res.render('medicine-new', { 
-            medicine: mapMedicine, 
-            plansOS: await PlanOS.findAll(),
-            socialsWork: await SocialWork.findAll()
+        // res.render('medicine-new', { 
+        //     medicine
+        // });
+
+        res.json({data:medicine,  
+            concentratedMedicine: await ConcentratedMedicine.findAll(),
+            quantityMed: await QuantityMed.findAll(),
+            pharmaForm: await PharmaForm.findAll(),
+            comercialMedicine: await ComercialMedicine.findAll()
         });
+
     } catch (error) {
         httpError(res, error);
     }
@@ -75,9 +77,6 @@ async function getListAllMedicines(req, res){
             ]
         });
 
-        console.log(medicine);
-        //const listMapMedicine = medicine.map(mapMedicineData);
-
         res.render('medicine-landing', { 
             medicines: medicine
         });       
@@ -91,8 +90,11 @@ async function getListAllMedicines(req, res){
 async function newMedicine(req, res) {
     try {
         return res.render('medicine-new', { 
-            plansOS: await PlanOS.findAll(),
-            socialsWork: await SocialWork.findAll()
+            concentratedMedicine: await ConcentratedMedicine.findAll({
+                order: [['quantity', 'ASC']]
+             }),
+            quantityMed: await QuantityMed.findAll(),
+            pharmaForm: await PharmaForm.findAll()
         });
         
     } catch (error) {
