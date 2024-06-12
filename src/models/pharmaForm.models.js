@@ -16,7 +16,7 @@ const {
 
     PharmaForm.init({
         name: {
-            type: DataTypes.ENUM('CAPSULA', 'GOTA', 'AMPOLLA', 'JARABE', 'COMPRIMIDO', 'OTROS'),
+            type: DataTypes.STRING,
             allowNull: false
         },
         creationDate: {

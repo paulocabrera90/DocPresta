@@ -5,7 +5,12 @@ const {
     module.exports = (sequelize, DataTypes) => {
 
     class FamilyMedicine extends Model {
-      static associate(models) {}
+      static associate(models) {
+        FamilyMedicine.belongsToMany(
+          models.Medicine, 
+          { through: 'FamilyMedicine_Medicine' }
+        );
+      }
     }
 
     FamilyMedicine.init({

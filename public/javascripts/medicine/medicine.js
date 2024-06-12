@@ -14,14 +14,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const checkActive = document.getElementById('checkActive').checked;
         const checkActiveText = checkActive?'Activo':'Inactivo';
-
         const comercialName = document.getElementById('comercialName').value;
-
         const magnitude = document.getElementById('concentratedMedicineMagnitude').options[document.getElementById('concentratedMedicineMagnitude').selectedIndex].text;
-        
+        const familyMedicineName = document.getElementById('familyMedicineName').value;
         const pharmaFormId = Array.from(document.getElementById('pharmaFormList').selectedOptions).map(opt => opt.value).join(', ');
         const pharmaFormText = Array.from(document.getElementById('pharmaFormList').selectedOptions).map(opt => opt.text).join(', ');
-
         const quantityMedList = Array.from(document.getElementById('quantityMedList').selectedOptions).map(opt => opt.value).join(', ');
         const quantityMedListText = Array.from(document.getElementById('quantityMedList').selectedOptions).map(opt => opt.text).join(', ');
 
@@ -30,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         if (quantityId && magnitude && pharmaFormId && quantityMedList) {
-            const content = `Concentración: ${quantityText}${magnitude}, Forma Farmacéutica: ${pharmaFormText}, Cantidades/Unidades: ${quantityMedListText}, Nombre Comercial: ${comercialName}, ${checkActiveText}`;
+            const content = `Concentración: ${quantityText}${magnitude}, Forma Farmacéutica: ${pharmaFormText}, Cantidades/Unidades: ${quantityMedListText}, Nombre Comercial: ${comercialName}, Familia Farmacéutica: ${familyMedicineName}, ${checkActiveText}`;
             document.querySelector('.selected-concentrations').style.display = 'block';
 
             if (isAlreadyInList(content)) {
@@ -52,14 +49,14 @@ document.addEventListener('DOMContentLoaded', function() {
             li.appendChild(removeBtn);
             list.appendChild(li);
     
-            addListItemToForm(quantityId, magnitude, pharmaFormId, quantityMedList, comercialName);
+            addListItemToForm(quantityId, magnitude, pharmaFormId, quantityMedList, comercialName, familyMedicineName);
 
         }else{
             alert("Todos los campos son obligatorios")
         }me
     });
 
-    function addListItemToForm(quantityId, magnitude, pharmaFormId, quantityMedList, comercialName) {
+    function addListItemToForm(quantityId, magnitude, pharmaFormId, quantityMedList, comercialName, familyMedicineName) {
         let input = form.querySelector('input[name="items"]');
         if (!input) {
             input = document.createElement('input');
@@ -76,8 +73,9 @@ document.addEventListener('DOMContentLoaded', function() {
             quantityId: quantityId,
             magnitude: magnitude,
             pharmaTypeId: pharmaFormId,
-            quantityCedTypeList: quantityMedList,
+            quantityMedList: quantityMedList,
             comercialName: comercialName,
+            familyMedicineName: familyMedicineName
         });
 
         // Guarda el arreglo actualizado de nuevo en el input como string JSON

@@ -10,49 +10,29 @@ const {
                 models.ConcentratedMedicine, { 
                     through: 'ConcentratedMedicine_Medicine',
                     as: 'ConcentratedMedicine'
-                }
-            );
+                });
 
             Medicine.belongsToMany(
                 models.QuantityMed, { 
                     through: 'QuantityMed_Medicine',
                     as: 'QuantityMed' 
-                }
-            );
+                });
 
             Medicine.belongsToMany(
                 models.PharmaForm, 
                 { through: 'PharmaForm_Medicine',
-                    as: 'PharmaForm' }
-                
-            );
+                    as: 'PharmaForm'
+                 });
 
-            Medicine.belongsTo(models.ComercialMedicine, {
-                foreignKey: {
-                  name: 'comercialMedicineId',
-                  allowNull: false,
-                  unique: true,
-                },
-                as: 'ComercialMedicine',
-            });
-        
-              
-            models.ComercialMedicine.hasOne(Medicine, {
-                foreignKey: 'comercialMedicineId',
-                as: 'Medicine',
+            Medicine.belongsTo(
+                models.ComercialMedicine, 
+                {   through: 'ComercialMedicine_Medicine',
+                    as: 'ComercialMedicine',
             });
 
             Medicine.belongsTo(models.FamilyMedicine, {
-                foreignKey: {
-                  name: 'familyMedicineId',
-                  allowNull: false,
-                },
+                through: 'FamilyMedicine_Medicine',
                 as: 'FamilyMedicine',
-            });
-
-            models.FamilyMedicine.hasOne(Medicine, {
-                foreignKey: 'familyMedicineId',
-                as: 'Medicine',
             });
         }
     }

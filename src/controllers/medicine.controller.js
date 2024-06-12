@@ -112,72 +112,70 @@ async function createMedicine(req, res) {
         const {
             name,
             code,
-            comercialName,
-            pharmaForm,
-            familyMedicineName,
             checkActive,
-            concentratedMedicineNameList,
-            concentratedMedicineQuantityList,
-            quantityMedList,
-            pharmaFormList,
+            items
         } = req.body;
         console.log("Body", req.body)
         console.log("Create medicine")
 
-        // let familyMedicine = await FamilyMedicine.findOne({
-        //     where: { name: familyMedicineName }
-        // });
+        const itemsJson = JSON.parse(items);
 
-        // if (!familyMedicine) {
-        //     familyMedicine = await FamilyMedicine.create({
-        //         name: familyMedicineName,
-        //         creatiionDate: Date.now(),
-        //         modificationDate: Date.now()
-        //     }, { transaction })
-        // }
+        const newMedicine = await Medicine.create({
+            name,
+            code,
+            active: checkActive ? true : false,
+            creatiionDate: Date.now(),
+            modificationDate: Date.now(),
+        }, { transaction });
 
-        // let comercialMedicine = await ComercialMedicine.findOne({
-        //     where: { name: comercialName }
-        // })
+        for (const element of items) {
 
-        // if (!comercialMedicine) {
-        //     comercialMedicine = await ComercialMedicine.create({
-        //         name: comercialName,
-        //         creatiionDate: Date.now(),
-        //         modificationDate: Date.now()
-        //     }, { transaction })
-        // }
+            let familyMedicine = await FamilyMedicine.findOne({
+                where: { name: element.familyMedicineName }
+            });
+    
+            if (!familyMedicine) {
+                familyMedicine = await FamilyMedicine.create({
+                    name: element.familyMedicineName,
+                    creatiionDate: Date.now(),
+                    modificationDate: Date.now()
+                }, { transaction })
+            }
 
-        // const newMedicine = await Medicine.create({
-        //     name,
-        //     code,
-        //     comercialName,
-        //     pharmaForm,
-        //     familyMedicineId: familyMedicine.id,
-        //     active: checkActive ? true : false,
-        //     creatiionDate: Date.now(),
-        //     modificationDate: Date.now(),
-        //     comercialMedicineId: comercialMedicine.id
-        // }, { transaction });
+            let comercialMedicine = await ComercialMedicine.findOne({
+                where: { name: comercialName }
+            })
+    
+            if (!comercialMedicine) {
+                comercialMedicine = await ComercialMedicine.create({
+                    name: comercialName,
+                    creatiionDate: Date.now(),
+                    modificationDate: Date.now()
+                }, { transaction })
+            }
 
-        // let concentratedMedicine = await ConcentratedMedicine.findOne({
-        //     where: { magnitude: concentratedMedicineName, id: concentratedMedicineQuantityId }
-        // });
+            let concentratedMedicine = await ConcentratedMedicine.findOne({
+                where: { 
+                    magnitude: element.concentratedMedicineName, 
+                    id: element.concentratedMedicineQuantityId }
+            });
+    
+            if (!concentratedMedicine) {
+                concentratedMedicine = await ConcentratedMedicine.create({
+                    name: element.concentratedMedicineName,
+                    quantity: Number(element.concentratedMedicineQuantityId),
+                    creatiionDate: Date.now(),
+                    modificationDate: Date.now()
+                }, { transaction })
+            }
+            await newMedicine.addConcentratedMedicine(concentratedMedicine.id, { transaction });
+            await newMedicine.addQuantityMed(quantityMedId, { transaction });
+            await newMedicine.addPharmaForm(pharmaFormId, { transaction });
+            await newMedicine.addFamilyMedicine(familyMedicine.id, { transaction });
+            await newMedicine.addComercialMedicine(comercialMedicine.id, { transaction });
+        };
 
-        // if (!concentratedMedicine) {
-        //     concentratedMedicine = await ConcentratedMedicine.create({
-        //         name: concentratedMedicineName,
-        //         quantity: Number(concentratedMedicineQuantityId),
-        //         creatiionDate: Date.now(),
-        //         modificationDate: Date.now()
-        //     }, { transaction })
-        // }
-
-        // await newMedicine.addConcentratedMedicine(concentratedMedicine.id, { transaction });
-        // await newMedicine.addQuantityMed(quantityMedId, { transaction });
-        // await newMedicine.addPharmaForm(pharmaFormId, { transaction });
-
-        // await transaction.commit();
+        await transaction.commit();
         console.log("Create medicine successfully")
         res.status(200).json({message: "Create medicine successfully", data: "newMedicine"});
 
