@@ -1,4 +1,35 @@
 
+document.addEventListener("DOMContentLoaded", function() {
+    const links = document.querySelectorAll('.sidenav a');
+    
+    links.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            showSpinner(true); // Mostrar el spinner
+            setTimeout(() => {
+                window.location.href = this.href; // Cambiar la página después de un breve retraso
+            }, 100);  // Este retraso es opcional y puede ser más corto
+        });
+    });
+
+    function showSpinner(show) {
+        const overlay = document.querySelector('.loading-overlay');
+        if (show) {
+          console.log("show");
+          overlay.style.visibility = 'visible';
+          overlay.style.opacity = '1';
+        } else {
+          console.log("not show");
+          overlay.style.visibility = 'hidden';
+          overlay.style.opacity = '0';
+        }
+      }
+  });
+
+  window.onload = function() {
+    showSpinner(false); // Esto ocultará el spinner cuando la página esté completamente cargada
+  };
+
 function confirmDelete(event) {
     event.preventDefault();
 
@@ -15,6 +46,7 @@ function confirmDelete(event) {
             if (response.ok) {
                 console.log(module+ " eliminado con éxito");
                 alert(`${module} con ID ${id} eliminado con éxito`); 
+                showSpinner(false)
                 location.reload();
             } else {
                 console.error("Error al eliminar el " + module);

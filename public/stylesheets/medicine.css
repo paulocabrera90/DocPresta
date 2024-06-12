@@ -98,16 +98,24 @@ input[type="date"],
 input[type="number"],
 input[type="email"],
 input[type="password"],
+input[type="checkbox"],
 #concentratedMedicineQuantityId,
-#concentratedMedicineId, 
-#quantityMedId,
-#pharmaFormId {
+#concentratedMedicineMagnitude, 
+#quantityMedList,
+#pharmaFormList,
+#familyMedicineName,
+.container-propertites-medicine {
   width: calc(100% - 22px);
   padding: 10px;
   border: 2px solid #5fbae9;
   border-radius: 5px;
   margin-bottom: 10px;
   box-sizing: border-box;
+}
+
+
+input[type="checkbox"]{
+  width: calc(5% - 22px);
 }
 
 button {
@@ -129,9 +137,50 @@ button:hover {
 .container-concentrated-medicine {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+ul#concentrationList {
+  width: calc(100% - 22px);
+  padding: 10px;
+  border: 2px solid #5fbae9;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  box-sizing: border-box;
+  list-style-type: none;
+}
+
+li {
+  margin-bottom: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 18px;
+}
+
+
+#addConcentration {
+  margin-top: 23px;
+}
+
+#addConcentration:not([disabled]) {
+  opacity: 1; /* Opacidad completa cuando está habilitado */
+  cursor: pointer;
+}
+
+button-remove-medicine-list {
+  width: 20%;
+  padding: 10px;
+  background-color: #56baed;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .half-width {
   flex: 1;
-  padding-right: 10px;
 }

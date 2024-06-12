@@ -1,7 +1,8 @@
-const { Medicine, User, Person, ConcentratedMedicine, QuantityMed, PharmaForm, ComercialMedicine,sequelize } = require('../models/index.models');
+const { Medicine, User, FamilyMedicine, Person, ConcentratedMedicine, QuantityMed, PharmaForm, ComercialMedicine,sequelize } = require('../models/index.models');
 const { mapMedicineData } = require('../models/mappers/medicine.mapper');
 const { httpError } = require('../helpers/handleError');
 const { encrypt } = require('../utils/handleBcrypt');
+const { where } = require('sequelize');
 
 async function getMedicineById (req, res) {
     const { id } = req.params;
@@ -57,6 +58,7 @@ async function getMedicineById (req, res) {
 async function getListAllMedicines(req, res){
     try {
         const medicine = await Medicine.findAll({
+            where: { state: true },
             include: [
                 {
                     model: ConcentratedMedicine,
@@ -94,7 +96,8 @@ async function newMedicine(req, res) {
                 order: [['quantity', 'ASC']]
              }),
             quantityMed: await QuantityMed.findAll(),
-            pharmaForm: await PharmaForm.findAll()
+            pharmaForm: await PharmaForm.findAll(),
+            family: await FamilyMedicine.findAll()
         });
         
     } catch (error) {
@@ -106,55 +109,96 @@ async function newMedicine(req, res) {
 async function createMedicine(req, res) {
     const transaction = await sequelize.transaction();
     try {
-        const {firstName, lastName, birthDate, numberDocument, 
-            typeDocument, sex, planOSId, passwordhash, 
-            username, email
+        const {
+            name,
+            code,
+            comercialName,
+            pharmaForm,
+            familyMedicineName,
+            checkActive,
+            concentratedMedicineNameList,
+            concentratedMedicineQuantityList,
+            quantityMedList,
+            pharmaFormList,
         } = req.body;
-        console.log("req.body", req.body)
+        console.log("Body", req.body)
         console.log("Create medicine")
 
-        const newPerson = await Person.create({
-            firstName,
-            lastName,
-            birthDate,
-            numberDocument,
-            typeDocument,
-            sex,
-            state: true,
-            creationDate: new Date(),
-            ModificationDate: new Date()
-        }, { transaction });
+        // let familyMedicine = await FamilyMedicine.findOne({
+        //     where: { name: familyMedicineName }
+        // });
 
-        const passwordEncrypted = await encrypt(passwordhash)
+        // if (!familyMedicine) {
+        //     familyMedicine = await FamilyMedicine.create({
+        //         name: familyMedicineName,
+        //         creatiionDate: Date.now(),
+        //         modificationDate: Date.now()
+        //     }, { transaction })
+        // }
 
-        const registerUser = await User.create({
-            username,
-            email,          
-            hashPassword: passwordEncrypted,          
-            profilePic: '',
-            state: true,
-            crationDate: Date.now(),
-            modificationDate: Date.now(),
-            rol: "PACIENTE",
-            personId: newPerson.id
-        }, { transaction })
+        // let comercialMedicine = await ComercialMedicine.findOne({
+        //     where: { name: comercialName }
+        // })
 
-        const medicine = await Medicine.create({
-            userId: registerUser.id,
-            planOSId, 
-            creationDate: new Date(),
-            modificationDate: new Date()
-        }, { transaction });
+        // if (!comercialMedicine) {
+        //     comercialMedicine = await ComercialMedicine.create({
+        //         name: comercialName,
+        //         creatiionDate: Date.now(),
+        //         modificationDate: Date.now()
+        //     }, { transaction })
+        // }
 
-         await transaction.commit();
+        // const newMedicine = await Medicine.create({
+        //     name,
+        //     code,
+        //     comercialName,
+        //     pharmaForm,
+        //     familyMedicineId: familyMedicine.id,
+        //     active: checkActive ? true : false,
+        //     creatiionDate: Date.now(),
+        //     modificationDate: Date.now(),
+        //     comercialMedicineId: comercialMedicine.id
+        // }, { transaction });
+
+        // let concentratedMedicine = await ConcentratedMedicine.findOne({
+        //     where: { magnitude: concentratedMedicineName, id: concentratedMedicineQuantityId }
+        // });
+
+        // if (!concentratedMedicine) {
+        //     concentratedMedicine = await ConcentratedMedicine.create({
+        //         name: concentratedMedicineName,
+        //         quantity: Number(concentratedMedicineQuantityId),
+        //         creatiionDate: Date.now(),
+        //         modificationDate: Date.now()
+        //     }, { transaction })
+        // }
+
+        // await newMedicine.addConcentratedMedicine(concentratedMedicine.id, { transaction });
+        // await newMedicine.addQuantityMed(quantityMedId, { transaction });
+        // await newMedicine.addPharmaForm(pharmaFormId, { transaction });
+
+        // await transaction.commit();
         console.log("Create medicine successfully")
-        res.status(200).json({message: "Create medicine successfully"});
+        res.status(200).json({message: "Create medicine successfully", data: "newMedicine"});
 
     } catch (error) {
         await transaction.rollback();
         httpError(res, error);
     }
 }
+
+async function associateMedicineAndConcentrate() {
+    try {
+      const { newMedicine, newConcentratedMedicine } = await createInstances();
+  
+      // Añadir la medicina concentrada a la medicina
+      await newMedicine.addConcentratedMedicine(newConcentratedMedicine);
+  
+      console.log(`Medicina y medicina concentrada asociadas exitosamente.`);
+    } catch (error) {
+      console.error('Error asociando medicinas:', error);
+    }
+  }
 
 async function updateMedicine(req, res) {
     const transaction = await sequelize.transaction();

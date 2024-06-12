@@ -1,35 +1,97 @@
 document.addEventListener('DOMContentLoaded', function() {   
 
-    const socialWorkInput = document.getElementById('socialWorkInput');
-    const plansOSList = document.getElementById('plansOSList');
-    const plansOSData = JSON.parse(document.getElementById('plansOSData').textContent);
+    const addButton = document.getElementById('addConcentration');
+    const list = document.getElementById('concentrationList');
 
-    // Función para actualizar la lista de planes
-    function updateplansOSList(socialWorkId) {
-        const filteredPlansOS = plansOSData.filter(s => s.socialWorkId === socialWorkId);
-        plansOSList.innerHTML = '';  // Limpia las opciones existentes
-        filteredPlansOS.forEach(plans => {
-            const option = document.createElement('option');
-            option.value = plans.name;
-            option.textContent = plans.name;
-            plansOSList.appendChild(option);
-        });
-        if (!filteredPlansOS.length) {
-            plansOSList.innerHTML = '<option value="">No hay planes disponibles</option>';
-        }
+    if (list.children.length === 0) {
+        document.querySelector('.selected-concentrations').style.display = 'none';
     }
 
-    // Escuchar cambios en el input de obra social
-    socialWorkInput.addEventListener('input', function() {
-        const selectedOption = document.querySelector(`#socialWorkList option[value="${socialWorkInput.value}"]`);
-        if (selectedOption && selectedOption.dataset.id) {
-            updateplansOSList(parseInt(selectedOption.dataset.id));
-        } else {
-            plansOSList.innerHTML = '<option value="">Seleccione una Obra social primero</option>';
+    addButton.addEventListener('click', function() {
+
+        const quantityId = Array.from(document.getElementById('concentratedMedicineQuantityId').selectedOptions).map(opt => opt.value).join(', ');
+        const quantityText = Array.from(document.getElementById('concentratedMedicineQuantityId').selectedOptions).map(opt => opt.text).join(', ');
+
+        const checkActive = document.getElementById('checkActive').checked;
+        const checkActiveText = checkActive?'Activo':'Inactivo';
+
+        const comercialName = document.getElementById('comercialName').value;
+
+        const magnitude = document.getElementById('concentratedMedicineMagnitude').options[document.getElementById('concentratedMedicineMagnitude').selectedIndex].text;
+        
+        const pharmaFormId = Array.from(document.getElementById('pharmaFormList').selectedOptions).map(opt => opt.value).join(', ');
+        const pharmaFormText = Array.from(document.getElementById('pharmaFormList').selectedOptions).map(opt => opt.text).join(', ');
+
+        const quantityMedList = Array.from(document.getElementById('quantityMedList').selectedOptions).map(opt => opt.value).join(', ');
+        const quantityMedListText = Array.from(document.getElementById('quantityMedList').selectedOptions).map(opt => opt.text).join(', ');
+
+        if (list.children.length === 0) {
+            document.querySelector('.selected-concentrations').style.display = 'none';
         }
+
+        if (quantityId && magnitude && pharmaFormId && quantityMedList) {
+            const content = `Concentración: ${quantityText}${magnitude}, Forma Farmacéutica: ${pharmaFormText}, Cantidades/Unidades: ${quantityMedListText}, Nombre Comercial: ${comercialName}, ${checkActiveText}`;
+            document.querySelector('.selected-concentrations').style.display = 'block';
+
+            if (isAlreadyInList(content)) {
+                alert("Este elemento ya ha sido añadido.");
+                return;
+            }
+
+            const li = document.createElement('li');
+            li.textContent = content;
+
+            const removeBtn = document.createElement('button-remove-medicine-list');
+            removeBtn.textContent = 'Eliminar';
+            removeBtn.onclick = function() {
+                this.parentNode.remove();
+                if (list.children.length === 0) {
+                    document.querySelector('.selected-concentrations').style.display = 'none';
+                }
+            };
+            li.appendChild(removeBtn);
+            list.appendChild(li);
+    
+            addListItemToForm(quantityId, magnitude, pharmaFormId, quantityMedList, comercialName);
+
+        }else{
+            alert("Todos los campos son obligatorios")
+        }me
     });
 
+    function addListItemToForm(quantityId, magnitude, pharmaFormId, quantityMedList, comercialName) {
+        let input = form.querySelector('input[name="items"]');
+        if (!input) {
+            input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'items';
+            form.appendChild(input);
+        }
+        
+        // Obtiene el valor actual del input, que es un JSON, y lo convierte a un arreglo
+        let items = input.value ? JSON.parse(input.value) : [];
+        
+        // Añade el nuevo ítem al arreglo
+        items.push({
+            quantityId: quantityId,
+            magnitude: magnitude,
+            pharmaTypeId: pharmaFormId,
+            quantityCedTypeList: quantityMedList,
+            comercialName: comercialName,
+        });
+
+        // Guarda el arreglo actualizado de nuevo en el input como string JSON
+        input.value = JSON.stringify(items);
+    }
+
+    function isAlreadyInList(content) {
+        const items = document.querySelectorAll('#concentrationList li');
+        return Array.from(items).some(item => item.textContent.includes(content));
+    }
+    
     //_______________________________________________________________________________-
+    //_______________________________________________________________________________-
+
     const form = document.querySelector('form');
     form.addEventListener('submit', function(event) {
         event.preventDefault();
@@ -39,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const patientId = form.getAttribute("data-id");
 
         const isUpdate = patientId? true : false;
-        const url = isUpdate ? `/api/patient/update/${patientId}` : '/api/patient/create';
+        const url = isUpdate ? `/api/medicine/update/${patientId}` : '/api/medicine/create';
         const method = isUpdate ? 'PATCH' : 'POST';
 
         fetch(url, {
@@ -53,9 +115,9 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(result => {
             console.log('Success:', result);
-            const message = isUpdate ? `Se actualizo correctamente el Paciente` : 'Se agrego correctamente el Paciente';
+            const message = isUpdate ? `Se actualizo correctamente el Medicamento` : 'Se agrego correctamente el Medicamento';
             alert(message);
-            window.location.href = '/api/patient';
+            window.location.href = '/api/medicine';
         })
         .catch(error => {
             // Handle errors
@@ -64,16 +126,4 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-});
-
-document.getElementById('planOSInput').addEventListener('change', function() {
-    var selectedPlanOS = this.value;
-    var plansOSData = JSON.parse(document.getElementById('plansOSData').textContent);
-    var planOSIdInput = document.getElementById('planOSId');
-
-    var selectedPlanOSId = plansOSData.find(function(planOS) {
-        return planOS.name === selectedPlanOS;
-    }).id;
-
-    planOSIdInput.value = selectedPlanOSId;
 });
