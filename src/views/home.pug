@@ -11,13 +11,17 @@ html
     link(rel='stylesheet', href='/stylesheets/medicine.css')
  
   body
+    div#loading.loading-overlay(style="visibility: hidden; opacity: 0;")
+      div.spinner
+      
     container-home
       include side-nav.pug      
       block content
 
   script(src='/javascripts/home.js')
+  script(src='/javascripts/medicine/medicine.js')  
   script(src="/javascripts/prescription/prescription.js")
   script(src='/javascripts/profesional/profesional.js')
-  script(src='/javascripts/patient/patient.js')  
+  script(src='/javascripts/patient/patient.js')
   script(src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js")
 

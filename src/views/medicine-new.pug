@@ -5,40 +5,68 @@ block content
         form(action=medicine ? "/api/medicine/update" : "/api/medicine/create" data-id=medicine ? medicine.id: '' method="post")
             h1 #{medicine ? 'Editar' : 'Crear'} Medicamento
             label(for="name") Nombre del Medicamento:
+                span(style="font-size: 13px; margin-left:10px; color: red;") *
                 input(type="text" name="name" id="name" required)
 
             label(for="code" ) Código:
-                input(type="text" name="code" id="code" required)
-                
-            label(for="concentratedMedicineId" ) Concentracion:
-            .container-concentrated-medicine
-                .half-width
-                    label Cantidad:
-                        select(name="concentratedMedicineId" id="concentratedMedicineQuantityId" required)
-                            option(value="") Seleccione una Cantidad
-                            each cm in concentratedMedicine
-                                option(value=cm.id)= cm.quantity
-                .half-width
-                    label Medida:
-                        select(name="concentratedMedicineId" id="concentratedMedicineId" required)
-                            option(value="") Seleccione una Concentración
-                            option(value="MG") MG
-                            option(value="G") G
-                            option(value="ML") ML
-                            option(value="CM3") CM3
+                span(style="font-size: 13px; margin-left:10px; color: red;") *
+                input(type="text" name="code" id="code" required)                  
 
-            label(for="quantityMedId") Cantidad:
-                select(name="quantityMedId" id="quantityMedId" required)
-                    option(value="") Seleccione una Cantidad
-                    each qm in quantityMed
-                        option(value=qm.id)= qm.quantity
+            h3 Propiedades del medicamento:    
+            .container-propertites-medicine
+                label(for="concentratedMedicineList") Concentracion:
+                .container-concentrated-medicine
+                    .half-width
+                        label Cantidad:
+                            span(style="font-size: 13px; margin-left:10px; color: red;") *
+                            select(name="concentratedMedicineQuantityId" id="concentratedMedicineQuantityId" required)
+                                option(value="") Seleccione una Cantidad
+                                each cm in concentratedMedicine
+                                    option(value=cm.id)= cm.quantity
 
-            label(for="pharmaFormId") Forma Farmacéutica:
-                select(name="pharmaFormId" id="pharmaFormId" required)
-                    option(value="") Seleccione una Forma Farmacéutica
-                    each pf in pharmaForm
-                        option(value=pf.id)= pf.name
+                        label(for="quantityMedList") Unidades:
+                            span(style="font-size: 13px; margin-left:10px; color: red;") *
+                            select(name="quantityMedList" id="quantityMedList" required)
+                                option(value="") Seleccione cantidad/unidad
+                                each qm in quantityMed
+                                    option(value=qm.id)= qm.quantity
+                        
+                        label(for="familyMedicineId") Familia:
+                            span(style="font-size: 13px; margin-left:10px; color: red;") * Sino existe la familia, por favor cree una nueva. Agregando en el campo
+                            input(list="familyList" id="familyMedicineName" name="familyMedicineName")
+                            datalist(id="familyList")
+                                option(value="") Seleccione una Familia
+                                each ff in family
+                                    option(value=ff.name.toUpperCase())= ff.name.toUpperCase()
 
-            button(id='btnFormNewProf' type="submit") #{medicine ? 'Actualizar' : 'Crear'}
+                    .half-width
+                        label Magnitud:
+                            span(style="font-size: 13px; margin-left:10px; color: red;") *
+                            select(name="concentratedMedicineMagnitude" id="concentratedMedicineMagnitude" required)
+                                option(value="") Seleccione una Magnitud
+                                option(value="MG") MG
+                                option(value="G") G
+                                option(value="ML") ML
+                                option(value="CM3") CM3
 
-    script(type="application/json" id="plansOSData")!= JSON.stringify(plansOS)
+                        label(for="pharmaFormList") Forma Farmacéutica:
+                            span(style="font-size: 13px; margin-left:10px; color: red;") *
+                            select(name="pharmaFormList" id="pharmaFormList" required)
+                                option(value="") Seleccione forma
+                                each pf in pharmaForm
+                                    option(value=pf.id)= pf.name
+                        
+                        label(for="comercialName") Nombre Comercial:
+                            span(style="font-size: 13px; margin-left:10px; color: red;") *
+                            input(type="text" name="comercialName" id="comercialName" required)
+                    
+                        button#addConcentration(type="button") Añadir
+
+                .selected-concentrations
+                    ul#concentrationList
+            
+
+                label(for="checkActive") Activo:
+                    input(type="checkbox" name="checkActive" id="checkActive" checked)
+                    
+            button(id='btnFormNewMedicine' type="submit") #{medicine ? 'Actualizar' : 'Crear'}

@@ -43,6 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const isUpdate = profId? true : false;
         const url = isUpdate ? `/api/profesional/update/${profId}` : '/api/profesional/create';
         const method = isUpdate ? 'PATCH' : 'POST';
+        showSpinner(true)
 
         fetch(url, {
             method: method,
@@ -57,6 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Success:', result);
             const message = isUpdate ? `Se actualizo correctamente el Profesional` : 'Se agrego correctamente el Profesional';
             alert(message);
+            showSpinner(false)
             window.location.href = '/api/profesional';
         })
         .catch(error => {
