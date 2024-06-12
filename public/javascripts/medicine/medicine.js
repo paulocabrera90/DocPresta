@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const checkActive = document.getElementById('checkActive').checked;
         const checkActiveText = checkActive?'Activo':'Inactivo';
 
+        const comercialName = document.getElementById('comercialName').value;
+
         const magnitude = document.getElementById('concentratedMedicineMagnitude').options[document.getElementById('concentratedMedicineMagnitude').selectedIndex].text;
         
         const pharmaFormId = Array.from(document.getElementById('pharmaFormList').selectedOptions).map(opt => opt.value).join(', ');
@@ -28,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         if (quantityId && magnitude && pharmaFormId && quantityMedList) {
-            const content = `Concentración: ${quantityText}${magnitude}, Forma Farmacéutica: ${pharmaFormText}, Cantidades/Unidades: ${quantityMedListText}, ${checkActiveText}`;
+            const content = `Concentración: ${quantityText}${magnitude}, Forma Farmacéutica: ${pharmaFormText}, Cantidades/Unidades: ${quantityMedListText}, Nombre Comercial: ${comercialName}, ${checkActiveText}`;
             document.querySelector('.selected-concentrations').style.display = 'block';
 
             if (isAlreadyInList(content)) {
@@ -45,29 +47,41 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.parentNode.remove();
                 if (list.children.length === 0) {
                     document.querySelector('.selected-concentrations').style.display = 'none';
-                } else {
-                    document.querySelector('.selected-concentrations').style.display = 'block';
                 }
             };
             li.appendChild(removeBtn);
-            document.getElementById('concentrationList').appendChild(li);
+            list.appendChild(li);
+    
+            addListItemToForm(quantityId, magnitude, pharmaFormId, quantityMedList, comercialName);
 
-            // Agregar inputs ocultos al formulario para enviar los datos
-            addHiddenInput(form, 'concentratedMedicineQuantityId[]', quantityId);
-            addHiddenInput(form, 'concentratedMedicineMagnitude[]', magnitude);
-            addHiddenInput(form, 'pharmaFormId[]', pharmaFormId);
-            addHiddenInput(form, 'quantityMedList[]', quantityMedList);
         }else{
             alert("Todos los campos son obligatorios")
         }me
     });
 
-    function addHiddenInput(form, name, value) {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = name;
-        input.value = value;
-        form.appendChild(input);
+    function addListItemToForm(quantityId, magnitude, pharmaFormId, quantityMedList, comercialName) {
+        let input = form.querySelector('input[name="items"]');
+        if (!input) {
+            input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'items';
+            form.appendChild(input);
+        }
+        
+        // Obtiene el valor actual del input, que es un JSON, y lo convierte a un arreglo
+        let items = input.value ? JSON.parse(input.value) : [];
+        
+        // Añade el nuevo ítem al arreglo
+        items.push({
+            quantityId: quantityId,
+            magnitude: magnitude,
+            pharmaTypeId: pharmaFormId,
+            quantityCedTypeList: quantityMedList,
+            comercialName: comercialName,
+        });
+
+        // Guarda el arreglo actualizado de nuevo en el input como string JSON
+        input.value = JSON.stringify(items);
     }
 
     function isAlreadyInList(content) {
