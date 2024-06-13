@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function() {
             showSpinner(true); // Mostrar el spinner
             setTimeout(() => {
                 window.location.href = this.href; // Cambiar la página después de un breve retraso
-            }, 100);  // Este retraso es opcional y puede ser más corto
+            }, 1000);  // Este retraso es opcional y puede ser más corto
         });
     });
 
