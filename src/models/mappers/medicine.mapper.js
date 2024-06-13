@@ -1,28 +1,30 @@
-const mapPatientData = (data) => {
-    return {
-        id: data.id,
-        firstName: data.User.Person.firstName,
-        lastName: data.User.Person.lastName,
-        age: ageBirth(data.User.Person.birthDate) + ' años',
-        birthDate: data.User.Person.birthDate,
-        numberDocument: data.User.Person.numberDocument,
-        typeDocument: data.User.Person.typeDocument,
-        sex: data.User.Person.sex,
-        patientId: data.id,
-        rol: data.User.rol,
-        email: data.User.email,
-        userId: data.User.id,
-        planOSName: data.PlanOS.name,
-        planOSId: data.PlanOS.id,
-        socialWorkName: data.PlanOS.SocialWork.name,
-        socialWorkId: data.PlanOS.SocialWork.id
-    };
-}; 
+function mapMedicineToItems(medicine) {  
+    return medicine.ConcentratedMedicines.map((cm, index) => {
+        const pharmaForm = medicine.PharmaForms[index] || { name: "Unknown" };
+        const quantityMed = medicine.QuantityMeds[index] || { quantity: "Unknown" };
+        const comercialMedicine = medicine.ComercialMedicines[index] || { name: "Unknown" };
+        const familyMedicine = medicine.FamilyMedicines[index] || { name: "Unknown" };
 
-
-function ageBirth(birthDate) {
-    const age = new Date().getFullYear() - new Date(birthDate).getFullYear();
-    return age;
+        return {
+            quantityId: cm.quantity.toString(),
+            magnitude: cm.magnitude,
+            pharmaTypeId: pharmaForm.name.toString(),
+            quantityMedList: quantityMed.quantity.toString(),
+            comercialName: comercialMedicine.name,
+            familyMedicineName: familyMedicine.name
+        };
+    });
 }
 
-module.exports = { mapPatientData }
+function mapMedicineData(medicine) {
+    return {
+        id: medicine.id,
+        name: medicine.name,
+        creationDate: Date.now(),
+        modificationDate: Date.now(),
+        code: medicine.code,
+        state: medicine.state,
+    }
+}
+
+module.exports = { mapMedicineToItems, mapMedicineData }

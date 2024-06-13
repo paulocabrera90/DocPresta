@@ -12,39 +12,42 @@ block content
             container-card      
                 each medicine in medicines
                     .card(class=medicine.state ? '' : 'alert-background')
+                        .card-header
+                            h5.card-title #{medicine.name} - Código: #{medicine.code}
                         .card-body.row 
-                            .col-md-3
-                                h5.card-title #{medicine.name} - Código: #{medicine.code}
+                            .col-md-3                               
                                 p.card-text
-                                if medicine.ComercialMedicine
+                                if medicine.ComercialMedicines
                                     h6 
                                         strong Nombre Comercial: 
-                                        each item in medicine.ConcentratedMedicine
-                                            p - #{item.quantity} #{item.magnitude}
+                                        each item in medicine.ComercialMedicines
+                                            p - #{item.name} 
                                 h6 
                                     strong Activo: 
                                     | #{medicine.state ? 'Si' : 'No'}
                             .col-md-3
-                                if medicine.ConcentratedMedicine.length > 0
+                                if medicine.ConcentratedMedicines.length > 0
                                     h6 
                                         strong Concentración:
-                                        each item in medicine.ConcentratedMedicine
+                                        each item in medicine.ConcentratedMedicines
                                             p - #{item.quantity} #{item.magnitude}
-                                if medicine.QuantityMed.length > 0
+                            .col-md-3
+                                if medicine.QuantityMeds.length > 0
                                     h6
                                         strong Cantidad/es:
-                                    each item in medicine.QuantityMed
+                                    each item in medicine.QuantityMeds
                                         p - Cantidad: #{item.quantity} unidades
-                                if medicine.PharmaForm.length > 0
+                            .col-md-3
+                                if medicine.PharmaForms.length > 0
                                     h6 
                                         strong Forma Farmacéutica
-                                    each form in medicine.PharmaForm
+                                    each form in medicine.PharmaForms
                                         p - #{form.name}
                         .card-footer
                             a(href=`/api/medicine/${medicine.id}` class="btn btn-secondary") Editar
 
                             form(id='formDeleteCard' data-id=medicine.id data-module="medicine")
-                                button(id='btnFormDeleteCard' type='submit' class="btn btn-danger" onclick="confirmDelete()") Eliminar
+                                button(id='btnFormDeleteCard' type='submit' class="btn btn-danger" onclick="confirmDelete(event)") Eliminar
         else
             .alert.alert-warning.no-alert
                 | No hay medicamentos disponibles.

@@ -6,17 +6,17 @@ block content
             h1 #{medicine ? 'Editar' : 'Crear'} Medicamento
             label(for="name") Nombre del Medicamento:
                 span(style="font-size: 13px; margin-left:10px; color: red;") *
-                input(type="text" name="name" id="name" required)
+                input(type="text" name="name" id="name" required value=medicine ? medicine.name : '')
 
             label(for="code" ) Código:
                 span(style="font-size: 13px; margin-left:10px; color: red;") *
-                input(type="text" name="code" id="code" required)       
+                input(type="text" name="code" id="code" required value=medicine ? medicine.code : '')
             
             label(for="checkActive") Activo:
-                <input type="hidden" id="checkActiveHidden" name="checkActive" value="Inactivo">
-                <input type="checkbox" id="checkActive" name="checkActive" value="Activo" checked>           
+                input(type="hidden" name="checkActive" value="Inactivo")
+                input(type="checkbox" id="checkActive" name="checkActive" value="Activo" checked=medicine && medicine.state ? true : false)
 
-            h3 Propiedades del medicamento:   
+            h3 Propiedades del medicamento:
 
             .container-propertites-medicine
                 label(for="concentratedMedicineList") Concentracion:
@@ -66,8 +66,14 @@ block content
                             input(type="text" name="comercialName" id="comercialName")
                     
                         button#addConcentration(type="button") Añadir
-
+               
                 .selected-concentrations
                     ul#concentrationList
-                    
+                        if medicine && items && items.length > 0
+                            each item, index in items
+                                li(data-quantity-id=item.quantityId data-magnitude=item.magnitude data-pharma-type-id=item.pharmaTypeId data-quantity-med-list=item.quantityMedList data-comercial-name=item.comercialName data-family-medicine-name=item.familyMedicineName)
+                                    | Concentración: #{item.quantityId}#{item.magnitude}, Cantidades/Unidades: #{item.quantityMedList}, Forma Farmacéutica: #{item.pharmaTypeId}, Familia Farmacéutica: #{item.familyMedicineName}, Nombre Comercial: #{item.comercialName}
+                                    button.remove-item(data-index=index) Eliminar    
+
             button(id='btnFormNewMedicine' type="submit") #{medicine ? 'Actualizar' : 'Crear'}
+             

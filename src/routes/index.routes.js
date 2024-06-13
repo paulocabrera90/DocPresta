@@ -8,6 +8,7 @@ const patientRoutes = require("./patient.routes");
 const usersRoutes = require("./users.routes");
 const { goHome } = require("../controllers/home.controller");
 const checkAuth = require("../middleware/auth.middle");
+const storage = require("../storage/session");
 
 const routes_init = () => {
   const router = Router();
@@ -20,19 +21,27 @@ const routes_init = () => {
   router.use('/medicine', medicineRoutes);
 
   router.get('/home', checkAuth, goHome);
-  router.use('/',  (req, res) => {
-  //   try {
-  //     await fs.unlink('./state.json');
-  //     console.log('Archivo eliminado con éxito');
-  // } catch (error) {
-  //     console.error('Error al eliminar el archivo:', error);
-  // }
+  router.use('/logout', async (req, res) => { 
 
-    res.render('login');
+    try {
+        
+      await storage.setState({
+        token: "",
+        user:""
+      })
+       
+      res.redirect('/');
+    } catch (error) {
+        console.error('Error al eliminar el archivo:', error);
+        // Manejar el error, por ejemplo, mostrar un mensaje de error al usuario
+        res.status(500).send('No se pudo eliminar el archivo.');
+    } 
+
   });
-  
 
-
+  router.use('/',  (req, res) => {  
+      res.render('login');
+  });
   return router;
 }
 

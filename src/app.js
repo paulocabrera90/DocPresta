@@ -1,7 +1,6 @@
 const globalConstants = require('./const/globalConst')
 const join = globalConstants.JOIN;
 const dirname = globalConstants.DIRNAME;
-const sequelizeSync = require("./models/index.models")
 
 var createError = require('http-errors');
 var express = require('express');
@@ -26,6 +25,7 @@ const configurationApi = (app) => {
 const configurationRoute = (app) => {
   app.use('/api',indexRouter.routes_init());
   app.use('/', indexRouter.routes_init());
+  
 
   app.use(function(req, res, next) {
     next(createError(404));

@@ -55,6 +55,6 @@ block content
                 label(for="passwordHash", readonly=patient) Password:
                     input(type="password" name="passwordhash" id="passwordHash")
 
-            button(id='btnFormNewProf' type="submit") #{patient ? 'Actualizar' : 'Crear'}
+            button(id='btnFormNewPat' type="submit") #{patient ? 'Actualizar' : 'Crear'}
 
     script(type="application/json" id="plansOSData")!= JSON.stringify(plansOS)

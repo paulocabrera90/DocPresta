@@ -169,8 +169,9 @@ li {
   cursor: pointer;
 }
 
-button-remove-medicine-list {
-  width: 15%;
+button-remove-medicine-list,
+.remove-item {
+  width: 10%;
   padding: 10px;
   background-color: #56baed;
   border: none;

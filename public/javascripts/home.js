@@ -26,10 +26,6 @@ document.addEventListener("DOMContentLoaded", function() {
       }
   });
 
-  window.onload = function() {
-    showSpinner(false); // Esto ocultará el spinner cuando la página esté completamente cargada
-  };
-
 function confirmDelete(event) {
     event.preventDefault();
 
@@ -47,7 +43,7 @@ function confirmDelete(event) {
                 console.log(module+ " eliminado con éxito");
                 alert(`${module} con ID ${id} eliminado con éxito`); 
                 showSpinner(false)
-                location.reload();
+                window.location.href = "/api/" + module + "/";
             } else {
                 console.error("Error al eliminar el " + module);
             }

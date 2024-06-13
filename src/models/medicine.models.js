@@ -1,39 +1,43 @@
 'use strict';
 const {
-  Model
+    Model
 } = require('sequelize');
-        module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize, DataTypes) => {
     class Medicine extends Model {
-        
+
         static associate(models) {
             Medicine.belongsToMany(
-                models.ConcentratedMedicine, { 
-                    through: 'ConcentratedMedicine_Medicine',
-                    as: 'ConcentratedMedicine'
+                models.ConcentratedMedicine, {
+                through: 'ConcentratedMedicine_Medicine',
+                as: 'ConcentratedMedicines'
+            });
+
+            Medicine.belongsToMany(
+                models.QuantityMed, {
+                through: 'QuantityMed_Medicine',
+                as: 'QuantityMeds'
+            });
+
+            Medicine.belongsToMany(
+                models.PharmaForm,
+                {
+                    through: 'PharmaForm_Medicine',
+                    as: 'PharmaForms'
                 });
 
             Medicine.belongsToMany(
-                models.QuantityMed, { 
-                    through: 'QuantityMed_Medicine',
-                    as: 'QuantityMed' 
+                models.ComercialMedicine,
+                {
+                    through: 'ComercialMedicine_Medicine',
+                    as: 'ComercialMedicines',
                 });
 
             Medicine.belongsToMany(
-                models.PharmaForm, 
-                { through: 'PharmaForm_Medicine',
-                    as: 'PharmaForm'
-                 });
-
-            Medicine.belongsToMany(
-                models.ComercialMedicine, 
-                {   through: 'ComercialMedicine_Medicine',
-                    as: 'ComercialMedicine',
-            });
-
-            Medicine.belongsToMany(models.FamilyMedicine, {
-                through: 'FamilyMedicine_Medicine',
-                as: 'FamilyMedicine',
-            });
+                models.FamilyMedicine,
+                {
+                    through: 'FamilyMedicine_Medicine',
+                    as: 'FamilyMedicines',
+                });
         }
     }
 
@@ -62,10 +66,10 @@ const {
             defaultValue: DataTypes.NOW,
         }
     }, {
-    sequelize,
-    modelName: 'Medicine',
-    tableName: 'Medicines',
-    timestamps: false,
+        sequelize,
+        modelName: 'Medicine',
+        tableName: 'Medicines',
+        timestamps: false,
     });
 
     return Medicine;

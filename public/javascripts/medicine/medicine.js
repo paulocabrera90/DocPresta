@@ -2,97 +2,112 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const addButton = document.getElementById('addConcentration');
     const list = document.getElementById('concentrationList');
+    const checkActiveCheckbox = document.getElementById('checkActive');
+    const checkActiveHidden = document.getElementById('checkActiveHidden');
+
+    let itemData = {};
 
     if (list.children.length === 0) {
         document.querySelector('.selected-concentrations').style.display = 'none';
     }
 
-    const checkActiveCheckbox = document.getElementById('checkActive');
-    const checkActiveHidden = document.getElementById('checkActiveHidden');
-
-    checkActiveCheckbox.addEventListener('change', function() {
-        // Si el checkbox está marcado, cambiamos el valor del input oculto para que no se envíe
+    checkActiveCheckbox.addEventListener('change', function() {        
         if (checkActiveCheckbox.checked) {
             checkActiveHidden.disabled = true;
-        } else {
-            // Si no está marcado, habilitamos el input oculto para que envíe el valor "Inactivo"
+        } else {            
             checkActiveHidden.disabled = false;
         }
     });
 
     addButton.addEventListener('click', function() {
-
-        const quantityId = Array.from(document.getElementById('concentratedMedicineQuantityId').selectedOptions).map(opt => opt.value).join(', ');
-        const quantityText = Array.from(document.getElementById('concentratedMedicineQuantityId').selectedOptions).map(opt => opt.text).join(', ');
-
+        const pharmaFormListElement = document.getElementById('pharmaFormList');
+        const quantityMedListElement = document.getElementById('quantityMedList');
+        const quantityId = document.getElementById('concentratedMedicineQuantityId').value;
+        const magnitude = document.getElementById('concentratedMedicineMagnitude').value;
+        const pharmaTypeId = document.getElementById('pharmaFormList').value;
+        const pharmaFormListText = pharmaFormListElement.options[pharmaFormListElement.selectedIndex].text;
+        const quantityMedListText = quantityMedListElement.options[quantityMedListElement.selectedIndex].text;
+        const quantityMedList = document.getElementById('quantityMedList').value;
         const comercialName = document.getElementById('comercialName').value;
-        const magnitude = document.getElementById('concentratedMedicineMagnitude').options[document.getElementById('concentratedMedicineMagnitude').selectedIndex].text;
         const familyMedicineName = document.getElementById('familyMedicineName').value;
-        const pharmaFormId = Array.from(document.getElementById('pharmaFormList').selectedOptions).map(opt => opt.value).join(', ');
-        const pharmaFormText = Array.from(document.getElementById('pharmaFormList').selectedOptions).map(opt => opt.text).join(', ');
-        const quantityMedList = Array.from(document.getElementById('quantityMedList').selectedOptions).map(opt => opt.value).join(', ');
-        const quantityMedListText = Array.from(document.getElementById('quantityMedList').selectedOptions).map(opt => opt.text).join(', ');
 
         if (list.children.length === 0) {
             document.querySelector('.selected-concentrations').style.display = 'none';
+        }else {
+            document.querySelector('.selected-concentrations').style.display = 'block';
         }
 
-        if (quantityId && magnitude && pharmaFormId && quantityMedList) {
-            const content = `Concentración: ${quantityText}${magnitude}, Forma Farmacéutica: ${pharmaFormText}, Cantidades/Unidades: ${quantityMedListText}, Nombre Comercial: ${comercialName}, Familia Farmacéutica: ${familyMedicineName}`;
+        if (quantityId && magnitude && pharmaFormListText && quantityMedListText && comercialName && familyMedicineName) {
             document.querySelector('.selected-concentrations').style.display = 'block';
-
-            if (isAlreadyInList(content)) {
-                alert("Este elemento ya ha sido añadido.");
-                return;
-            }
-
-            const li = document.createElement('li');
-            li.textContent = content;
-
-            const removeBtn = document.createElement('button-remove-medicine-list');
-            removeBtn.textContent = 'Eliminar';
-            removeBtn.onclick = function() {
-                this.parentNode.remove();
-                if (list.children.length === 0) {
-                    document.querySelector('.selected-concentrations').style.display = 'none';
-                }
-            };
-            li.appendChild(removeBtn);
-            list.appendChild(li);
-    
-            addListItemToForm(quantityId, magnitude, pharmaFormId, quantityMedList, comercialName, familyMedicineName);
-
+            addNewItem(quantityId, magnitude, pharmaFormListText, quantityMedListText, comercialName, familyMedicineName);            
+            updateItemsInput();            
         }else{
-            alert("Todos los campos son obligatorios")
-        }me
+            alert("Todos los campos de Propiedades del medicamento, son obligatorios")
+        }
     });
 
-    function addListItemToForm(quantityId, magnitude, pharmaFormId, quantityMedList, comercialName, familyMedicineName) {
-        let input = form.querySelector('input[name="items"]');
-        if (!input) {
-            input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = 'items';
-            form.appendChild(input);
+    function addNewItem(quantityId, magnitude, pharmaTypeId, quantityMedList, comercialName, familyMedicineName) {
+
+        document.querySelector('.selected-concentrations').style.display = 'block';
+        
+        const li = document.createElement('li');
+        li.setAttribute('data-quantity-id', quantityId);
+        li.setAttribute('data-magnitude', magnitude);
+        li.setAttribute('data-pharma-type-id', pharmaTypeId);
+        li.setAttribute('data-quantity-med-list', quantityMedList);
+        li.setAttribute('data-comercial-name', comercialName);
+        li.setAttribute('data-family-medicine-name', familyMedicineName);
+        li.textContent = `Concentración: ${quantityId}${magnitude}, Cantidades/Unidades: ${quantityMedList}, Forma Farmacéutica: ${pharmaTypeId}, Familia Farmacéutica: ${familyMedicineName}, Nombre Comercial: ${comercialName}`;
+        
+        if (isAlreadyInList(li.textContent)) {
+                alert("Este elemento ya ha sido añadido.");
+                return;
         }
-        
-        // Obtiene el valor actual del input, que es un JSON, y lo convierte a un arreglo
-        let items = input.value ? JSON.parse(input.value) : [];
-        
-        // Añade el nuevo ítem al arreglo
-        items.push({
-            quantityId: quantityId,
-            magnitude: magnitude,
-            pharmaTypeId: pharmaFormId,
-            quantityMedList: quantityMedList,
-            comercialName: comercialName,
-            familyMedicineName: familyMedicineName,
-            checkActive
+        const removeBtn = document.createElement('button');
+        removeBtn.classList.add('remove-item');
+        removeBtn.textContent = 'Eliminar';
+        removeBtn.onclick = function() {
+            this.parentNode.remove();
+            if (list.children.length === 0) {
+                document.querySelector('.selected-concentrations').style.display = 'none';
+            }
+            updateItemsInput();
+        };
+        li.appendChild(removeBtn);
+    
+        list.appendChild(li);
+        updateItemsInput();
+    }
+
+    function updateItemsInput() {
+        const items = [];
+        list.querySelectorAll('li').forEach(li => {
+            const item = {
+                quantityId: li.getAttribute('data-quantity-id'),
+                magnitude: li.getAttribute('data-magnitude'),
+                pharmaTypeId: li.getAttribute('data-pharma-type-id'),
+                quantityMedList: li.getAttribute('data-quantity-med-list'),
+                comercialName: li.getAttribute('data-comercial-name'),
+                familyMedicineName: li.getAttribute('data-family-medicine-name')
+            };
+            items.push(item);
         });
 
-        // Guarda el arreglo actualizado de nuevo en el input como string JSON
-        input.value = JSON.stringify(items);
+        if(items.length === 0){
+            itemData = "";
+        }else{
+            itemData = JSON.stringify(items);
+        }
     }
+
+    list.addEventListener('click', function(event) {
+        if (event.target.matches('.remove-item')) {
+            const index = event.target.dataset.index;
+            event.target.parentNode.remove();
+            updateItemsInput();
+        }
+    });
+    
 
     function isAlreadyInList(content) {
         const items = document.querySelectorAll('#concentrationList li');
@@ -103,37 +118,46 @@ document.addEventListener('DOMContentLoaded', function() {
     //_______________________________________________________________________________-
 
     const form = document.querySelector('form');
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
-        
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
-        const patientId = form.getAttribute("data-id");
+    if (form) { 
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            updateItemsInput();
+            if(itemData.length === 0){
+                alert("No se han anadido Propiedades");
+                return
+            }
+           
+            const name = document.getElementById('name').value;
+            const code = document.getElementById('code').value;
+            const active = document.getElementById('checkActive').checked ? 'Activo' : 'Inactivo';
+            const data = {name, code, active, items: itemData};
 
-        const isUpdate = patientId? true : false;
-        const url = isUpdate ? `/api/medicine/update/${patientId}` : '/api/medicine/create';
-        const method = isUpdate ? 'PATCH' : 'POST';
+            const medicineId = form.getAttribute("data-id");
+            const isUpdate = medicineId? true : false;
+            const url = isUpdate ? `/api/medicine/update/${medicineId}` : '/api/medicine/create';
+            const method = isUpdate ? 'PATCH' : 'POST';
 
-        fetch(url, {
-            method: method,
-            headers: {
-                'Content-Type': 'application/json',
-                // Include other necessary headers, e.g., authorization
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(result => {
-            console.log('Success:', result);
-            const message = isUpdate ? `Se actualizo correctamente el Medicamento` : 'Se agrego correctamente el Medicamento';
-            alert(message);
-            window.location.href = '/api/medicine';
-        })
-        .catch(error => {
-            // Handle errors
-            console.error('Error:', error);
-            alert('Ocurrio un error. Intente nuevamente.');
+            fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log('Success:', result);
+                const message = isUpdate ? `Se actualizo correctamente el Medicamento` : 'Se agrego correctamente el Medicamento';
+                alert(message);
+                window.location.href = '/api/medicine';
+            })
+            .catch(error => {
+                // Handle errors
+                console.error('Error:', error);
+                alert('Ocurrio un error. Intente nuevamente.');
+            });
         });
-    });
-    
+    }else {
+        console.log("No se encontró el formulario.");
+    }
 });
