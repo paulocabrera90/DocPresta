@@ -7,35 +7,40 @@ block content
                 h1 Lista de Profesionales
             a(href="/api/profesional/new" id="newElementCard" class="btn btn-success") Nuevo
         hr(style="margin-top: 20px; margin-bottom: 20px;")
-        container-card
-            each prof in profesionals
-                .card
-                    .card-header #{prof.firstName} #{prof.lastName} - ID REFEPS: #{prof.idREFEPS}
-                    .card-body
-                        p
-                        br
-                        | <strong>Documento:</strong> (#{prof.typeDocument})-#{prof.numberDocument} 
-                        br
-                        | <strong>Dirección Legal:</strong> #{prof.legalAddress}
-                        br
-                        | <strong>Sexo:</strong> #{prof.sex}
-                        br
-                        | <strong>Número de Registro:</strong> #{prof.registrationNumber}
-                        br
-                        | <strong>ID REFEPS:</strong> #{prof.idREFEPS}
-                        br
-                        | <strong>Especialidad:</strong> #{prof.nameSpeciality}
-                        br
-                        | <strong>Código:</strong> #{prof.profesionCode}
-                        br
-                        | <strong>Descripción:</strong> #{prof.profesionDescription}
-                        br
-                        | <strong>Fecha de Nacimiento:</strong> #{new Date(prof.birthDate).toISOString().split('T')[0]}                       
-                        
-                        br
-                
-                    .card-footer
-                        a(href=`/api/patient/${prof.id}` class="btn btn-secondary") Editar
 
-                        form(id='formDeleteCard' data-id=prof.id data-module="profesional")
-                            button(id='btnFormDeleteCard' type='submit' class="btn btn-danger" onclick="confirmDelete(event)") Eliminar
+        if profesionals.length > 0
+            container-card
+                each prof in profesionals
+                    .card
+                        .card-header #{prof.firstName} #{prof.lastName} - ID REFEPS: #{prof.idREFEPS}
+                        .card-body
+                            p
+                            br
+                            | <strong>Documento:</strong> (#{prof.typeDocument})-#{prof.numberDocument} 
+                            br
+                            | <strong>Dirección Legal:</strong> #{prof.legalAddress}
+                            br
+                            | <strong>Sexo:</strong> #{prof.sex}
+                            br
+                            | <strong>Número de Registro:</strong> #{prof.registrationNumber}
+                            br
+                            | <strong>ID REFEPS:</strong> #{prof.idREFEPS}
+                            br
+                            | <strong>Especialidad:</strong> #{prof.nameSpeciality}
+                            br
+                            | <strong>Código:</strong> #{prof.profesionCode}
+                            br
+                            | <strong>Descripción:</strong> #{prof.profesionDescription}
+                            br
+                            | <strong>Fecha de Nacimiento:</strong> #{new Date(prof.birthDate).toISOString().split('T')[0]}                       
+                            
+                            br
+                    
+                        .card-footer
+                            a(href=`/api/patient/${prof.id}` class="btn btn-secondary") Editar
+
+                            form(id='formDeleteCard' data-id=prof.id data-module="profesional")
+                                button(id='btnFormDeleteCard' type='submit' class="btn btn-danger" onclick="confirmDelete(event)") Eliminar
+        else 
+             .alert.alert-warning.no-alert
+                | No hay Profesionales disponibles.

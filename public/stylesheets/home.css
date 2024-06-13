@@ -3,3 +3,12 @@ container-home {
     flex-direction: row;
     justify-content: flex-end;
 }
+
+.no-alert {
+    color: red;
+    background-color: rgb(204, 204, 204);
+    border-radius: 5px;
+    padding: 30px;
+    text-align: center;
+    margin-top: 10%;
+  }

@@ -7,13 +7,24 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelector('.selected-concentrations').style.display = 'none';
     }
 
+    const checkActiveCheckbox = document.getElementById('checkActive');
+    const checkActiveHidden = document.getElementById('checkActiveHidden');
+
+    checkActiveCheckbox.addEventListener('change', function() {
+        // Si el checkbox está marcado, cambiamos el valor del input oculto para que no se envíe
+        if (checkActiveCheckbox.checked) {
+            checkActiveHidden.disabled = true;
+        } else {
+            // Si no está marcado, habilitamos el input oculto para que envíe el valor "Inactivo"
+            checkActiveHidden.disabled = false;
+        }
+    });
+
     addButton.addEventListener('click', function() {
 
         const quantityId = Array.from(document.getElementById('concentratedMedicineQuantityId').selectedOptions).map(opt => opt.value).join(', ');
         const quantityText = Array.from(document.getElementById('concentratedMedicineQuantityId').selectedOptions).map(opt => opt.text).join(', ');
 
-        const checkActive = document.getElementById('checkActive').checked;
-        const checkActiveText = checkActive?'Activo':'Inactivo';
         const comercialName = document.getElementById('comercialName').value;
         const magnitude = document.getElementById('concentratedMedicineMagnitude').options[document.getElementById('concentratedMedicineMagnitude').selectedIndex].text;
         const familyMedicineName = document.getElementById('familyMedicineName').value;
@@ -27,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         if (quantityId && magnitude && pharmaFormId && quantityMedList) {
-            const content = `Concentración: ${quantityText}${magnitude}, Forma Farmacéutica: ${pharmaFormText}, Cantidades/Unidades: ${quantityMedListText}, Nombre Comercial: ${comercialName}, Familia Farmacéutica: ${familyMedicineName}, ${checkActiveText}`;
+            const content = `Concentración: ${quantityText}${magnitude}, Forma Farmacéutica: ${pharmaFormText}, Cantidades/Unidades: ${quantityMedListText}, Nombre Comercial: ${comercialName}, Familia Farmacéutica: ${familyMedicineName}`;
             document.querySelector('.selected-concentrations').style.display = 'block';
 
             if (isAlreadyInList(content)) {
@@ -75,7 +86,8 @@ document.addEventListener('DOMContentLoaded', function() {
             pharmaTypeId: pharmaFormId,
             quantityMedList: quantityMedList,
             comercialName: comercialName,
-            familyMedicineName: familyMedicineName
+            familyMedicineName: familyMedicineName,
+            checkActive
         });
 
         // Guarda el arreglo actualizado de nuevo en el input como string JSON

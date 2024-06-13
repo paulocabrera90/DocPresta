@@ -10,23 +10,28 @@ block content
 
             label(for="code" ) Código:
                 span(style="font-size: 13px; margin-left:10px; color: red;") *
-                input(type="text" name="code" id="code" required)                  
+                input(type="text" name="code" id="code" required)       
+            
+            label(for="checkActive") Activo:
+                <input type="hidden" id="checkActiveHidden" name="checkActive" value="Inactivo">
+                <input type="checkbox" id="checkActive" name="checkActive" value="Activo" checked>           
 
-            h3 Propiedades del medicamento:    
+            h3 Propiedades del medicamento:   
+
             .container-propertites-medicine
                 label(for="concentratedMedicineList") Concentracion:
                 .container-concentrated-medicine
                     .half-width
                         label Cantidad:
                             span(style="font-size: 13px; margin-left:10px; color: red;") *
-                            select(name="concentratedMedicineQuantityId" id="concentratedMedicineQuantityId" required)
+                            select(name="concentratedMedicineQuantityId" id="concentratedMedicineQuantityId")
                                 option(value="") Seleccione una Cantidad
                                 each cm in concentratedMedicine
-                                    option(value=cm.id)= cm.quantity
+                                    option(value=cm.quantity)= cm.quantity
 
                         label(for="quantityMedList") Unidades:
                             span(style="font-size: 13px; margin-left:10px; color: red;") *
-                            select(name="quantityMedList" id="quantityMedList" required)
+                            select(name="quantityMedList" id="quantityMedList")
                                 option(value="") Seleccione cantidad/unidad
                                 each qm in quantityMed
                                     option(value=qm.id)= qm.quantity
@@ -42,7 +47,7 @@ block content
                     .half-width
                         label Magnitud:
                             span(style="font-size: 13px; margin-left:10px; color: red;") *
-                            select(name="concentratedMedicineMagnitude" id="concentratedMedicineMagnitude" required)
+                            select(name="concentratedMedicineMagnitude" id="concentratedMedicineMagnitude")
                                 option(value="") Seleccione una Magnitud
                                 option(value="MG") MG
                                 option(value="G") G
@@ -51,22 +56,18 @@ block content
 
                         label(for="pharmaFormList") Forma Farmacéutica:
                             span(style="font-size: 13px; margin-left:10px; color: red;") *
-                            select(name="pharmaFormList" id="pharmaFormList" required)
+                            select(name="pharmaFormList" id="pharmaFormList")
                                 option(value="") Seleccione forma
                                 each pf in pharmaForm
                                     option(value=pf.id)= pf.name
                         
                         label(for="comercialName") Nombre Comercial:
                             span(style="font-size: 13px; margin-left:10px; color: red;") *
-                            input(type="text" name="comercialName" id="comercialName" required)
+                            input(type="text" name="comercialName" id="comercialName")
                     
                         button#addConcentration(type="button") Añadir
 
                 .selected-concentrations
                     ul#concentrationList
-            
-
-                label(for="checkActive") Activo:
-                    input(type="checkbox" name="checkActive" id="checkActive" checked)
                     
             button(id='btnFormNewMedicine' type="submit") #{medicine ? 'Actualizar' : 'Crear'}

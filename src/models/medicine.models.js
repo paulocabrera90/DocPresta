@@ -24,13 +24,13 @@ const {
                     as: 'PharmaForm'
                  });
 
-            Medicine.belongsTo(
+            Medicine.belongsToMany(
                 models.ComercialMedicine, 
                 {   through: 'ComercialMedicine_Medicine',
                     as: 'ComercialMedicine',
             });
 
-            Medicine.belongsTo(models.FamilyMedicine, {
+            Medicine.belongsToMany(models.FamilyMedicine, {
                 through: 'FamilyMedicine_Medicine',
                 as: 'FamilyMedicine',
             });

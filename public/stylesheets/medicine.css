@@ -184,3 +184,7 @@ button-remove-medicine-list {
 .half-width {
   flex: 1;
 }
+
+.alert-background {
+  background-color: #e7b5b9;
+}
