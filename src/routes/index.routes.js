@@ -21,6 +21,7 @@ const routes_init = () => {
   router.use('/medicine', medicineRoutes);
 
   router.get('/home', checkAuth, goHome);
+
   router.use('/logout', async (req, res) => { 
 
     try {        

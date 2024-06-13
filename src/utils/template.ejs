@@ -1,0 +1,38 @@
+<!-- template.ejs -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Formulario PDF</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        h1, h2, h3 { text-align: center; }
+        .container { width: 100%; margin: 0 auto; }
+        .field { margin-bottom: 10px; }
+        .field label { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Información del Paciente</h1>
+    <div class="container">
+        <div class="field">
+            <label>Nombre del paciente:</label> <%= patientName %>
+        </div>
+        <div class="field">
+            <label>Nombre del médico:</label> <%= doctorName %>
+        </div>
+        <h2>Medicamentos</h2>
+        <% medications.forEach(function(medication, index) { %>
+            <div class="field">
+                <label>Nombre del medicamento <%= index + 1 %>:</label> <%= medication.name %>
+            </div>
+            <div class="field">
+                <label>Posología <%= index + 1 %>:</label> <%= medication.dosage %>
+            </div>
+        <% }) %>
+        <div class="field">
+            <label>Estudios a realizarse:</label> <%= studies %>
+        </div>
+    </div>
+</body>
+</html>
