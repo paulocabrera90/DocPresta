@@ -2,33 +2,13 @@ const { Patient, User, Person, PlanOS, SocialWork, sequelize } = require('../mod
 const { mapPatientData } = require('../models/mappers/patient.mapper');
 const { httpError } = require('../helpers/handleError');
 const { encrypt } = require('../utils/handleBcrypt');
+const { getPatientByIdService, getListAllPatientsService, createPatientService } = require('../services/patient.service');
 
 async function getPatientById (req, res) {
     const { id } = req.params;
     try {
-        const patient = await Patient.findOne({ 
-            where: { id },
-            include: [
-                {
-                    model: PlanOS,
-                    as: 'PlanOS',
-                    include: {
-                        model: SocialWork,
-                        as: 'SocialWork'
-                    }
-                },
-                {
-                    model: User,
-                    as: 'User',
-                    include: {
-                        model: Person,
-                        as: 'Person',
-                    }
-                }
-            ]
-        });
-
-        if (!patient || !patient.User || !patient.User.Person) {
+        const patient = await getPatientByIdService(id);
+        if (!patient) {
             return res.status(404).json({ message: 'Patient not found' });
         }
         //res.json({data: mapPatientData(patient)})
@@ -54,27 +34,8 @@ async function getPatientById (req, res) {
 
 async function getListAllPatients(req, res){
     try {
-        const patient = await Patient.findAll({
-            include: [
-                {
-                    model: PlanOS,
-                    as: 'PlanOS',
-                    include: {
-                        model: SocialWork,
-                        as: 'SocialWork'
-                    }
-                },
-                {
-                    model: User,
-                    as: 'User',
-                    include: {
-                        model: Person,
-                        as: 'Person',
-                    }
-                }
-            ]
-        });
-
+        const patient = await getListAllPatientsService(id);
+        
         console.log(patient);
         const listMapPatient = patient.map(mapPatientData);
 
@@ -104,49 +65,12 @@ async function newPatient(req, res) {
 async function createPatient(req, res) {
     const transaction = await sequelize.transaction();
     try {
-        const {firstName, lastName, birthDate, numberDocument, 
-            typeDocument, sex, planOSId, passwordhash, 
-            username, email
-        } = req.body;
+        
         console.log("req.body", req.body)
         console.log("Create patient")
-
-        const newPerson = await Person.create({
-            firstName,
-            lastName,
-            birthDate,
-            numberDocument,
-            typeDocument,
-            sex,
-            state: true,
-            creationDate: new Date(),
-            ModificationDate: new Date()
-        }, { transaction });
-
-        const passwordEncrypted = await encrypt(passwordhash)
-
-        const registerUser = await User.create({
-            username,
-            email,          
-            hashPassword: passwordEncrypted,          
-            profilePic: '',
-            state: true,
-            crationDate: Date.now(),
-            modificationDate: Date.now(),
-            rol: "PACIENTE",
-            personId: newPerson.id
-        }, { transaction })
-
-        const patient = await Patient.create({
-            userId: registerUser.id,
-            planOSId, 
-            creationDate: new Date(),
-            modificationDate: new Date()
-        }, { transaction });
-
-         await transaction.commit();
+        const patient = await createPatientService(req.body);
         console.log("Create patient successfully")
-        res.status(200).json({message: "Create patient successfully"});
+        res.status(200).json({message: "Create patient successfully", patient});
 
     } catch (error) {
         await transaction.rollback();

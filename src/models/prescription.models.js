@@ -9,22 +9,22 @@ const {
             // Define las relaciones con otros modelos aquí
             Prescription.belongsTo(models.Benefit, {
                 foreignKey: 'benefitId',
-                as: 'benefit',
+                as: 'Benefits',
             });
 
             Prescription.belongsTo(models.Patient, {
                 foreignKey: 'patientId',
-                as: 'patient',
+                as: 'Patients',
             });
 
             Prescription.belongsTo(models.Sickness, {
                 foreignKey: 'sicknessId',
-                as: 'sickness',
+                as: 'Sicknesses',
             });
 
             Prescription.belongsTo(models.Profesional, {
                 foreignKey: 'profesionalId',
-                as: 'profesional',
+                as: 'Profesionals',
             });
         }
     }

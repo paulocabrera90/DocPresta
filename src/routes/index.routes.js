@@ -23,17 +23,14 @@ const routes_init = () => {
   router.get('/home', checkAuth, goHome);
   router.use('/logout', async (req, res) => { 
 
-    try {
-        
+    try {        
       await storage.setState({
         token: "",
         user:""
-      })
-       
+      })       
       res.redirect('/');
     } catch (error) {
         console.error('Error al eliminar el archivo:', error);
-        // Manejar el error, por ejemplo, mostrar un mensaje de error al usuario
         res.status(500).send('No se pudo eliminar el archivo.');
     } 
 

@@ -40,13 +40,17 @@ function confirmDelete(event) {
         })
         .then(response => {
             if (response.ok) {
-                console.log(module+ " eliminado con éxito");
-                alert(`${module} con ID ${id} eliminado con éxito`); 
-                showSpinner(false)
-                window.location.href = "/api/" + module + "/";
+                return response.json();  // Suponiendo que el servidor responde con JSON
             } else {
-                console.error("Error al eliminar el " + module);
+                // Lanza un error que llevará al bloque .catch con más información
+                throw new Error('Algo salió mal en el servidor: ' + response.statusText);
             }
+        })
+        .then(data => {
+            console.log(module + " eliminado con éxito");
+            alert(`${module} con ID ${id} eliminado con éxito`);
+            showSpinner(false);  // Asegúrate de ocultar el spinner aquí
+            window.location.href = "/api/" + module + "/";
         })
         .catch(error => {
             console.error("Error al enviar la solicitud DELETE", error);

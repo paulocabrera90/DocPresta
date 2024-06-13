@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', function(event) {
         event.preventDefault();
         
+        showSpinner(true)
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
         const profId = form.getAttribute("data-id");
@@ -43,8 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const isUpdate = profId? true : false;
         const url = isUpdate ? `/api/profesional/update/${profId}` : '/api/profesional/create';
         const method = isUpdate ? 'PATCH' : 'POST';
-        showSpinner(true)
-
+       
         fetch(url, {
             method: method,
             headers: {
@@ -53,8 +53,14 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             body: JSON.stringify(data)
         })
-        .then(response => response.json())
-        .then(result => {
+        .then(response => {
+            if (response.ok) {
+                return response.json();  // Suponiendo que el servidor responde con JSON
+            } else {
+                // Lanza un error que llevará al bloque .catch con más información
+                throw new Error('Algo salió mal en el servidor: ' + response.statusText);
+            }
+        }).then(result => {
             console.log('Success:', result);
             const message = isUpdate ? `Se actualizo correctamente el Profesional` : 'Se agrego correctamente el Profesional';
             alert(message);

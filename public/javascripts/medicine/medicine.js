@@ -121,6 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (form) { 
         form.addEventListener('submit', function(event) {
             event.preventDefault();
+            showSpinner(true);
             updateItemsInput();
             if(itemData.length === 0){
                 alert("No se han anadido Propiedades");
@@ -144,11 +145,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: JSON.stringify(data)
             })
-            .then(response => response.json())
-            .then(result => {
+            .then(response => {
+                if (response.ok) {
+                    return response.json();  // Suponiendo que el servidor responde con JSON
+                } else {
+                    // Lanza un error que llevará al bloque .catch con más información
+                    throw new Error('Algo salió mal en el servidor: ' + response.statusText);
+                }
+            }).then(result => {
                 console.log('Success:', result);
                 const message = isUpdate ? `Se actualizo correctamente el Medicamento` : 'Se agrego correctamente el Medicamento';
                 alert(message);
+                showSpinner(false)
                 window.location.href = '/api/medicine';
             })
             .catch(error => {

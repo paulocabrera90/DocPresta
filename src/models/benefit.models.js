@@ -10,16 +10,15 @@ const {
                 foreignKey: {
                   name: 'sectionId',
                   allowNull: false,
-                  unique: true,
                 },
-                as: 'Section', // Nombre del alias para la asociación
+                as: 'Sections',
               });
         
               
-              models.Section.hasOne(Benefit, {
-                foreignKey: 'benefitId',
-                as: 'Sections',
-              });
+            models.Section.hasOne(Benefit, {
+                foreignKey: 'sectionId',
+                as: 'Benefit',
+            });
            
         }
     }

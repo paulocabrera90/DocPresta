@@ -38,7 +38,8 @@
     margin-bottom: 5px;
   }
   
-  container-presta-list {
+  container-presta-list,
+  container-medical-record-list {
     width: 85%;
     margin-right: 10px;
 }

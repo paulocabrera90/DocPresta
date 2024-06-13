@@ -1,0 +1,45 @@
+extends home
+
+block content
+    container-medical-record-list
+        header
+            .title-header-cards
+                h1 Lista de Registros Médicos
+            a(href="/api/medical-record/new" id="newElementCard" class="btn btn-success") Nuevo
+        hr(style="margin-top: 20px; margin-bottom: 20px;")
+        if profesional
+            .professional-info
+                h3 Información del Profesional
+                h4 Dr/Dra #{profesional.User.Person.firstName} #{profesional.User.Person.lastName}
+                p Especialidad: #{speciality.name}
+                p Email: #{profesional.User.email}
+                p REFEPS: #{profesional.idREFEPS}
+
+        hr(style="margin-top: 20px; margin-bottom: 20px;")        
+        if medicalRecords.length>0
+            container-card
+                h3 Informacion de Registros Medicos
+                each record in medicalRecords
+                    .card
+                        .card-header #{record.Patients.User.Person.firstName} #{record.Patients.User.Person.lastName}
+                        .card-body
+                            p
+                                strong Fecha de la Prescripción: 
+                                | #{new Date(record.prescriptionDate).toISOString().split('T')[0]}
+                            p
+                                strong Enfermedad: 
+                                | #{record.Sicknesses.name}
+                            p
+                                strong Beneficio: 
+                                | #{record.Benefits.name}
+                            p
+                                strong Seccion: 
+                                | #{record.Benefits.Sections.name}
+                        .card-footer
+                            a(href=`/api/medical-record/${record.id}` class="btn btn-secondary") Editar
+
+                            form(id='formDeleteCard' data-id=record.id data-module="medical-record")
+                                button(id='btnFormDeleteCard' type='submit' class="btn btn-danger" onclick="confirmDelete(event)") Eliminar
+        
+        else
+            p No hay registros médicos disponibles

@@ -5,7 +5,7 @@ const checkRoleAuth = require('../middleware/roleAuth.middle');
 
 var router = express.Router();
 
-router.get('/', checkAuth, getListAllMedicines);
+router.get('/', checkAuth,checkRoleAuth(['ADMIN','PROFESIONAL']), getListAllMedicines);
 
 router.get('/new', checkAuth,checkRoleAuth(['ADMIN','PROFESIONAL']), newMedicine);
 
