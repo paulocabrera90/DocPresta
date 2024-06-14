@@ -57,13 +57,19 @@
 }
 
 .medical-record-new h2 {
-  color: #f7fafc;
+  color: #1b1c1d;
   margin-top: 20px;
+}
+.container-profesional,
+.container-paciente {
+  display: flex;
+  justify-content: space-between;
 }
 
 .medical-record-new label {
   display: block;
-  margin-top: 10px;
+  color: black;
+  /* //margin-top: 10px; */
 }
 
 .medical-record-new input[type="text"],

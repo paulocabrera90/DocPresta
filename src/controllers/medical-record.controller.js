@@ -4,6 +4,8 @@ const { where } = require('sequelize');
 const storage = require('../storage/session');
 const PDFDocument = require('pdfkit');
 const { getAllMedicalRecordsService } = require('../services/medical-record.service');
+const { getListAllPatients } = require('./patient.controller');
+const { getListAllPatientsService } = require('../services/patient.service');
 
 async function medicalRecordNew(req, res){   
     try {
@@ -37,25 +39,28 @@ async function medicalRecordNew(req, res){
                 }
             ]
         })
+        const allPatient = await getListAllPatientsService();
     
         const speciality = profesional.dataValues.Speciality.dataValues;
         const profesion = await Profesion.findOne({ where: { id: speciality.profesionId } })
     
-        // res.render('medical-record-new', { 
-        //     medicalRecord,
-        //     person: storage.state.user.Person,
-        //     profesional: profesional.dataValues,
-        //     speciality,
-        //     profesion:profesion.dataValues
-        // })
-
-        res.json({ 
+        res.render('medical-record-new', { 
             medicalRecord,
             person: storage.state.user.Person,
             profesional: profesional.dataValues,
             speciality,
-            profesion:profesion.dataValues
+            profesion:profesion.dataValues,
+            patients:allPatient
         })
+
+        // res.json({ 
+        //     medicalRecord,
+        //     person: storage.state.user.Person,
+        //     profesional: profesional.dataValues,
+        //     speciality,
+        //     profesion:profesion.dataValues,
+        //     patients:allPatient
+        // })
     } catch (error) {
         httpError(res, error);
     }

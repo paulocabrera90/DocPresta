@@ -36,10 +36,12 @@ block content
       .container-paciente
         .column
             label(for="paciente_documento") Documento:
-            .search-dni                      
-                  input(type="text", name="prestaciones-dni", id="prestaciones-dni", required)
-                  button(id="button-searchDni" type="submit" class="btn btn-danger")
-                    i.fa.fa-search  Buscar  
+            .search-dni  
+                input(type="hidden", id="patientsData", value= patients?JSON.stringify(patients):'')                    
+                //input(name="prestaciones-dni" id="prestaciones-dni" list="patientList" placeholder="Buscar pacientes..." required)
+                select(id="patientList")
+                  option(value="") Seleccione un paciente
+                               
             .overlay
             .popup
                 h2 Paciente

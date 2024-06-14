@@ -1,8 +1,7 @@
 const { Patient, User, Person, PlanOS, SocialWork, sequelize } = require('../models/index.models');
 const { mapPatientData } = require('../models/mappers/patient.mapper');
 const { httpError } = require('../helpers/handleError');
-const { encrypt } = require('../utils/handleBcrypt');
-const { getPatientByIdService, getListAllPatientsService, createPatientService } = require('../services/patient.service');
+const { getPatientByIdService, getListAllPatientsService, createPatientService, getPatientByDniService } = require('../services/patient.service');
 
 async function getPatientById (req, res) {
     const { id } = req.params;
@@ -32,9 +31,27 @@ async function getPatientById (req, res) {
     }
 }
 
+async function getPatientByDni (req, res) {
+    const { dni } = req.params;
+    console.log("DNI", dni)
+    try {
+        const patient = await getPatientByDniService(dni);
+        if (!patient) {
+            return res.status(404).json({ message: 'Patient not found' });
+        }    
+        
+       // const mapPatient = mapPatientData(patient);
+
+        res.json({patient})
+    } catch (error) {
+        httpError(res, error);
+    }
+}
+
+
 async function getListAllPatients(req, res){
     try {
-        const patient = await getListAllPatientsService(id);
+        const patient = await getListAllPatientsService();
         
         console.log(patient);
         const listMapPatient = patient.map(mapPatientData);
@@ -173,4 +190,4 @@ async function deletePatient(req, res) {
     }
 }
 
-module.exports = { getPatientById, getListAllPatients, newPatient, createPatient, deletePatient, updatePatient}
+module.exports = { getPatientById, getListAllPatients, newPatient, createPatient, deletePatient, updatePatient, getPatientByDni}

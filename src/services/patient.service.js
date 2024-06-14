@@ -1,3 +1,4 @@
+const { where } = require('sequelize');
 const { Patient, User, Person, PlanOS, SocialWork, sequelize } = require('../models/index.models');
 const { encrypt } = require('../utils/handleBcrypt');
 
@@ -25,9 +26,32 @@ async function getPatientByIdService(id) {
     });
 }
 
-async function getListAllPatientsService(id) {
+async function getPatientByDniService(dni) {
     return Patient.findOne({ 
-        where: { id },
+        include: [
+            {
+                model: PlanOS,
+                as: 'PlanOS',
+                include: {
+                    model: SocialWork,
+                    as: 'SocialWork'
+                }
+            },
+            {
+                model: User,
+                as: 'User',
+                include: {
+                    model: Person,
+                    as: 'Person',
+                    where: { numberDocument: dni }
+                }
+            }
+        ]
+    });
+}
+
+async function getListAllPatientsService() {
+    return Patient.findAll({ 
         include: [
             {
                 model: PlanOS,
@@ -79,5 +103,6 @@ async function createPatientService(data) {
 module.exports = {
     getPatientByIdService,
     createPatientService,
-    getListAllPatientsService
+    getListAllPatientsService,
+    getPatientByDniService,
 };

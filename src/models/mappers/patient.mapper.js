@@ -1,5 +1,6 @@
 const mapPatientData = (data) => {
-    return {
+    console.log("DATA PATIENT", data)
+    return {        
         id: data.id,
         firstName: data.User.Person.firstName,
         lastName: data.User.Person.lastName,

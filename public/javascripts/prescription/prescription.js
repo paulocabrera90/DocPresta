@@ -1,32 +1,22 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const button = document.getElementById("button-searchDni");
-    const inputField = document.getElementById('prestaciones-dni');
+  const inputField = document.getElementById('prestaciones-dni');
+  const dataList = document.getElementById('patientList');
+  const patientsData = JSON.parse(document.getElementById('patientsData').value);
+
+    patientsData.forEach(patient => {
+      const option = new Option(`${patient.User.Person.firstName} ${patient.User.Person.lastName} - ${patient.User.Person.numberDocument}`);
+      dataList.add(option);
+    });
         
     let patientGlobal = {};
     
-    if (button) {
-      button.addEventListener("click", function(event) {
-        event.preventDefault();
-        const dni = inputField.value.trim();
-  
-        if (!isValidDNI(dni)) {
-          alert('Ingrese un DNI válido de 8 dígitos.');
-          return;
+      dataList.addEventListener("change", function() {
+        const selectedValue = this.value;
+        const patient = patientsData.find(p => `${p.User.Person.firstName} ${p.User.Person.lastName} - ${p.User.Person.numberDocument}` === selectedValue);
+        if (patient) {
+            patientGlobal= patient
+            showPopup(patient);
         }
-  
-        fetch(`http://localhost:4200/api/users/${dni}`)
-        .then(response => response.json())
-        .then(response => {
-            if (response.data) {
-              patientGlobal=response.data;
-              showPopup(patientGlobal);
-            } else {
-                alert('Paciente no encontrado.');
-            }
-        })
-        .catch(() => {
-            alert('Error al buscar el paciente.');
-        });
       });
 
       document.getElementById('acceptButtonPopup').addEventListener('click', function() {
@@ -38,7 +28,6 @@ document.addEventListener("DOMContentLoaded", function() {
             hidePopup();
         });
       });
-    }
   });
   
   function isValidDNI(dni) {
@@ -49,15 +38,15 @@ document.addEventListener("DOMContentLoaded", function() {
   function showPopup(data) {
    // $('#patientInfo').text(`Nombre: ${data.firstName} ${data.lastName}\nEmail: ${data.email}\nDNI: ${data.numberDocument}`);
     let patientInfoHtml = `
-      <p>Nombre: ${data.firstName} ${data.lastName}</p>
-      <p>Email: ${data.email}</p>
-      <p>DNI: ${data.numberDocument}</p>
-      <p>Edad: ${data.age}</p>
-      <p>Tipo de documento: ${data.typeDocument}</p>
-      <p>Sexo: ${data.sex}</p>
-      <p>Rol: ${data.rol}</p>
-      <p>Obra Social: ${data.socialWork.name}</p>
-      <p>Plan de Obra Social: ${data.planOSName}</p>
+      <p>Nombre: ${data.User.Person.firstName} ${data.User.Person.lastName}</p>
+      <p>Email: ${data.User.email}</p>
+      <p>DNI: ${data.User.Person.numberDocument}</p>
+      <p>Fecha de nacimiento: ${data.User.Person.birthDate}</p>
+      <p>Tipo de documento: ${data.User.Person.typeDocument}</p>
+      <p>Sexo: ${data.User.Person.sex}</p>
+      <p>Rol: ${data.User.rol}</p>
+      <p>Obra Social: ${data.PlanOS.SocialWork.name}</p>
+      <p>Plan de Obra Social: ${data.PlanOS.planOSName}</p>
     `;
     document.getElementById('patientInfo').innerHTML = patientInfoHtml; 
     document.querySelector('.overlay').style.display = 'block';
@@ -80,13 +69,12 @@ document.addEventListener("DOMContentLoaded", function() {
   function acceptPopup(patientGlobal) {
     const birthDate = formatDate(patientGlobal.birthDate);
 
-    document.getElementById('paciente_nombre').value = patientGlobal.firstName;
-    document.getElementById('paciente_apellido').value = patientGlobal.lastName;
-    document.getElementById('prestaciones-dni').value = patientGlobal.numberDocument;
-    document.getElementById('paciente_fecha_nacimiento').value = birthDate;
-    document.getElementById('paciente_obra_social').value = patientGlobal.socialWork.name;
-    document.getElementById('paciente_plan').value = patientGlobal.planOSName;
-    document.getElementById('paciente_sexo').value = patientGlobal.sex.toUpperCase() === 'FEMENINO' ? 'FEMALE' : patientGlobal.sex.toUpperCase() === 'MASCULINO' ? 'MALE' : 'OTHER';
+    document.getElementById('paciente_nombre').value = patientGlobal.User.Person.firstName;
+    document.getElementById('paciente_apellido').value = patientGlobal.User.Person.lastName;
+    document.getElementById('paciente_fecha_nacimiento').value = new Date(patientGlobal.User.Person.birthDate).toISOString().split('T')[0];
+    document.getElementById('paciente_obra_social').value = patientGlobal.PlanOS.SocialWork.name;
+    document.getElementById('paciente_plan').value = patientGlobal.PlanOS.planOSName;
+    document.getElementById('paciente_sexo').value = patientGlobal.User.Person.sex.toUpperCase() === 'FEMENINO' ? 'FEMALE' : patientGlobal.User.Person.sex.toUpperCase() === 'MASCULINO' ? 'MALE' : 'OTHER';
 
     hidePopup();
 }
