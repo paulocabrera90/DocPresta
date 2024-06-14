@@ -1,1 +1,21 @@
-PUTO EL QUE LEE
+EN el mismo se agrega las funcionalidades de crear paciente, profesional, medicament, el listado de prescripcion
+
+en el mismo se encuentra doc-presta.sql, que tiene los insert para la base de datos
+Pasos
+
+1 Crear la base de datos con nombre doc_presta
+2 Eliminar la extension a .env.tempate, tiene q qdar -> .env
+3 Revisar en src/config/config.sql la configuracion de desarrollador
+
+                "development": {
+                "username": "root",
+                "password": "",
+                "database": "doc_presta",
+                "host": "localhost",
+                "dialect": "mysql"
+                },
+4 npm start o npm run dev, genera automaticamente todas las tablas y sus relaciones
+5 Cargar el script con los datos, estan ordenados para que no rompa por Pk o Fk
+6 Los usuarios
+    ADMIN pauloc@gmail.com PASS 123456
+    PROFESIONAL fernandao@gmail.com PASS 123456

@@ -7,7 +7,7 @@ var router = express.Router();
 /* GET users listing. */
 router.get('/new', checkAuth,checkRoleAuth(['PROFESIONAL']), medicalRecordNew);
 
-router.get('/', checkAuth,checkRoleAuth(['PROFESIONAL']), getListAllMedicalRecord);
+router.get('/', checkAuth,checkRoleAuth(['ADMIN','PROFESIONAL']), getListAllMedicalRecord);
 
 
 // router.post('/create', checkAuth, checkRoleAuth(['PROFESIONAL']), createMedicalRecord);
@@ -18,7 +18,7 @@ router.get('/', checkAuth,checkRoleAuth(['PROFESIONAL']), getListAllMedicalRecor
 
 // router.delete('/:id',checkAuth, checkRoleAuth(['PROFESIONAL']), deleteMedicalRecord);
 
-router.get('/generate-pdf', checkAuth, checkRoleAuth(['PROFESIONAL']), generatePdf);
+router.get('/generate-pdf', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), generatePdf);
 
 
 module.exports = router;
