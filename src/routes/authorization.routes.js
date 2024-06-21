@@ -8,6 +8,8 @@ const router = express.Router();
 
 router.post('/login', validateLogin, loginCtrl);
 
+//router.post('/login', loginCtrl);
+
 router.post('/register', checkAuth, checkRoleAuth(['admin'], false), validateRegister, registerCtrl);
 
 router.get('/check-token', checkAuth, checkToken);

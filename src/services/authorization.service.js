@@ -1,50 +1,55 @@
 
+const { loginError } = require('../helpers/handleError');
 const { User, Person } = require('../models/index.models');
 const storage = require('../storage/session');
 const { tokenSign } = require('../utils/generateToken');
 const { compare } = require('../utils/handleBcrypt');
 
-const privilegedRoles = ["admin"];
 async function login(email, password) {
-    const user = await User.findOne({ 
-        where: { email },
-        include: [
-            {
-                model: Person,
-                as: 'Person'
-            }
-        ]
-    });
-
-    if (!user) {
-        throw new Error('User not found');
+    try {
+        console.log("LOGIN SERVICE!")
+        const user = await User.findOne({ 
+            where: { email },
+            include: [
+                {
+                    model: Person,
+                    as: 'Person'
+                }
+            ]
+        });
+        
+        if (!user) {
+            throw new loginError(401, 'CREDENTIALS_INCORRECT', 'Credenciales incorrectas');
+        }
+        
+        const checkPassword = await compare(password, user.hashPassword);
+    
+        if (!checkPassword) {
+            throw new loginError(401, 'CREDENTIALS_INCORRECT', 'Credenciales incorrectas');
+        }
+    
+        const tokenSession = await tokenSign(user);
+    
+        await storage.setState({
+            token: tokenSession,
+            user:user.dataValues
+        })
+    
+        return {
+            id: user.id,
+            fullName: fullName(user),
+            email: user.email,
+            rol: user.rol,
+            tokenSession
+        };
+    } catch (error) {
+        throw error;
     }
     
-    const checkPassword = await compare(password, user.hashPassword);
-
-    if (!checkPassword) {
-        throw new Error('Invalid password');
-    }
-
-    const timeSession = privilegedRoles.includes(user.role) ? "8h" : "2h";
-    const tokenSession = await tokenSign(user, timeSession);
-
-    await storage.setState({
-        token: tokenSession,
-        user:user.dataValues
-    })
-
-    return {
-        id: user.id,
-        fullName: user.username,
-        email: user.email,
-        role: user.role,
-        tokenSession
-    };
 }
 
 function fullName(user){
-    return user.firstName + ' ' + user.lastName
+    return user.Person.firstName + ' ' + user.Person.lastName
 }
 
 module.exports = {

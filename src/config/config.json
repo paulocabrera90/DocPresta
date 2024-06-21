@@ -1,23 +1,23 @@
 {
     "development": {
-      "username": "root",
-      "password": "",
+      "username": "paulo",
+      "password": "123456",
       "database": "doc_presta",
-      "host": "localhost",
+      "host": "172.17.0.2",
       "dialect": "mysql"
     },
     "test": {
-        "username": "root",
-        "password": "",
-        "database": "doc_presta",
-        "host": "localhost",
-        "dialect": "mysql"
+        "username": "paulo",
+      "password": "123456",
+      "database": "doc_presta",
+      "host": "172.17.0.2",
+      "dialect": "mysql"
     },
     "production": {
-        "username": "root",
-        "password": "",
-        "database": "doc_presta",
-        "host": "localhost",
-        "dialect": "mysql"
+        "username": "paulo",
+      "password": "123456",
+      "database": "doc_presta",
+      "host": "172.17.0.2",
+      "dialect": "mysql"
     }
   }

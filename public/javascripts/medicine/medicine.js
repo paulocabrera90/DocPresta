@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (form) { 
         form.addEventListener('submit', function(event) {
             event.preventDefault();
-            showSpinner(true);
+          //  showSpinner(true);
             updateItemsInput();
             if(itemData.length === 0){
                 alert("No se han anadido Propiedades");

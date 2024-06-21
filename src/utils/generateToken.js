@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = "docpresta_cabrera";
+const TIME_SESSION = "2h";
 
-async function tokenSign(user, timeSession) {
+async function tokenSign(user) {
     return jwt.sign(
         {
             id: user.id,
@@ -10,7 +11,7 @@ async function tokenSign(user, timeSession) {
             state: user.state
         },
         JWT_SECRET, 
-        { expiresIn: timeSession, }
+        { expiresIn: TIME_SESSION, }
     );
 }
 

@@ -9,6 +9,7 @@ const usersRoutes = require("./users.routes");
 const { goHome } = require("../controllers/home.controller");
 const checkAuth = require("../middleware/auth.middle");
 const storage = require("../storage/session");
+const { verifyToken } = require("../utils/generateToken");
 
 const routes_init = () => {
   const router = Router();
@@ -37,8 +38,14 @@ const routes_init = () => {
 
   });
 
-  router.use('/',  (req, res) => {  
-      res.render('login');
+  router.use('/', async  (req, res) => {
+      const very = await verifyToken(storage.state.token)
+        console.log("login", very)
+        if(very && very.id){
+          res.redirect('/api/medical-record');  
+        } else {
+          res.render('login');
+        }
   });
   return router;
 }

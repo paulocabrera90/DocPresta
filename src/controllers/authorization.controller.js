@@ -3,14 +3,14 @@ const { encrypt } = require("../utils/handleBcrypt");
 const authService = require('../services/authorization.service');
 const { User } = require('../models/index.models');
 const { httpError } = require("../helpers/handleError"); 
-
-const privilegedRoles = ["admin"];
+const { mapUserData } = require("../models/mappers/user.mapper");
 
 async function loginCtrl(req, res) {
     try {
         const { email, password } = req.body;
         const userData = await authService.login(email, password);
-        
+        console.log("userData!", userData)
+
         res.json({ userData });
         
     } catch (error) {        
@@ -66,8 +66,7 @@ async function checkToken(req, res) {
         return res.send({ error: 'User not found' });
     }
     
-    const timeSession = privilegedRoles.includes(user.role) ? "8h" : "2h";
-    const tokenSession = await tokenSign(user, timeSession);
+    const tokenSession = await tokenSign(user);
     return res.send({
         data: { message: "Update token" , id: user.id, fullName: fullName(user), email: user.email, role: user.role },
         tokenSession
