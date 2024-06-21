@@ -1,26 +1,26 @@
 {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTcsInJvbCI6IlBST0ZFU0lPTkFMIiwiZW1haWwiOiJmZXJuYW5kYW9AZ21haWwuY29tIiwic3RhdGUiOnRydWUsImlhdCI6MTcxODkyNzc5NiwiZXhwIjoxNzE4OTM0OTk2fQ.Xq-ktr85fS2IZnfXiJ-on8kr68LnquPekmG52kDczbQ",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sIjoiQURNSU4iLCJlbWFpbCI6InBhdWxvY0BnbWFpbC5jb20iLCJzdGF0ZSI6dHJ1ZSwiaWF0IjoxNzE4OTQ5NjYyLCJleHAiOjE3MTg5NTY4NjJ9.AbHzpw55dF05X3wT_-ig0TSEQWsU0jQHYGLT3Gypfy8",
     "user": {
-        "id": 17,
-        "username": "fernandao",
+        "id": 1,
+        "username": "pauloc",
         "hashPassword": "$2a$10$Ap9SF4uShR.YiHsVqHVIHOx1AaPXxGiAHeyJ1R4.hFEptoOBcLSVu",
-        "rol": "PROFESIONAL",
-        "email": "fernandao@gmail.com",
+        "rol": "ADMIN",
+        "email": "pauloc@gmail.com",
         "state": true,
-        "creationDate": "2024-06-09T17:54:15.000Z",
-        "modificationDate": "2024-06-09T17:54:15.000Z",
-        "personId": 41,
+        "creationDate": "2024-05-29T00:31:08.000Z",
+        "modificationDate": "2024-05-29T00:31:08.000Z",
+        "personId": 1,
         "Person": {
-            "id": 41,
-            "firstName": "Fernanda",
-            "lastName": "Ochoa",
-            "birthDate": "2024-06-06T00:00:00.000Z",
-            "numberDocument": "34699512",
+            "id": 1,
+            "firstName": "Paulo Nicolas",
+            "lastName": "Cabrera",
+            "birthDate": "1990-01-31T00:00:00.000Z",
+            "numberDocument": "35104957",
             "typeDocument": "DNI",
-            "sex": "Femenino",
+            "sex": "Masculino",
             "state": true,
-            "creationDate": "2024-06-09T17:54:15.000Z",
-            "ModificationDate": "2024-06-09T17:54:15.000Z"
+            "creationDate": "2024-05-29T00:23:30.000Z",
+            "ModificationDate": "2024-05-29T00:23:30.000Z"
         }
     }
 }

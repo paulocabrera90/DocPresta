@@ -174,15 +174,33 @@ async function deletePatient(req, res) {
     const { id } = req.params; 
     const transaction = await sequelize.transaction();
 
-    try {        
-        await Patient.destroy({
-            where: { id },
+    try {   
+        // const existingPatient = await getPatientByIdService(id);
+
+        // await Patient.destroy({
+        //     where: { id },
+        //     transaction
+        // });
+
+        // await transaction.commit();
+        const existingPatient = await Patient.findByPk(id, {
+            include: [{
+                model: User,
+                as: 'User',
+                include: [{
+                    model: Person,
+                    as: 'Person'
+                }]
+            }],
             transaction
         });
-
+        
+        await existingPatient.destroy({ transaction });
+        await existingPatient.User.destroy({ transaction });
+        await existingPatient.User.Person.destroy({ transaction });
         await transaction.commit();
         
-        res.status(200).json( {id} );
+        res.status(200).json( {id, existingPatient} );
     } catch (error) {
        
         await transaction.rollback();

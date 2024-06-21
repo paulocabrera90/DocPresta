@@ -27,7 +27,7 @@ block content
                             a(href=`/api/patient/${pat.id}` class="btn btn-secondary") Editar
 
                             form(id='formDeleteCard' data-id=pat.id data-module="patient")
-                                button(id='btnFormDeleteCard' type='submit' class="btn btn-danger" onclick="confirmDelete()") Eliminar
+                                button(id='btnFormDeleteCard' type='submit' class="btn btn-danger" onclick="confirmDelete(event)") Eliminar
         else
             .alert.alert-warning.no-medicines-alert
                 | No hay pacientes.

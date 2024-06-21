@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         const closeBtn = document.querySelector('.close');
         closeBtn.onclick = function() {
-          modal.style.display = 'none'; // Ocultar modal al hacer clic en 'X'
+          modal.style.display = 'none';
         }
         console.error("Error al iniciar sesión:", error.message);
     }

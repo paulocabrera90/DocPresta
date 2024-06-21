@@ -17,6 +17,11 @@ html
     container-home
       include side-nav.pug      
       block content
+    
+    #errorModal.modal
+      .modal-content
+        span.close &times;
+        p#errorMessage 
       
   script(src='/javascripts/home.js')
   script(src='/javascripts/login.js')

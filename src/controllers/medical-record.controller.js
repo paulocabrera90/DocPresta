@@ -75,7 +75,7 @@ async function getListAllMedicalRecord(req, res){
             
         res.render('medical-record-landing', { medicalRecords, speciality, profesion, profesional });
           
-         // res.json({ medicalRecords, speciality, profesion, profesional });
+        //res.json({ medicalRecords, speciality, profesion, profesional });
        
     } catch (error) {
         httpError(res, error);

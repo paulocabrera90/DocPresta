@@ -16,6 +16,7 @@ async function getAllMedicalRecordsService(userId) {
             {
                 model: Patient,
                 as: 'Patients',
+                required:true,
                 include: [
                     {
                         model: PlanOS,
@@ -42,7 +43,8 @@ async function getAllMedicalRecordsService(userId) {
             {
                 model: Profesional,
                 as: 'Profesionals',
-                where: { userId },
+                required: true,
+                where: { userId: userId },
                 include: [
                     {
                         model: Speciality,
