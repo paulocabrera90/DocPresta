@@ -9,8 +9,7 @@ module.exports = (sequelize, DataTypes) => {
         Speciality.belongsTo(models.Profesion, {
           foreignKey: {
             name: 'profesionId',
-            allowNull: false,
-            unique: true,
+            allowNull: false
           },
           as: 'Profesion',
         });

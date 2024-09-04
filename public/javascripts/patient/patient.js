@@ -31,46 +31,53 @@ document.addEventListener('DOMContentLoaded', function() {
 
     //_______________________________________________________________________________-
     const form = document.querySelector('form');
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
-        showSpinner(true)
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
-        const patientId = form.getAttribute("data-id");
-
-        const isUpdate = patientId? true : false;
-        const url = isUpdate ? `/api/patient/update/${patientId}` : '/api/patient/create';
-        const method = isUpdate ? 'PATCH' : 'POST';
-
-        fetch(url, {
-            method: method,
-            headers: {
-                'Content-Type': 'application/json',
-                // Include other necessary headers, e.g., authorization
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => {
-            if (response.ok) {
-                return response.json();  // Suponiendo que el servidor responde con JSON
-            } else {
-                // Lanza un error que llevará al bloque .catch con más información
-                throw new Error('Algo salió mal en el servidor: ' + response.statusText);
-            }
-        }).then(result => {
-            console.log('Success:', result);
-            const message = isUpdate ? `Se actualizo correctamente el Paciente` : 'Se agrego correctamente el Paciente';
-            alert(message);
+    if (form) {
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            showSpinner(true);
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            const patientId = form.getAttribute("data-id");
+    
             
-            showSpinner(false)
-            window.location.href = '/api/patient';
-        })
-        .catch(error => {
-            // Handle errors
-            console.error('Error:', error);
-            alert('Ocurrio un error. Intente nuevamente.');
+            const isUpdate = patientId? true : false;
+            const url = isUpdate ? `/api/patient/update/${patientId}` : '/api/patient/create';
+            const method = isUpdate ? 'PATCH' : 'POST';
+            console.log('Creating or Updating Patient:', url);
+    
+            fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Include other necessary headers, e.g., authorization
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                console.log("Response status: ", response.status);
+                if (response.ok) {
+                    return response.json();  // Suponiendo que el servidor responde con JSON
+                } else {
+                    // Lanza un error que llevará al bloque .catch con más información
+                    throw new Error('Algo salió mal en el servidor: ' + response.statusText);
+                }
+            }).then(result => {
+                console.log('Success:', result);
+                const message = isUpdate ? `Se actualizo correctamente el Paciente` : 'Se agrego correctamente el Paciente';
+                alert(message);
+                console.log("Redirigiendo...");
+                showSpinner(false)
+                window.location.href = '/api/patient';
+            })
+            .catch(error => {
+                // Handle errors
+                console.error('Error:', error);
+                alert('Ocurrio un error. Intente nuevamente.');
+            });
         });
-    });
+    }else {
+        console.log("No se encontró el formulario.");
+    }    
     
 });
 

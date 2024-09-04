@@ -12,19 +12,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    function showSpinner(show) {
-        const overlay = document.querySelector('.loading-overlay');
-        if (show) {
-            console.log("show");
-            overlay.style.visibility = 'visible';
-            overlay.style.opacity = '1';
-        } else {
-            console.log("not show");
-            overlay.style.visibility = 'hidden';
-            overlay.style.opacity = '0';
-        }
-    }
-
     //______________________
     var userDataString = localStorage.getItem('user');
     var userData = null;
@@ -122,6 +109,19 @@ function confirmDelete(event) {
                     modal.style.display = 'none';
                 }
             });
+    }
+}
+
+function showSpinner(show) {
+    const overlay = document.querySelector('.loading-overlay');
+    if (show) {
+        console.log("show");
+        overlay.style.visibility = 'visible';
+        overlay.style.opacity = '1';
+    } else {
+        console.log("not show");
+        overlay.style.visibility = 'hidden';
+        overlay.style.opacity = '0';
     }
 }
 

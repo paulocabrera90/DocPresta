@@ -11,11 +11,16 @@ block content
         hr(style="margin-top: 20px; margin-bottom: 20px;")
         if profesional
             .professional-info
-                h3 Información del Profesional
-                h4 Dr/Dra #{profesional.User.Person.firstName} #{profesional.User.Person.lastName}
-                p Especialidad: #{speciality.name}
-                p Email: #{profesional.User.email}
-                p REFEPS: #{profesional.idREFEPS}
+                if profesional.User.rol == 'ADMIN'
+                    h3 Información del Usuario
+                    h4 #{profesional.User.Person.firstName} #{profesional.User.Person.lastName}
+                else
+                    h3 Información del Profesional
+                    h4 Dr/Dra #{profesional.User.Person.firstName} #{profesional.User.Person.lastName}
+                    p Especialidad: #{speciality.name}
+                    p Role: #{profesional.User.rol}
+                    p Email: #{profesional.User.email}
+                    p REFEPS: #{profesional.idREFEPS}
 
         hr(style="margin-top: 20px; margin-bottom: 20px;")        
         if medicalRecords.length>0
@@ -44,4 +49,7 @@ block content
                                 button(id='btnFormDeleteCard' type='submit' class="btn btn-danger" onclick="confirmDelete(event)") Eliminar
         
         else
-            p No hay registros médicos disponibles
+            .alert.alert-warning.text-center(role='alert')
+                i.fas.fa-exclamation-triangle.fa-2x
+                h4 No hay registros médicos disponibles
+                p Por favor, regrese más tarde o contacte al administrador del sistema.

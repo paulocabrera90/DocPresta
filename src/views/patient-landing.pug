@@ -29,5 +29,7 @@ block content
                             form(id='formDeleteCard' data-id=pat.id data-module="patient")
                                 button(id='btnFormDeleteCard' type='submit' class="btn btn-danger" onclick="confirmDelete(event)") Eliminar
         else
-            .alert.alert-warning.no-medicines-alert
-                | No hay pacientes.
+            .alert.alert-warning.text-center(role='alert')
+                i.fas.fa-exclamation-triangle.fa-2x
+                h4 No hay registros pacientes disponibles
+                p Por favor, regrese más tarde o contacte al administrador del sistema.
