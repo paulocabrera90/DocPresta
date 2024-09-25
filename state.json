@@ -1,26 +1,26 @@
 {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sIjoiQURNSU4iLCJlbWFpbCI6InBhdWxvY0BnbWFpbC5jb20iLCJzdGF0ZSI6dHJ1ZSwiaWF0IjoxNzI1NDc4NzU4LCJleHAiOjE3MjU0ODU5NTh9.YlDt7E408D3p4NewKOEHkJoc1MXyvWM4Xn6vqLHObsE",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sIjoiQURNSU4iLCJlbWFpbCI6InBhdWxvY0BnbWFpbC5jb20iLCJzdGF0ZSI6dHJ1ZSwiaWF0IjoxNzI3MTI3Mzc1LCJleHAiOjE3MjcxMzQ1NzV9.yxLHv2tc_cqywg8gNzfdkw4l694uTP0wOa81WakWcrQ",
     "user": {
         "id": 1,
         "username": "pauloc",
-        "hashPassword": "$2a$10$Ap9SF4uShR.YiHsVqHVIHOx1AaPXxGiAHeyJ1R4.hFEptoOBcLSVu",
+        "hashPassword": "$2y$10$zbpDB6Z1zdBII7eTGxn5we4wmQ.PGTCQAU13FvifRI9yZ9PXzAAzC",
         "rol": "ADMIN",
         "email": "pauloc@gmail.com",
         "state": true,
-        "creationDate": "2024-05-29T00:31:08.000Z",
-        "modificationDate": "2024-05-29T00:31:08.000Z",
+        "creationDate": "2024-10-20T00:00:00.000Z",
+        "modificationDate": "2024-10-20T00:00:00.000Z",
         "personId": 1,
         "Person": {
             "id": 1,
-            "firstName": "Paulo Nicolas",
+            "firstName": "Paulo",
             "lastName": "Cabrera",
             "birthDate": "1990-01-31T00:00:00.000Z",
             "numberDocument": "35104957",
             "typeDocument": "DNI",
             "sex": "Masculino",
             "state": true,
-            "creationDate": "2024-05-29T00:23:30.000Z",
-            "ModificationDate": "2024-05-29T00:23:30.000Z"
+            "creationDate": "2024-10-20T00:00:00.000Z",
+            "ModificationDate": "2024-10-20T00:00:00.000Z"
         }
     }
 }

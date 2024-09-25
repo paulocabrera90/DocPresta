@@ -85,16 +85,24 @@ async function getAllMedicalRecordsService(userId) {
                 }
             ]
         })
-         
-        if (!profesional) {
-            throw new Error('No se encontró el profesional.');
-        }
 
-        const speciality = profesional.dataValues.Speciality.dataValues;
+        var speciality = null;
+        var profesion = null;
+        if (profesional) {
+            speciality = profesional.dataValues.Speciality.dataValues;
         
-        const profesion = speciality && speciality.profesionId
+            profesion = speciality && speciality.profesionId
             ? await Profesion.findOne({ where: { id: speciality.profesionId } })
             : null;
+
+            speciality = profesional.dataValues.Speciality.dataValues;
+        
+            profesion = speciality && speciality.profesionId
+            ? await Profesion.findOne({ where: { id: speciality.profesionId } })
+            : null;
+        }
+
+        
     
         return { medicalRecords, profesional, speciality, profesion };
     } catch (error) {

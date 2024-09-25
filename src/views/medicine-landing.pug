@@ -49,5 +49,7 @@ block content
                             form(id='formDeleteCard' data-id=medicine.id data-module="medicine")
                                 button(id='btnFormDeleteCard' type='submit' class="btn btn-danger" onclick="confirmDelete(event)") Eliminar
         else
-            .alert.alert-warning.no-alert
-                | No hay medicamentos disponibles.
+            .alert.alert-warning.text-center(role='alert')
+                i.fas.fa-exclamation-triangle.fa-2x
+                h4 No hay medicamentos disponibles
+                p Por favor, regrese más tarde o contacte al administrador del sistema.
