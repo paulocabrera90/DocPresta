@@ -14,9 +14,9 @@ const {
               as: 'SocialWork',
             });      
             
-            models.SocialWork.hasOne(PlanOS, {
+            models.SocialWork.hasMany(PlanOS, { 
               foreignKey: 'socialWorkId',
-              as: 'SocialWorks',
+              as: 'PlanOS',
             });
           }
     }

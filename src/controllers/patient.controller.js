@@ -83,7 +83,6 @@ async function createPatient(req, res) {
     const transaction = await sequelize.transaction();
     try {
         
-        console.log("req.body", req.body)
         console.log("Create patient")
         const patient = await createPatientService(req.body);
         console.log("Create patient successfully")

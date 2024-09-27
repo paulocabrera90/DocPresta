@@ -9,7 +9,6 @@ async function loginCtrl(req, res) {
     try {
         const { email, password } = req.body;
         const userData = await authService.login(email, password);
-        console.log("userData!", userData)
 
         res.json({ userData });
         
