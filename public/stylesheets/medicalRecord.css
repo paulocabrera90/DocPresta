@@ -153,10 +153,15 @@
 
 #newElementCard {
   cursor: pointer;
-  width: 100%;
+  width: 10%;
   height: 55px;
   align-content: center;
-  font-size: 30px;
+  font-size: 20px;
+}
+
+.buttons-header {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .title-header-cards {

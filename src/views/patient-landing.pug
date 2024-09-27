@@ -5,7 +5,8 @@ block content
         header
             .title-header-cards
                 h1 Lista de Pacientes
-            a(href="/api/patient/new" id="newElementCard" class="btn btn-success") Nuevo
+            .buttons-header
+                a(href="/api/patient/new" id="newElementCard" class="btn btn-success") Nuevo
         hr(style="margin-top: 20px; margin-bottom: 20px;")
         if patients.length > 0
             container-card

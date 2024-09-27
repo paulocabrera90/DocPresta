@@ -14,14 +14,18 @@ html
     div#loading.loading-overlay(style="visibility: hidden; opacity: 0;")
       div.spinner
       
-    container-home
+    container-home.mt-3.mb-3
       include side-nav.pug      
       block content
     
     #errorModal.modal
-      .modal-content
-        span.close &times;
-        p#errorMessage 
+      .modal-dialog
+        .modal-content
+          .modal-header
+            button.close(type="button" data-dismiss="modal") &times;
+            h4.modal-title Error
+          .modal-body
+            p#errorMessage  
       
   script(src='/javascripts/home.js')
   script(src='/javascripts/login.js')
