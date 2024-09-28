@@ -18,3 +18,7 @@ body {
     border-radius: 10px;
     background-color: #f8d7da;
 }
+
+.btn-error {
+    margin-top: 15px;
+}

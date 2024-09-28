@@ -1,6 +1,80 @@
- /* Estilo para el popup */
+
+/* Estilo para el contenido principal */
+.container-patient-new {
+  margin-left: 260px;
+  width: calc(100% - 260px); 
+  max-width: none;
+  padding: 25px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+/* Mejora la presentación del formulario */
+form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+}
+
+h1 {
+  text-align: center;
+  color: #3498db;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+  display: flex;
+
+  flex-direction: column;
+}
+
+label {
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="email"],
+input[type="password"],
+select,
+input[list] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #3498db;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #2980b9;
+}
+
+h3 {
+  grid-column: span 2; /* Hace que el título del usuario ocupe las dos columnas */
+  text-align: center;
+}
+
+/* Popup estilo (manteniendo tu popup actual) */
 .popup {
-    display: none; /* Escondido por defecto */
+    display: none;
     position: fixed;
     left: 50%;
     top: 50%;
@@ -13,10 +87,9 @@
     z-index: 1000;
     border-radius: 8px;
     text-align: center;
-  }
-  
-  /* Estilo para el overlay */
-  .overlay {
+}
+
+.overlay {
     display: none;
     position: fixed;
     left: 0;
@@ -25,104 +98,4 @@
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
     z-index: 999;
-  }
-  
-  /* Estilo para el título del popup */
-  .popup h2 {
-    margin-top: 0;
-    font-size: 24px;
-    color: #333;
-  }
-  
-  /* Estilo para el párrafo de información del paciente */
-  .popup p#patientInfo {
-    font-size: 16px;
-    color: #000; /* Letras negras */
-    margin: 15px 0;
-  }
-  
-  /* Estilo para los botones */
-  .popup button {
-    width: 100px;
-    margin: 5px;
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  #acceptButtonPopup {
-    background-color: #4CAF50; /* Verde */
-    color: white;
-  }
-  
-  #cancelButtonPopup {
-    background-color: #f44336; /* Rojo */
-    color: white;
-  }
-  
-  #acceptButton:hover, #cancelButton:hover {
-    opacity: 0.8;
-  }
-/* Estilo para el patient new */
-
-.container-patient-new {
-  display: flex;
-  justify-content: space-between;
-  width: 85%;
-  margin: 25px
 }
-
-form {
-  background-color: #fff;
-  padding: 20px;
-  border: 2px solid #5fbae9;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 100%;
-}
-
-h1 {
-  text-align: center;
-  color: #56baed;
-}
-
-label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-input[type="text"],
-input[type="date"],
-input[type="number"],
-input[type="email"],
-input[type="password"],
-#socialWorkInput,
-#planOSInput, 
-#sex,
-#typeDocument {
-  width: calc(100% - 22px);
-  padding: 10px;
-  border: 2px solid #5fbae9;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  box-sizing: border-box;
-}
-
-button {
-  width: 100%;
-  padding: 10px;
-  background-color: #56baed;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-button:hover {
-  background-color: #3a9ac6;
-}
-  
