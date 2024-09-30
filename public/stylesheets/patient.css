@@ -24,11 +24,39 @@ h1 {
   margin-bottom: 20px;
 }
 
-.form-group {
-  margin-bottom: 15px;
-  display: flex;
+.container-patient-new > form {
+    background-color: #fff;
+    padding: 20px;
+    border: 2px solid #5fbae9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
 
-  flex-direction: column;
+.form-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.form-group > label {
+  flex-grow: 0;  
+  flex-shrink: 0; 
+  flex-basis: 9%; 
+  padding-right: 10px;
+  margin-left: 10px;
+  text-align: center; 
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+}
+
+.form-group > select input{
+  flex: 1;
+  width: 80%; 
 }
 
 label {
@@ -51,7 +79,7 @@ input[list] {
   font-size: 16px;
 }
 
-button {
+/* button {
   width: 100%;
   padding: 10px;
   background-color: #3498db;
@@ -65,10 +93,10 @@ button {
 
 button:hover {
   background-color: #2980b9;
-}
+} */
 
 h3 {
-  grid-column: span 2; /* Hace que el título del usuario ocupe las dos columnas */
+  grid-column: span 2; 
   text-align: center;
 }
 
@@ -98,4 +126,23 @@ h3 {
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
     z-index: 999;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px; 
+  padding-right: 20px; 
+}
+
+.form-actions  > button {
+  padding: 5px 10px; 
+  margin-left: 5px;
+  border: none;
+  border-radius: 5px;
+  width: 10%;
+}
+
+.form-actions > .button-secondary {
+  background-color: #6c757d;
 }

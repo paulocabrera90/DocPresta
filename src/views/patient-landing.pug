@@ -26,7 +26,6 @@ block content
                     
                         .card-footer
                             a(href=`/api/patient/${pat.id}` class="btn btn-secondary") Editar
-
                             form(id='formDeleteCard' data-id=pat.id data-module="patient")
                                 button(id='btnFormDeleteCard' type='submit' class="btn btn-danger" onclick="confirmDelete(event)") Eliminar
         else
