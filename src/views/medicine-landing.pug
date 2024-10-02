@@ -5,7 +5,8 @@ block content
         header
             .title-header-cards
                 h1 Lista de Medicamentos
-            a(href="/api/medicine/new" id="newElementCard" class="btn btn-success") Nuevo
+            .buttons-header
+                a(href="/api/medicine/new" id="newElementCard" class="btn btn-success") Nuevo
         hr(style="margin-top: 20px; margin-bottom: 20px;")
 
         if medicines.length > 0

@@ -5,7 +5,8 @@ block content
         header
             .title-header-cards
                 h1 Lista de Profesionales
-            a(href="/api/profesional/new" id="newElementCard" class="btn btn-success") Nuevo
+            .buttons-header
+                a(href="/api/profesional/new" id="newElementCard" class="btn btn-success") Nuevo
         hr(style="margin-top: 20px; margin-bottom: 20px;")
 
         if profesionals.length > 0
@@ -37,7 +38,7 @@ block content
                             br
                     
                         .card-footer
-                            a(href=`/api/patient/${prof.id}` class="btn btn-secondary") Editar
+                            a(href=`/api/profesional/${prof.id}` class="btn btn-secondary") Editar
                             form(id='formDeleteCard' data-id=prof.id data-module="profesional")
                                 button(id='btnFormDeleteCard' type='submit' class="btn btn-danger" onclick="confirmDelete(event)") Eliminar
         else

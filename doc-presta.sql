@@ -37,8 +37,7 @@ INSERT INTO doc_presta.Profesions (id,name,code,description,state,creationDate,m
 	 (8,'Psiquiatra','PSIQ','Psiquiatra / Especialista en salud mental',1,'2024-06-02 00:00:00','2024-06-02 00:00:00'),
 	 (9,'Traumatólogo','TRAUM','Traumatólogo / Especialista en lesiones y fracturas',1,'2024-06-02 00:00:00','2024-06-02 00:00:00'),
 	 (10,'Oncólogo','ONCO','Oncólogo / Especialista en cáncer',1,'2024-06-03 00:00:00','2024-06-03 00:00:00'),
-	 (11,'Endocrinólogo','ENDO','Endocrinólogo / Especialista en hormonas',1,'2024-06-03 00:00:00','2024-06-03 00:00:00');
-INSERT INTO doc_presta.Profesions (id,name,code,description,state,creationDate,modificationDate) VALUES
+	 (11,'Endocrinólogo','ENDO','Endocrinólogo / Especialista en hormonas',1,'2024-06-03 00:00:00','2024-06-03 00:00:00'),
 	 (12,'Reumatólogo','REUMA','Reumatólogo / Especialista en enfermedades reumáticas',1,'2024-06-04 00:00:00','2024-06-04 00:00:00'),
 	 (13,'Gastroenterólogo','GASTRO','Gastroenterólogo / Especialista en sistema digestivo',1,'2024-06-04 00:00:00','2024-06-04 00:00:00'),
 	 (14,'Neumólogo','NEUMO','Neumólogo / Especialista en sistema respiratorio',1,'2024-06-05 00:00:00','2024-06-05 00:00:00'),
@@ -60,8 +59,7 @@ INSERT INTO doc_presta.Specialities (id,name,code,description,state,creationDate
 	 (7,'Otorrinolaringología','OTOR-CL','Otorrinolaringología Clínica',1,'2024-06-01 00:00:00','2024-06-01 00:00:00',7),
 	 (8,'Psiquiatría Infantil','PSIQ-INF','Psiquiatría Infantil',1,'2024-06-02 00:00:00','2024-06-02 00:00:00',8),
 	 (9,'Traumatología Deportiva','TRAUM-DEP','Traumatología Deportiva',1,'2024-06-02 00:00:00','2024-06-02 00:00:00',9),
-	 (10,'Oncología Médica','ONCO-MED','Oncología Médica',1,'2024-06-03 00:00:00','2024-06-03 00:00:00',10);
-INSERT INTO doc_presta.Specialities (id,name,code,description,state,creationDate,modificationDate,profesionId) VALUES
+	 (10,'Oncología Médica','ONCO-MED','Oncología Médica',1,'2024-06-03 00:00:00','2024-06-03 00:00:00',10),
 	 (11,'Endocrinología Reproductiva','ENDO-REP','Endocrinología Reproductiva',1,'2024-06-03 00:00:00','2024-06-03 00:00:00',11),
 	 (12,'Reumatología Infantil','REUMA-INF','Reumatología Infantil',1,'2024-06-04 00:00:00','2024-06-04 00:00:00',12),
 	 (13,'Gastroenterología Pediátrica','GASTRO-PED','Gastroenterología Pediátrica',1,'2024-06-04 00:00:00','2024-06-04 00:00:00',13),

@@ -5,9 +5,10 @@ block content
         header
             .title-header-cards
                 h1 Lista de Registros Médicos
-            a(href="/api/medical-record/new" id="newElementCard" class="btn btn-success") Nuevo
-            button(onclick="location.href='/api/medical-record/generate-pdf'")
-                | Descargar PDF
+            .buttons-header                
+                a(href="/api/medical-record/new" id="newElementCard" class="btn btn-success") Nuevo
+                button(onclick="location.href='/api/medical-record/generate-pdf'" class="btn btn-primary")
+                    | Descargar PDF
         hr(style="margin-top: 20px; margin-bottom: 20px;")
         if profesional
             .professional-info
