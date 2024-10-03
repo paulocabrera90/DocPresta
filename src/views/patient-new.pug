@@ -1,8 +1,7 @@
 extends home
 
 block content
-    .container-patient-new
-    
+    .container-patient-new    
         form(action=patient ? "/api/patient/update" : "/api/patient/create" data-id=patient ? patient.id: '' method="post")
             h1 #{patient ? 'Editar' : 'Crear'} Paciente
             
@@ -48,8 +47,8 @@ block content
                         each planOS in plansOS
                             option(value=planOS.name selected=patient && patient.planOSName == planOS.name)= planOS.name
 
-            input(type="hidden" name="planOSId" id="planOSId")
-            
+            input(type="hidden" name="planOSId" id="planOSId" value=patient ? patient.planOSId : '')
+
             if !patient
                 h3 Usuario
                 label(for="username") Username:

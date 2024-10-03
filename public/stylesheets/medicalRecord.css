@@ -40,8 +40,10 @@
   
   container-presta-list,
   container-medical-record-list {
-    width: 85%;
-    margin-right: 10px;
+    width: 83%; 
+    margin-right: 2%;
+    margin-left: auto;
+    box-sizing: border-box;
 }
 
 /*Formulario medicalRecordNew*/

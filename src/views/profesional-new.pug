@@ -4,57 +4,63 @@ block content
     .container-profesional-new         
         form(action=profesional ? "/api/profesional/update" : "/api/profesional/create" data-id=profesional ?profesional.id: '' method="post")
             h1 #{profesional ? 'Editar' : 'Crear'} Profesional
-            label(for="firstName") Nombre:
+
+            .form-group
+                label(for="firstName") Nombre:
                 input(type="text" name="firstName" id="firstName" value=profesional ? profesional.firstName : '')
 
-            label(for="lastName") Apellido:
+                label(for="lastName") Apellido:
                 input(type="text" name="lastName" id="lastName" value=profesional ? profesional.lastName : '')
 
-            label(for="birthDate") Fecha Nacimiento:
+            .form-group
+                label(for="birthDate") Fecha Nacimiento:
                 input(type="date" name="birthDate" id="birthDate" value=(profesional && profesional.birthDate ? new Date(profesional.birthDate).toISOString().split('T')[0] : ''))
 
-            label(for="numberDocument") N° Documento:
-                input(type="text" name="numberDocument" id="numberDocument" value=profesional ? profesional.numberDocument : '')
-
-            label(for="typeDocument") Tipo Documento:
-                select(name="typeDocument" id="typeDocument")
-                    option(value="" ) Seleccione un Tipo
-                    option(value="DNI" selected=profesional && profesional.typeDocument == 'DNI') DNI
-                    option(value="Pasaporte" selected=profesional && profesional.typeDocument == 'Pasaporte') Pasaporte
-                    option(value="Otro" selected=profesional && profesional.typeDocument == 'Otro') Otros
-
-            label(for="sex") Sexo:
+                label(for="sex") Sexo:
                 select(name="sex" id="sex")
                     option(value="" ) Seleccione un Sexo
                     option(value="Masculino" selected=profesional && profesional.sex == 'Masculino') Masculino
                     option(value="Femenino" selected=profesional && profesional.sex == 'Femenino') Femenino
                     option(value="Otros" selected=profesional && profesional.sex == 'Otros') Otros
 
-            label(for="legalAddress") Domicilio fiscal:
+            .form-group
+                label(for="typeDocument") Tipo Documento:
+                select(name="typeDocument" id="typeDocument")
+                    option(value="" ) Seleccione un Tipo
+                    option(value="DNI" selected=profesional && profesional.typeDocument == 'DNI') DNI
+                    option(value="Pasaporte" selected=profesional && profesional.typeDocument == 'Pasaporte') Pasaporte
+                    option(value="Otro" selected=profesional && profesional.typeDocument == 'Otro') Otros
+                
+                label(for="numberDocument") N° Documento:
+                input(type="text" name="numberDocument" id="numberDocument" value=profesional ? profesional.numberDocument : '')
+            
+            .form-group
+                label(for="legalAddress") Domicilio fiscal:
                 input(type="text" name="legalAddress" id="legalAddress" value=profesional ? profesional.legalAddress : '')
 
-            label(for="registrationNumber") Matricula:
+                label(for="registrationNumber") Matricula:
                 input(type="text" name="registrationNumber" id="registrationNumber" value=profesional ? profesional.registrationNumber : '')
 
-            label(for="idREFEPS") ID-REFEPS:
+                label(for="idREFEPS") ID-REFEPS:
                 input(type="text" name="idREFEPS" id="idREFEPS" value=profesional ? profesional.idREFEPS : '')
-            
-            label(for="profesionInput") Profesion:
+
+            .form-group
+                label(for="profesionInput") Profesion:
                 input(list="profesionList" id="profesionInput" name="profesionInput" placeholder="Escriba una Profesion" value=profesional ? profesional.profesionName : '')
                 datalist(id="profesionList")
                     option(value="" selected=!profesional) Seleccione una Profesión
                     each profesion in profesions
                         option(value=profesion.name selected=profesional && profesional.profesionName == profesion.name data-id=profesion.id)= profesion.name
 
-            label(for="specialityInput") Especialidad:
+                label(for="specialityInput") Especialidad:
                 input(list="specialityList" id="specialityInput" name="specialityInput" placeholder="Escriba una Especialidad" value=profesional ? profesional.nameSpeciality : '')
-                datalist(id="specialityList")  // Asegúrate de que el id sea 'specialityList'
+                datalist(id="specialityList") 
                     option(value="" selected=!profesional) Seleccione una Especialidad
                     each speciality in specialities
                         option(value=speciality.name selected=profesional && profesional.nameSpeciality == speciality.name)= speciality.name
 
-            input(type="hidden" name="specialityId" id="specialityId")
-            
+            input(type="hidden" name="specialityId" id="specialityId" value=profesional ? profesional.specialityId : '')
+
             if !profesional
                 h3 Usuario
                 label(for="username") Username:
@@ -63,7 +69,9 @@ block content
                     input(type="email" name="email" id="email" value=profesional ? profesional.email : '')        
                 label(for="passwordHash", readonly=profesional) Password:
                     input(type="password" name="passwordhash" id="passwordHash")
-
-            button(id='btnFormNewProf' type="submit") #{profesional ? 'Actualizar' : 'Crear'}
+            
+            .form-actions
+                button.btn.btn-primary(id='btnFormNewProf' type="submit") #{profesional ? 'Actualizar' : 'Crear'}
+                button.btn.btn-secondary.ml-2(type="button" id="btnBack" onclick="window.history.back();") Cancelar
 
     script(type="application/json" id="specialitiesData")!= JSON.stringify(specialities)
