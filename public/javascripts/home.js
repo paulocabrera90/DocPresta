@@ -73,44 +73,42 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
-function confirmDelete(event) {
+async function confirmDelete(event) {
     event.preventDefault();
-
     const form = event.target.closest("form");
     const id = form.getAttribute("data-id");
     const module = form.getAttribute("data-module");
-    console.log(module);
-    if (window.confirm("¿Estás seguro de que deseas eliminar este " + module + "?")) {
-        const url = "/api/" + module + "/" + id;
-        fetch(url, {
-            method: 'DELETE'
-        })
-            .then(async response => {
-                const data = await response.json();
-                console.log("data", data)
-                if (!response.ok) {
-                    throw new Error(data.msg);
-                }
-            })
-            .then(data => {
-                console.log(module + " eliminado con éxito");
-                alert(`${module} con ID ${id} eliminado con éxito`);
-                showSpinner(false);  // Asegúrate de ocultar el spinner aquí
-                window.location.href = "/api/" + module + "/";
-            })
-            .catch(error => {
-                console.error("Error al enviar la solicitud DELETE", error);
-                showSpinner(false);
-                message.innerText = error.message;
-                modal.style.display = 'block';
 
-                const closeBtn = document.querySelector('.close');
-                closeBtn.onclick = function () {
-                    modal.style.display = 'none';
-                }
-            });
+    const result = await Swal.fire({
+        //title: `¿Estás seguro de que deseas eliminar este ${module}?`,
+        title: `¿Estás seguro de que deseas eliminar este elemento?`,
+        text: "Esta acción no se puede deshacer",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminar!',
+        cancelButtonText: 'Cancelar'
+    });
+
+    if (result.isConfirmed) {
+        const url = `/api/${module}/${id}`;
+        try {
+            const response = await fetch(url, { method: 'DELETE' });
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.msg);
+            }
+            Swal.fire('Eliminado!', `${module} con ID ${id} eliminado con éxito`, 'success');
+            showSpinner(false);
+            window.location.href = `/api/${module}/`;
+        } catch (error) {
+            Swal.fire('Error!', error.message, 'error');
+            showSpinner(false);
+        }
     }
 }
+
 
 function showSpinner(show) {
     const overlay = document.querySelector('.loading-overlay');

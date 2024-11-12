@@ -25,14 +25,14 @@ block content
 
             .form-group
                 label(for="typeDocument") Tipo Documento:
-                select(name="typeDocument" id="typeDocument")
+                select(name="typeDocument" id="typeDocument" disabled=profesional)
                     option(value="" ) Seleccione un Tipo
                     option(value="DNI" selected=profesional && profesional.typeDocument == 'DNI') DNI
                     option(value="Pasaporte" selected=profesional && profesional.typeDocument == 'Pasaporte') Pasaporte
                     option(value="Otro" selected=profesional && profesional.typeDocument == 'Otro') Otros
                 
                 label(for="numberDocument") N° Documento:
-                input(type="text" name="numberDocument" id="numberDocument" value=profesional ? profesional.numberDocument : '')
+                input(type="text" name="numberDocument" id="numberDocument"  readonly=profesional value=profesional ? profesional.numberDocument : '')
             
             .form-group
                 label(for="legalAddress") Domicilio fiscal:
