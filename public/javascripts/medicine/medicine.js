@@ -118,54 +118,66 @@ document.addEventListener('DOMContentLoaded', function() {
     //_______________________________________________________________________________-
 
     const form = document.querySelector('form');
-    if (form) { 
-        form.addEventListener('submit', function(event) {
+    if (form) {
+        form.addEventListener('submit', async function(event) {
             event.preventDefault();
-          //  showSpinner(true);
+             showSpinner(true); // Asegúrate de que esta función muestra un indicador de carga
+    
             updateItemsInput();
             if(itemData.length === 0){
-                alert("No se han anadido Propiedades");
-                return
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'No se han añadido propiedades al medicamento.',
+                    confirmButtonColor: '#3085d6',
+                });
+                // showSpinner(false);
+                return;
             }
-           
+    
             const name = document.getElementById('name').value;
             const code = document.getElementById('code').value;
             const active = document.getElementById('checkActive').checked ? 'Activo' : 'Inactivo';
             const data = {name, code, active, items: itemData};
-
+    
             const medicineId = form.getAttribute("data-id");
-            const isUpdate = medicineId? true : false;
+            const isUpdate = medicineId ? true : false;
             const url = isUpdate ? `/api/medicine/update/${medicineId}` : '/api/medicine/create';
             const method = isUpdate ? 'PATCH' : 'POST';
-
-            fetch(url, {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();  // Suponiendo que el servidor responde con JSON
-                } else {
-                    // Lanza un error que llevará al bloque .catch con más información
+    
+            try {
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+    
+                const result = await response.json();
+                if (!response.ok) {
                     throw new Error('Algo salió mal en el servidor: ' + response.statusText);
                 }
-            }).then(result => {
-                console.log('Success:', result);
-                const message = isUpdate ? `Se actualizo correctamente el Medicamento` : 'Se agrego correctamente el Medicamento';
-                alert(message);
-                showSpinner(false)
+    
+                await Swal.fire({
+                    icon: 'success',
+                    title: isUpdate ? 'Actualizado' : 'Creado',
+                    text: isUpdate ? `Se actualizó correctamente el medicamento` : 'Se agregó correctamente el medicamento',
+                    confirmButtonColor: '#3085d6',
+                });
+                // showSpinner(false);
                 window.location.href = '/api/medicine';
-            })
-            .catch(error => {
-                // Handle errors
-                console.error('Error:', error);
-                alert('Ocurrio un error. Intente nuevamente.');
-            });
+            } catch (error) {
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: error.message,
+                    confirmButtonColor: '#d33',
+                });
+                // showSpinner(false);
+            }
         });
-    }else {
+    } else {
         console.log("No se encontró el formulario.");
     }
 });

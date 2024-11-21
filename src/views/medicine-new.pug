@@ -2,7 +2,7 @@ extends home
 
 block content
     .container-medicine-new         
-        form(action=medicine ? "/api/medicine/update" : "/api/medicine/create" data-id=medicine ? medicine.id: '' method="post")
+        form(id="form-medicamento" action=medicine ? "/api/medicine/update" : "/api/medicine/create" data-id=medicine ? medicine.id: '' method="post")
             h1 #{medicine ? 'Editar' : 'Crear'} Medicamento
             label(for="name") Nombre del Medicamento:
                 span(style="font-size: 13px; margin-left:10px; color: red;") *
