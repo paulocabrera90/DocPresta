@@ -1,20 +1,20 @@
 var express = require('express');
-const { getMedicineById, getListAllMedicines, createMedicine, newMedicine, deleteMedicine, updateMedicine } = require('../controllers/medicine.controller');
+const { getMedicineByIdController,  createMedicineController, updateMedicineController, deleteMedicineController, newMedicineController, getListAllMedicinesController } = require('../controllers/medicine.controller');
 const checkAuth = require('../middleware/auth.middle');
 const checkRoleAuth = require('../middleware/roleAuth.middle');
 
 var router = express.Router();
 
-router.get('/', checkAuth,checkRoleAuth(['ADMIN','PROFESIONAL']), getListAllMedicines);
+router.get('/', checkAuth,checkRoleAuth(['ADMIN','PROFESIONAL']), getListAllMedicinesController);
 
-router.get('/new', checkAuth,checkRoleAuth(['ADMIN','PROFESIONAL']), newMedicine);
+router.get('/new', checkAuth,checkRoleAuth(['ADMIN','PROFESIONAL']), newMedicineController);
 
-router.post('/create', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), createMedicine);
+router.post('/create', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), createMedicineController);
 
-router.get('/:id', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), getMedicineById);
+router.get('/:id', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), getMedicineByIdController);
 
-router.patch('/update/:id', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), updateMedicine);
+router.patch('/update/:id', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), updateMedicineController);
 
-router.delete('/:id',checkAuth, checkRoleAuth(['ADMIN', 'PROFESIONAL']), deleteMedicine);
+router.delete('/:id',checkAuth, checkRoleAuth(['ADMIN', 'PROFESIONAL']), deleteMedicineController);
 
 module.exports = router;

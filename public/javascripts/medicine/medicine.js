@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     text: isUpdate ? `Se actualizó correctamente el medicamento` : 'Se agregó correctamente el medicamento',
                     confirmButtonColor: '#3085d6',
                 });
-                // showSpinner(false);
+                showSpinner(false);
                 window.location.href = '/api/medicine';
             } catch (error) {
                 await Swal.fire({
@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     text: error.message,
                     confirmButtonColor: '#d33',
                 });
-                // showSpinner(false);
+                showSpinner(false);
             }
         });
     } else {
