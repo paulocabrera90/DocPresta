@@ -27,6 +27,11 @@ const {
         allowNull: false,
         defaultValue: DataTypes.NOW,
       },
+      
+      state: { //ACTIVO O NO
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
     }, {
       sequelize,
       modelName: 'ComercialMedicine',

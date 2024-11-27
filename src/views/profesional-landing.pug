@@ -16,25 +16,13 @@ block content
                         .card-header #{prof.firstName} #{prof.lastName} - ID REFEPS: #{prof.idREFEPS}
                         .card-body
                             p
-                            br
-                            | <strong>Documento:</strong> (#{prof.typeDocument})-#{prof.numberDocument} 
-                            br
-                            | <strong>Dirección Legal:</strong> #{prof.legalAddress}
-                            br
-                            | <strong>Sexo:</strong> #{prof.sex}
+                            | <strong>Documento:</strong> #{prof.typeDocument}-#{prof.numberDocument} 
                             br
                             | <strong>Número de Registro:</strong> #{prof.registrationNumber}
                             br
-                            | <strong>ID REFEPS:</strong> #{prof.idREFEPS}
-                            br
                             | <strong>Especialidad:</strong> #{prof.nameSpeciality}
                             br
-                            | <strong>Código:</strong> #{prof.profesionCode}
-                            br
-                            | <strong>Descripción:</strong> #{prof.profesionDescription}
-                            br
-                            | <strong>Fecha de Nacimiento:</strong> #{new Date(prof.birthDate).toISOString().split('T')[0]}                       
-                            
+                            | <strong>Código:</strong> #{prof.profesionCode}                            
                             br
                     
                         .card-footer

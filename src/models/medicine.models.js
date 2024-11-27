@@ -51,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: true,
             unique: true,
         },
-        state: {
+        state: { //ACTIVO O NO
             type: DataTypes.BOOLEAN,
             defaultValue: true,
         },
