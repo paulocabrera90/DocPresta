@@ -72,9 +72,11 @@ async function createMedicineController(req, res) {
 
 async function updateMedicineController(req, res) {
     const { id } = req.params;
+    const transaction = await sequelize.transaction();
+
     try {
         console.log("Updating medicine with ID:", id);
-        const updatedMedicine = await updateMedicineService(id, req.body);
+        const updatedMedicine = await updateMedicineService(id, req.body, transaction);
         console.log("Update medicine successfully");
         res.status(200).json({ message: "Update medicine successfully", data: updatedMedicine });
     

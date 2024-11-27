@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
             addNewItem(quantityId, magnitude, pharmaFormListText, quantityMedListText, comercialName, familyMedicineName);            
             updateItemsInput();            
         }else{
-            alert("Todos los campos de Propiedades del medicamento, son obligatorios")
+            showAlert('Aviso', 'Todos los campos de Propiedades del medicamento, son obligatorios.', 'info');
         }
     });
 
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
         li.textContent = `Concentración: ${quantityId}${magnitude}, Cantidades/Unidades: ${quantityMedList}, Forma Farmacéutica: ${pharmaTypeId}, Familia Farmacéutica: ${familyMedicineName}, Nombre Comercial: ${comercialName}`;
         
         if (isAlreadyInList(li.textContent)) {
-                alert("Este elemento ya ha sido añadido.");
+                showAlert('Aviso', 'Este elemento ya ha sido añadido.', 'info');
                 return;
         }
         const removeBtn = document.createElement('button');
@@ -99,15 +99,22 @@ document.addEventListener('DOMContentLoaded', function() {
             itemData = JSON.stringify(items);
         }
     }
-
-    list.addEventListener('click', function(event) {
+    
+    list.addEventListener('click', async function(event) {
+        event.preventDefault();
+        event.stopPropagation();
         if (event.target.matches('.remove-item')) {
-            const index = event.target.dataset.index;
-            event.target.parentNode.remove();
-            updateItemsInput();
+            const itemCount = list.querySelectorAll('li').length;
+            
+            if (itemCount > 1) {
+                const index = event.target.dataset.index;
+                event.target.parentNode.remove();
+                updateItemsInput();
+            } else {
+                showAlert('Aviso', 'No puedes eliminar el último elemento.', 'error');
+            }
         }
     });
-    
 
     function isAlreadyInList(content) {
         const items = document.querySelectorAll('#concentrationList li');
@@ -121,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (form) {
         form.addEventListener('submit', async function(event) {
             event.preventDefault();
-             showSpinner(true); // Asegúrate de que esta función muestra un indicador de carga
+             showSpinner(true);
     
             updateItemsInput();
             if(itemData.length === 0){
@@ -131,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     text: 'No se han añadido propiedades al medicamento.',
                     confirmButtonColor: '#3085d6',
                 });
-                // showSpinner(false);
+                showSpinner(false);
                 return;
             }
     

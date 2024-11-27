@@ -94,8 +94,8 @@ async function createMedicineService(medicineData) {
     }
 }
 
-async function updateMedicineService(id, medicineData) {
-    const transaction = await sequelize.transaction();
+async function updateMedicineService(id, medicineData, transaction) {
+ //   const transaction = await sequelize.transaction();
     try {
         
         const { name, code, active, items} = medicineData;
@@ -156,7 +156,7 @@ async function updateMedicineService(id, medicineData) {
 }
 
 async function deleteMedicineService(id, transaction) {
-   // const transaction = await sequelize.transaction();
+
     try {
         const medicine = await Medicine.findByPk(id, {
             include: [
