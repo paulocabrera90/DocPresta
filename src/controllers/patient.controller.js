@@ -207,4 +207,12 @@ async function deletePatient(req, res) {
     }
 }
 
-module.exports = { getPatientById, getListAllPatients, newPatient, createPatient, deletePatient, updatePatient, getPatientByDni}
+module.exports = { 
+    getPatientById, 
+    getListAllPatients, 
+    newPatient, 
+    createPatient, 
+    deletePatient, 
+    updatePatient, 
+    getPatientByDni
+}

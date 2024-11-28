@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (userData.rol === 'ADMIN') {
             linksList = [
                 { href: "/api/home", id: "lista-prescripcion-sidenav", text: "Prescripciones" },
-                { href: "#", id: "prestaciones-sidenav", text: "Prestaciones" },
+                { href: "/api/benefit", id: "prestaciones-sidenav", text: "Prestaciones" },
                 { href: "/api/medicine", id: "medicamentos-sidenav", text: "Medicamentos" },
                 { href: "/api/profesional", id: "profesionales-sidenav", text: "Profesionales" },
                 { href: "/api/patient", id: "pacientes-sidenav", text: "Pacientes" }
@@ -137,7 +137,7 @@ if (window.location.pathname == '/api/profesional') {
     profesional.style.backgroundColor = 'blue'
 }
 
-if (window.location.pathname == '/api/pacientes') {
+if (window.location.pathname == '/api/patient') {
     const pacientes = document.getElementById('pacientes-sidenav')
     pacientes.style.backgroundColor = 'blue'
 }

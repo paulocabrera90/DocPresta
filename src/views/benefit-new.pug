@@ -1,0 +1,47 @@
+extends home
+
+block content
+    .container-benefit-new         
+        form(action=benefit ? "/api/benefit/update" : "/api/benefit/create" method="post")
+            h1 #{benefit ? 'Editar' : 'Crear'} Prestación
+
+            .form-group
+                label(for="name") Nombre:
+                input(type="text" name="name" id="name" required=true value=benefit ? benefit.name : '')
+
+            .form-group
+                label(for="code") Código:
+                input(type="text" name="code" id="code" required=true value=benefit ? benefit.code : '')
+
+            .form-group
+                label(for="sectionId") Sección:
+                select(name="sectionId" id="sectionId" required=true)
+                    option(value="") Seleccione una Sección
+                    each section in sections
+                        option(value=section.id selected=benefit && benefit.sectionId == section.id)= section.name
+
+            .form-group
+                label(for="description") Descripción:
+                textarea(name="description" id="description" rows="3" cols="225")= benefit ? benefit.description : ''
+
+            .form-group
+                label(for="justification") Justificación:
+                textarea(name="justification" id="justification" rows="3" cols="225")= benefit ? benefit.justification : ''
+
+            .form-group
+                label(for="state") Estado:
+                select(name="state" id="state")
+                    option(value=1 selected=benefit && benefit.state) Activo
+                    option(value=0 selected=benefit && !benefit.state) Inactivo
+
+            .form-group
+                label(for="creationDate") Fecha de Creación:
+                input(type="date" name="creationDate" id="creationDate" value=(benefit && benefit.creationDate ? new Date(benefit.creationDate).toISOString().split('T')[0] : ''))
+
+            .form-group
+                label(for="modificationDate") Fecha de Modificación:
+                input(type="date" name="modificationDate" id="modificationDate" value=(benefit && benefit.modificationDate ? new Date(benefit.modificationDate).toISOString().split('T')[0] : ''))
+
+            .form-actions
+                button.btn.btn-primary(type="submit") #{benefit ? 'Actualizar' : 'Crear'}
+                button.btn.btn-secondary.ml-2(type="button" onclick="window.history.back();") Cancelar

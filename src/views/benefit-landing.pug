@@ -1,0 +1,36 @@
+extends home
+
+block content
+    container-presta-list
+        header
+            .title-header-cards
+                h1 Lista de Prestaciones
+            .buttons-header
+                a(href="/api/benefit/new" id="newElementCard" class="btn btn-success") Nuevo
+        hr(style="margin-top: 20px; margin-bottom: 20px;")
+
+        if benefits.length > 0
+            container-card
+                each ben in benefits
+                    .card
+                        .card-header #{ben.name} - Código: #{ben.code}
+                        .card-body
+                            p
+                            | <strong>Descripción:</strong> #{ben.description}
+                            br
+                            | <strong>Justificación:</strong> #{ben.justification}
+                            br
+                            | <strong>Estado:</strong> #{ben.state ? 'Activo' : 'Inactivo'}
+                            br
+                            | <strong>Fecha de Creación:</strong> #{ben.creationDate.toLocaleDateString()}
+                            br
+                    
+                        .card-footer
+                            a(href=`/api/benefit/${ben.id}` class="btn btn-secondary") Editar
+                            form(id='formDeleteCard' data-id=ben.id data-module="benefit")
+                                button(id='btnFormDeleteCard' type='submit' class="btn btn-danger" onclick="confirmDelete(event)") Eliminar
+        else
+            .alert.alert-warning.text-center(role='alert')
+                i.fas.fa-exclamation-triangle.fa-2x
+                h4 No hay beneficios disponibles.
+                p Por favor, regrese más tarde o contacte al administrador del sistema.
