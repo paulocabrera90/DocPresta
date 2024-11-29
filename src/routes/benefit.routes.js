@@ -1,5 +1,5 @@
 var express = require('express');
-const { newBenefitController, getListAllBenefitsController, createBenefitController } = require('../controllers/benefit.controller');
+const { newBenefitController, getListAllBenefitsController, createBenefitController, getFindBenefitByIdController } = require('../controllers/benefit.controller');
 const checkAuth = require('../middleware/auth.middle');
 const checkRoleAuth = require('../middleware/roleAuth.middle');
 
@@ -11,7 +11,7 @@ router.get('/new', checkAuth,checkRoleAuth(['ADMIN','PROFESIONAL']), newBenefitC
 
 router.post('/create', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), createBenefitController);
 
-// router.get('/:id', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), getPatientById);
+ router.get('/:id', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), getFindBenefitByIdController);
 
 // router.get('/dni/:dni', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), getPatientByDni);
 

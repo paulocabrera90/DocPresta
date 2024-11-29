@@ -2,7 +2,7 @@ extends home
 
 block content
     .container-benefit-new         
-        form(action=benefit ? "/api/benefit/update" : "/api/benefit/create" method="post")
+        form(id="form-benefit" action=benefit ? "/api/benefit/update" : "/api/benefit/create" data-id=benefit ? benefit.id: ''  method="post")
             h1 #{benefit ? 'Editar' : 'Crear'} Prestación
 
             .form-group

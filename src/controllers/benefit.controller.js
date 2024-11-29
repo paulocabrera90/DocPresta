@@ -1,5 +1,5 @@
 const { httpError } = require("../helpers/handleError");
-const { getListAllBenefitsService, getFindAllSections, createBenefitService } = require("../services/benefit.service");
+const { getListAllBenefitsService, getFindAllSections, createBenefitService, getFindBenefitByIdService } = require("../services/benefit.service");
 const { sequelize } = require('../models/index.models');
 
 async function getListAllBenefitsController(req, res){
@@ -43,8 +43,30 @@ async function createBenefitController(req, res) {
     }
 }
 
+async function getFindBenefitByIdController(req, res) {
+    try {
+        const { id } = req.params;
+        const result = await getFindBenefitByIdService(id);
+    
+            if (!result.benefit) {
+                return res.render('benefit-new', {
+                    medicine: '',
+                    ...result.sections
+                });
+            }
+    
+            res.render('benefit-new', {
+                ...result,
+                ...result.sections
+            });
+         //res.json({data: result });
+    } catch (error) {
+        httpError(res, error);
+    }
+}
 module.exports = { 
     getListAllBenefitsController,
     newBenefitController,
-    createBenefitController
+    createBenefitController,
+    getFindBenefitByIdController
 }
