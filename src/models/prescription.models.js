@@ -6,10 +6,10 @@ const {
     class Prescription extends Model {
 
         static associate(models) {
-            // Define las relaciones con otros modelos aquí
+          
             Prescription.belongsTo(models.Benefit, {
                 foreignKey: 'benefitId',
-                as: 'Benefits',
+                as: 'Benefits'
             });
 
             Prescription.belongsTo(models.Patient, {

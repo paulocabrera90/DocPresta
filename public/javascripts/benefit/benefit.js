@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
             
             const isUpdate = benefitId? true : false;
-            const url = isUpdate ? `/api/benefit/update/${patientId}` : '/api/benefit/create';
+            const url = isUpdate ? `/api/benefit/update/${benefitId}` : '/api/benefit/create';
             const method = isUpdate ? 'PATCH' : 'POST';
             console.log('Creating or Updating benefit:', url);
     

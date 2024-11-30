@@ -1,5 +1,5 @@
 const { httpError } = require("../helpers/handleError");
-const { getListAllBenefitsService, getFindAllSections, createBenefitService, getFindBenefitByIdService } = require("../services/benefit.service");
+const { getListAllBenefitsService, getFindAllSections, createBenefitService, getFindBenefitByIdService, updateBenefitService, deleteBenefitService } = require("../services/benefit.service");
 const { sequelize } = require('../models/index.models');
 
 async function getListAllBenefitsController(req, res){
@@ -37,6 +37,7 @@ async function createBenefitController(req, res) {
         console.log("Create Benefit successfully")
         res.status(200).json({message: "Create Benefit successfully", benefit});
 
+        await transaction.commit();
     } catch (error) {
         await transaction.rollback();
         httpError(res, error);
@@ -64,9 +65,45 @@ async function getFindBenefitByIdController(req, res) {
         httpError(res, error);
     }
 }
+
+async function updateBenefitController(req, res) {
+    const { id } = req.params;
+    const transaction = await sequelize.transaction();
+
+    try {
+        console.log("Updating benefit with ID:", id);
+        const updatedBenefit = await updateBenefitService(id, req.body);
+
+        console.log("Update medicine successfully");
+        res.status(200).json({ message: "Update benefit successfully", data: updatedBenefit });
+    
+        await transaction.commit();
+    } catch (error) {
+        await transaction.rollback();
+        httpError(res, error);
+    }
+}
+
+async function deleteBenefitController(req, res) {
+    const { id } = req.params;
+    const transaction = await sequelize.transaction();
+
+    try {
+        await deleteBenefitService(id);
+        await transaction.commit();
+        res.status(200).json({ id });
+    } catch (error) {
+
+        await transaction.rollback();
+        httpError(res, error);
+    }
+}
+
 module.exports = { 
     getListAllBenefitsController,
     newBenefitController,
     createBenefitController,
-    getFindBenefitByIdController
+    getFindBenefitByIdController,
+    deleteBenefitController,
+    updateBenefitController
 }

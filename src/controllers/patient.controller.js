@@ -48,7 +48,6 @@ async function getPatientByDni (req, res) {
     }
 }
 
-
 async function getListAllPatients(req, res){
     try {
         const patient = await getListAllPatientsService();
@@ -77,7 +76,6 @@ async function newPatient(req, res) {
         httpError(res, error);
     }
 }
-
 
 async function createPatient(req, res) {
     const transaction = await sequelize.transaction();

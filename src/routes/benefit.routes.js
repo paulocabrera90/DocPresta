@@ -1,7 +1,8 @@
 var express = require('express');
-const { newBenefitController, getListAllBenefitsController, createBenefitController, getFindBenefitByIdController } = require('../controllers/benefit.controller');
+const { newBenefitController, getListAllBenefitsController, createBenefitController, getFindBenefitByIdController, deleteBenefitController, updateBenefitController } = require('../controllers/benefit.controller');
 const checkAuth = require('../middleware/auth.middle');
 const checkRoleAuth = require('../middleware/roleAuth.middle');
+const { updateBenefitService } = require('../services/benefit.service');
 
 var router = express.Router();
 
@@ -11,12 +12,10 @@ router.get('/new', checkAuth,checkRoleAuth(['ADMIN','PROFESIONAL']), newBenefitC
 
 router.post('/create', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), createBenefitController);
 
- router.get('/:id', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), getFindBenefitByIdController);
+router.get('/:id', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), getFindBenefitByIdController);
 
-// router.get('/dni/:dni', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), getPatientByDni);
+router.patch('/update/:id', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), updateBenefitController);
 
-// router.patch('/update/:id', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), updatePatient);
-
-// router.delete('/:id',checkAuth, checkRoleAuth(['ADMIN', 'PROFESIONAL']), deletePatient);
+router.delete('/:id',checkAuth, checkRoleAuth(['ADMIN', 'PROFESIONAL']), deleteBenefitController);
 
 module.exports = router;

@@ -43,5 +43,5 @@ block content
                 input(type="date" name="modificationDate" id="modificationDate" value=(benefit && benefit.modificationDate ? new Date(benefit.modificationDate).toISOString().split('T')[0] : ''))
 
             .form-actions
-                button.btn.btn-primary(type="submit") #{benefit ? 'Actualizar' : 'Crear'}
+                button(id='btnFormNewMedicine' type="submit") #{benefit ? 'Actualizar' : 'Crear'}
                 button.btn.btn-secondary.ml-2(type="button" onclick="window.history.back();") Cancelar
