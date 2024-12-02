@@ -33,47 +33,59 @@ document.addEventListener('DOMContentLoaded', function() {
 
     //_______________________________________________________________________________-
     const form = document.getElementById('form-profesional');
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
-        
-        showSpinner(true)
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
-        const profId = form.getAttribute("data-id");
+    if (form) {
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            showSpinner(true)
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            const profId = form.getAttribute("data-id");
 
-        const isUpdate = profId? true : false;
-        const url = isUpdate ? `/api/profesional/update/${profId}` : '/api/profesional/create';
-        const method = isUpdate ? 'PATCH' : 'POST';
-       
-        fetch(url, {
-            method: method,
-            headers: {
-                'Content-Type': 'application/json',
-                // Include other necessary headers, e.g., authorization
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => {
-            if (response.ok) {
-                return response.json();  // Suponiendo que el servidor responde con JSON
-            } else {
-                // Lanza un error que llevará al bloque .catch con más información
-                throw new Error('Algo salió mal en el servidor: ' + response.statusText);
+            const isUpdate = profId? true : false;
+            const url = isUpdate ? `/api/profesional/update/${profId}` : '/api/profesional/create';
+            const method = isUpdate ? 'PATCH' : 'POST';
+        
+            try{
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Include other necessary headers, e.g., authorization
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                if (!response.ok) {
+                    throw new Error('Algo salió mal en el servidor: ' + response.statusText);
+                }
+
+                console.log('Success:', result);
+                await showAlert(
+                    isUpdate ? 'Actualizado' : 'Creado',
+                    isUpdate ? `Se actualizó correctamente el Profesional` : 'Se agregó correctamente  el Profesional',
+                    'success'
+                )
+
+                showSpinner(false)
+                window.location.href = '/api/profesional';
+
+            } catch(error)  {
+                // Handle errors
+                console.error('Error:', error);
+                await Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: error.message,
+                        confirmButtonColor: '#d33',
+                    });
+                showSpinner(false);
             }
-        }).then(result => {
-            console.log('Success:', result);
-            const message = isUpdate ? `Se actualizo correctamente el Profesional` : 'Se agrego correctamente el Profesional';
-            alert(message);
-            showSpinner(false)
-            window.location.href = '/api/profesional';
-        })
-        .catch(error => {
-            // Handle errors
-            console.error('Error:', error);
-            alert('Ocurrio un error. Intente nuevamente.');
         });
-    });
-    
+    } else {
+        console.log("No se encontró el formulario.");
+    }
 });
 
 document.getElementById('specialityInput').addEventListener('change', function() {

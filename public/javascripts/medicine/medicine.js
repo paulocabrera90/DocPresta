@@ -165,13 +165,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (!response.ok) {
                     throw new Error('Algo salió mal en el servidor: ' + response.statusText);
                 }
-    
-                await Swal.fire({
-                    icon: 'success',
-                    title: isUpdate ? 'Actualizado' : 'Creado',
-                    text: isUpdate ? `Se actualizó correctamente el medicamento` : 'Se agregó correctamente el medicamento',
-                    confirmButtonColor: '#3085d6',
-                });
+
+                await showAlert(
+                    isUpdate ? 'Actualizado' : 'Creado',
+                     isUpdate ? `Se actualizó correctamente el medicamento` : 'Se agregó correctamente  el medicamento',
+                     'success'
+                )
                 showSpinner(false);
                 window.location.href = '/api/medicine';
             } catch (error) {

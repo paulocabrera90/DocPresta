@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
     //_______________________________________________________________________________-
     const form = document.getElementById('form-patient');
     if (form) {
-        form.addEventListener('submit', function(event) {
+        form.addEventListener('submit', async function(event) {
             event.preventDefault();
             showSpinner(true);
             const formData = new FormData(form);
@@ -45,37 +45,39 @@ document.addEventListener('DOMContentLoaded', function() {
             const method = isUpdate ? 'PATCH' : 'POST';
             console.log('Creating or Updating Patient:', url);
     
-            fetch(url, {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    // Include other necessary headers, e.g., authorization
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => {
-                console.log("Response status: ", response.status);
-                if (response.ok) {
-                    return response.json();
-                } else {
+            try{
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Include other necessary headers, e.g., authorization
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                if (!response.ok) {
                     throw new Error('Algo salió mal en el servidor: ' + response.statusText);
                 }
-            }).then(async result => {
-                console.log('Success:', result);
-                showAlert(
+
+                await showAlert(
                     isUpdate ? 'Actualizado' : 'Creado',
                      isUpdate ? `Se actualizó correctamente el paciente` : 'Se agregó correctamente  el paciente',
                      'success'
                 )
+
                 console.log("Redirigiendo...");
                 showSpinner(false)
                 window.location.href = '/api/patient';
-            })
-            .catch(error => {
-                // Handle errors
-                console.error('Error:', error);
-                alert('Ocurrio un error. Intente nuevamente.');
-            });
+            } catch (error) {
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: error.message,
+                    confirmButtonColor: '#d33',
+                });
+                showSpinner(false);
+            };
         });
     }else {
         console.log("No se encontró el formulario.");

@@ -47,11 +47,12 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => {
                 // Handle errors
                 console.error('Error:', error);
-                alert('Ocurrio un error. Intente nuevamente.');
+                showAlert('Error', error.message, 'error');
             });
         });
     }else {
         console.log("No se encontró el formulario.");
+        showAlert('Error', 'No se encontró el formulario.', 'error');
     }    
     
 });

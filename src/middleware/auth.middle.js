@@ -4,23 +4,22 @@ const { verifyToken } = require("../utils/generateToken");
 async function checkAuth(req, res, next) {
     try {
         if (!storage.state.token) {
-            res.render('error', {statusCode: 400, message: 'Authorization header not provided.'});
+            res.render('error', {statusCode: 400, message: 'El hedear no provee autorizacion.'});
         }
         
-        //const token = req.headers.authorization.split(' ').pop();
         const token = storage.state.token;
         const tokenData = await verifyToken(token)
         
         if (!tokenData.id) {
-            //res.status(500).render("./register", {err: "Please fill all the form elements"});    
-            res.render('error', {statusCode: 409, message: 'Token no válido: El token proporcionado no es válido o ha expirado.'})//  sendError(res, 409, 'Invalid Token Bearer: The provided token is invalid or has expired.')
+
+            res.render('error', {statusCode: 409, message: 'Token no válido: El token proporcionado no es válido o ha expirado.'})
         }
         
         req.tokenId = tokenData.id;
         next();
     } catch (e) {
         console.error(e)
-        res.render('error', {statusCode: 401, message: 'Token no válido: El token proporcionado no es válido o ha expirado.'})// sendError(res, 401, 'Invalid Token Bearer: The provided token is invalid or has expired.')
+        res.render('error', {statusCode: 401, message: 'Token no válido: El token proporcionado no es válido o ha expirado.'})
     }
 }
 

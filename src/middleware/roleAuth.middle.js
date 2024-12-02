@@ -7,21 +7,20 @@ const checkRoleAuth = (roles, flagBo) => async (req, res, next) => {
     try {
         const token = storage.state.token;
         const tokenData = await verifyToken(token);
-        console.log("Verify token", tokenData);
+
         userData = await User.findOne({ where: { id: tokenData.id } })
         
-        console.log("userData", userData)    
         if ([].concat(roles).map(rol => rol.toLowerCase()).includes(userData.rol.toLowerCase())) {
             next()
         } else {
             res.status(401)
-            res.send({ error: 'The user does not have permissions.' })
+            res.send({ error: 'El usuario no tiene permisos.' })
         }
 
     } catch (e) {
         console.log(e)
         res.status(401)
-        res.send({ error: 'The user does not have permissions.' })
+        res.send({ error: 'El usuario no tiene permisos.' })
     }
 }
 

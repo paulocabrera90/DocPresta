@@ -1,26 +1,26 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Asegúrate de que el DOM esté completamente cargado
     document.getElementById('newElementMedicalRecord').addEventListener('click', function(event) {
-        // Previene el comportamiento por defecto del enlace
         event.preventDefault();
 
-        // Hace una solicitud GET al href del enlace
         fetch(this.getAttribute('href'))
             .then(response => {
                 if (response.ok) {
-                    return response.json(); // o response.text() si esperas texto
+                    return response.json(); 
+                } else if (response.status === 401) {
+                    return response.json().then(err => {
+                        throw new Error(err.msg || "No tienes permiso para realizar esta acción.");
+                    });
                 } else {
-                    throw new Error('Algo salió mal en la solicitud');
+                    throw new Error('Algo salió mal en la solicitud. Por favor intenta de nuevo.');
                 }
             })
-            .then(data => {
-                // Manejo exitoso de la respuesta
-                console.log('Respuesta recibida:', data);
-                // Aquí puedes añadir lo que desees hacer con la respuesta
+            .then(data => {               
+                console.log('Respuesta recibida:', data);              
             })
             .catch(error => {
-                // Manejo de errores
                 console.error('Error en la solicitud:', error);
+                showAlert('Acceso Denegado', error.message, 'error');
+
             });
     });
 });

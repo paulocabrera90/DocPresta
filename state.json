@@ -1,5 +1,5 @@
 {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sIjoiQURNSU4iLCJlbWFpbCI6InBhdWxvY0BnbWFpbC5jb20iLCJzdGF0ZSI6dHJ1ZSwiaWF0IjoxNzMzMDk3ODI0LCJleHAiOjE3MzMxMDUwMjR9.ZFfr0pGuJt8xrNBBUv3Lc9U4lxTX-UorbsGe8OMhY_M",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sIjoiQURNSU4iLCJlbWFpbCI6InBhdWxvY0BnbWFpbC5jb20iLCJzdGF0ZSI6dHJ1ZSwiaWF0IjoxNzMzMTQ3MDcwLCJleHAiOjE3MzMxNTQyNzB9.DRRhcc44sGdc16cg2HvEtn3WkprG1urrIa3j45dKduk",
     "user": {
         "id": 1,
         "username": "pauloc",
@@ -8,7 +8,7 @@
         "email": "pauloc@gmail.com",
         "state": true,
         "creationDate": "2024-05-29T00:31:08.000Z",
-        "modificationDate": "2024-05-29T00:31:08.000Z",
+        "modificationDate": "2024-12-02T00:48:58.000Z",
         "personId": 1,
         "Person": {
             "id": 1,
