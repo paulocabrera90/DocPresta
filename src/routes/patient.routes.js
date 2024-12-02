@@ -2,6 +2,7 @@ var express = require('express');
 const { getPatientById, getListAllPatients, createPatient, newPatient, deletePatient, updatePatient, getPatientByDni } = require('../controllers/patient.controller');
 const checkAuth = require('../middleware/auth.middle');
 const checkRoleAuth = require('../middleware/roleAuth.middle');
+const { validateRegister } = require('../validators/register.validator');
 
 var router = express.Router();
 
@@ -9,7 +10,7 @@ router.get('/', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), getListAllPat
 
 router.get('/new', checkAuth,checkRoleAuth(['ADMIN','PROFESIONAL']), newPatient);
 
-router.post('/create', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), createPatient);
+router.post('/create', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), validateRegister, createPatient);
 
 router.get('/:id', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), getPatientById);
 

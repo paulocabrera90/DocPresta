@@ -12,7 +12,7 @@ const httpError = (res, err) => {
     // Manejo específico para errores 401
     if (statusCode === 401) {
         errorMessage.error = 'Unauthorized';
-        errorMessage.msg = 'You do not have permission to access this resource.';
+        errorMessage.msg = 'No posees permisos.';
     }
 
     res.send(errorMessage);

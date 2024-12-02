@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }else {
         console.log("No se encontró el formulario.");
-        showAlert('Error', 'No se encontró el formulario.', 'error');
+        
     }    
     
 });

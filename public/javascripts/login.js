@@ -2,10 +2,10 @@ document.addEventListener("DOMContentLoaded", function() {
   var modal = document.getElementById('errorModal');
   var message = document.getElementById('errorMessage');
 
-  if (!modal || !message) {
-    console.error('Los elementos del modal no están disponibles.');
-    return;  // Detiene la ejecución si los elementos no están disponibles
-  }
+  // if (!modal || !message) {
+  //   console.error('Los elementos del modal no están disponibles.');
+  //   return;  // Detiene la ejecución si los elementos no están disponibles
+  // }
 
     document.getElementById("loginForm").addEventListener("submit", async function(event) {
       event.preventDefault();
@@ -30,7 +30,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
         const data = await response.json(); 
         if (!response.ok) {
-          throw new Error(data.msg);
+          if (data.errors && Array.isArray(data.errors)) {          
+            let messages = data.errors.map(item => item.msg + " " + item.path).join(', ');
+            throw new Error(messages);
+          } else {
+            throw new Error(data.msg);
+          }
         }
 
         localStorage.setItem("user", JSON.stringify(data.userData));
@@ -42,13 +47,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
       } catch (error) {
         showSpinner(false);
-        message.innerText = error.message;
-        modal.style.display = 'block';
-
-        const closeBtn = document.querySelector('.close');
-        closeBtn.onclick = function() {
-          modal.style.display = 'none';
-        }
+        Swal.fire('Error!', error.message, 'error');
         console.error("Error al iniciar sesión:", error.message);
     }
 

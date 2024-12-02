@@ -19,13 +19,13 @@ async function login(email, password) {
         });
         
         if (!user) {
-            throw new loginError(401, 'CREDENTIALS_INCORRECT', 'Credenciales incorrectas');
+            throw new loginError(422, 'CREDENTIALS_INCORRECT', 'Credenciales incorrectas');
         }
         
         const checkPassword = await compare(password, user.hashPassword);
     
         if (!checkPassword) {
-            throw new loginError(401, 'CREDENTIALS_INCORRECT', 'Credenciales incorrectas');
+            throw new loginError(422, 'CREDENTIALS_INCORRECT', 'Credenciales incorrectas');
         }
     
         const tokenSession = await tokenSign(user);
