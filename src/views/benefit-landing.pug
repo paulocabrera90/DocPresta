@@ -12,7 +12,7 @@ block content
         if benefits.length > 0
             container-card
                 each ben in benefits
-                    .card
+                    .card(class=ben.state ? '' : 'alert-background')
                         .card-header #{ben.name} - Código: #{ben.code}
                         .card-body
                             p

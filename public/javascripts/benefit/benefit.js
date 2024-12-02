@@ -1,7 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
    
-
-    //_______________________________________________________________________________-
     const form = document.querySelector('form');
     if (form) {
         form.addEventListener('submit', function(event) {
@@ -33,10 +31,15 @@ document.addEventListener('DOMContentLoaded', function() {
                    
                     throw new Error('Algo salió mal en el servidor: ' + response.statusText);
                 }
-            }).then(result => {
+            }).then(async result => {
                 console.log('Success:', result);
-                const message = isUpdate ? `Se actualizo correctamente la prescripción` : 'Se agrego correctamente la prescripción';
-                alert(message);
+                await Swal.fire({
+                    icon: 'success',
+                    title: isUpdate ? 'Actualizado' : 'Creado',
+                    text: isUpdate ? `Se actualizó correctamente la prescripcion` : 'Se agregó correctamente la prescripcion',
+                    confirmButtonColor: '#3085d6',
+                });
+
                 console.log("Redirigiendo...");
                 showSpinner(false)
                 window.location.href = '/api/benefit';
