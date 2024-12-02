@@ -67,7 +67,6 @@ async function medicalRecordNew(req, res){
     
 }
 
-
 async function getListAllMedicalRecord(req, res){
     try {
         const userId = storage.state.user.id;

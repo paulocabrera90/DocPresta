@@ -7,7 +7,7 @@ var router = express.Router();
 
 router.get('/', checkAuth,checkRoleAuth(['ADMIN','PROFESIONAL']), getListAllMedicinesController);
 
-router.get('/new', checkAuth,checkRoleAuth(['ADMIN','PROFESIONAL']), newMedicineController);
+router.get('/new', checkAuth,checkRoleAuth(['PROFESIONAL']), newMedicineController);
 
 router.post('/create', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), createMedicineController);
 

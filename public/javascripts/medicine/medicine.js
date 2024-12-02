@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function() {
     //_______________________________________________________________________________-
     //_______________________________________________________________________________-
 
-    const form = document.querySelector('form');
+    const form = document.getElementById('form-medicamento');
     if (form) {
         form.addEventListener('submit', async function(event) {
             event.preventDefault();

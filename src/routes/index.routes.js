@@ -5,7 +5,9 @@ const medicalRecordRoutes = require("./medical-record.routes");
 const profesionalRoutes = require("./profesional.routes");
 const medicineRoutes = require("./medicine.routes");
 const patientRoutes = require("./patient.routes");
+const benefitRoutes = require("./benefit.routes");
 const usersRoutes = require("./users.routes");
+
 const { goHome } = require("../controllers/home.controller");
 const checkAuth = require("../middleware/auth.middle");
 const storage = require("../storage/session");
@@ -19,6 +21,7 @@ const routes_init = () => {
   router.use('/medical-record', medicalRecordRoutes);
   router.use('/profesional', profesionalRoutes);
   router.use('/patient', patientRoutes);
+  router.use('/benefit', benefitRoutes);
   router.use('/medicine', medicineRoutes);
 
   router.get('/home', checkAuth, goHome);

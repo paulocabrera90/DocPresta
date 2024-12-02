@@ -76,7 +76,7 @@ async function updateMedicineController(req, res) {
 
     try {
         console.log("Updating medicine with ID:", id);
-        const updatedMedicine = await updateMedicineService(id, req.body, transaction);
+        const updatedMedicine = await updateMedicineService(id, req.body);
         console.log("Update medicine successfully");
         res.status(200).json({ message: "Update medicine successfully", data: updatedMedicine });
     
