@@ -2,7 +2,7 @@ extends home
 
 block content
     .container-patient-new    
-        form(action=patient ? "/api/patient/update" : "/api/patient/create" data-id=patient ? patient.id: '' method="post")
+        form(id="form-patient" action=patient ? "/api/patient/update" : "/api/patient/create" data-id=patient ? patient.id: '' method="post")
             h1 #{patient ? 'Editar' : 'Crear'} Paciente
             
             .form-group

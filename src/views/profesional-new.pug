@@ -2,7 +2,7 @@ extends home
 
 block content
     .container-profesional-new         
-        form(action=profesional ? "/api/profesional/update" : "/api/profesional/create" data-id=profesional ?profesional.id: '' method="post")
+        form(id='form-profesional' action=profesional ? "/api/profesional/update" : "/api/profesional/create" data-id=profesional ?profesional.id: '' method="post")
             h1 #{profesional ? 'Editar' : 'Crear'} Profesional
 
             .form-group

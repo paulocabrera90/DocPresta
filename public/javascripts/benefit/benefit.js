@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
    
-    const form = document.querySelector('form');
+    const form = document.getElementById('form-benefit');
     if (form) {
         form.addEventListener('submit', function(event) {
             event.preventDefault();

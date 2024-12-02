@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
 
     //_______________________________________________________________________________-
-    const form = document.querySelector('form');
+    const form = document.getElementById('form-profesional');
     form.addEventListener('submit', function(event) {
         event.preventDefault();
         

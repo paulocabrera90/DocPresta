@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     //_______________________________________________________________________________-
-    const form = document.querySelector('form');
+    const form = document.getElementById('form-patient');
     if (form) {
         form.addEventListener('submit', function(event) {
             event.preventDefault();
@@ -56,15 +56,17 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => {
                 console.log("Response status: ", response.status);
                 if (response.ok) {
-                    return response.json();  // Suponiendo que el servidor responde con JSON
+                    return response.json();
                 } else {
-                    // Lanza un error que llevará al bloque .catch con más información
                     throw new Error('Algo salió mal en el servidor: ' + response.statusText);
                 }
-            }).then(result => {
+            }).then(async result => {
                 console.log('Success:', result);
-                const message = isUpdate ? `Se actualizo correctamente el Paciente` : 'Se agrego correctamente el Paciente';
-                alert(message);
+                showAlert(
+                    isUpdate ? 'Actualizado' : 'Creado',
+                     isUpdate ? `Se actualizó correctamente el paciente` : 'Se agregó correctamente  el paciente',
+                     'success'
+                )
                 console.log("Redirigiendo...");
                 showSpinner(false)
                 window.location.href = '/api/patient';
