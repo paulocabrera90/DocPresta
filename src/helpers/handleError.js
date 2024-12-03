@@ -1,21 +1,33 @@
 const httpError = (res, err) => {
-    console.error(err);
+    console.error('Error:', err);
     const statusCode = err.status || 500;
-
-    res.status(statusCode);
 
     let errorMessage = {
         error: err.code || 'InternalServerError',
-        msg: err.message || 'An unexpected error occurred'
+        msg: err.details || err.message || 'An unexpected error occurred'
     };
 
-    // Manejo específico para errores 401
-    if (statusCode === 401) {
-        errorMessage.error = 'Unauthorized';
-        errorMessage.msg = 'No posees permisos.';
+    // Handle specific error codes
+    switch (statusCode) {
+        case 400:
+            errorMessage.msg = 'Bad request. ' + errorMessage.msg;
+            break;
+        case 401:
+            errorMessage.error = 'Unauthorized';
+            errorMessage.msg = 'No posees permisos.';
+            break;
+        case 404:
+            errorMessage.error = 'NotFound';
+            errorMessage.msg = 'Resource not found.';
+            break;
+        case 500:
+        default:
+            errorMessage.error = 'InternalServerError';
+            errorMessage.msg = 'An internal server error occurred.';
+            break;
     }
 
-    res.send(errorMessage);
+    res.status(statusCode).send(errorMessage);
 }
 
 function loginError(status, code, message) {

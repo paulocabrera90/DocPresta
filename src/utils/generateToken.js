@@ -1,6 +1,9 @@
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = "docpresta_cabrera";
-const TIME_SESSION = "1m";
+const globalConstants = require('../const/globalConst');
+const JWT_SECRET = globalConstants.JWT_SECRET;
+const TIME_SESSION = globalConstants.TIME_SESSION;
+// const JWT_SECRET = "docpresta_cabrera";
+// const TIME_SESSION = "15m";
 
 async function tokenSign(user) {
     return jwt.sign(

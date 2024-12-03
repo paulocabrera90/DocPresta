@@ -109,7 +109,6 @@ async function confirmDelete(event) {
     }
 }
 
-
 function showSpinner(show) {
     const overlay = document.querySelector('.loading-overlay');
     if (show) {
