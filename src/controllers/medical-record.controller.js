@@ -51,7 +51,7 @@ async function medicalRecordNew(req, res){
             speciality,
             profesion:profesion.dataValues,
             patients:allPatient
-        })
+        });
 
         // res.json({ 
         //     medicalRecord,

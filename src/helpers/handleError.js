@@ -18,12 +18,12 @@ const httpError = (res, err) => {
             break;
         case 404:
             errorMessage.error = 'NotFound';
-            errorMessage.msg = 'Resource not found.';
+            errorMessage.msg = 'Recurso no encontrado.';
             break;
         case 500:
         default:
             errorMessage.error = 'InternalServerError';
-            errorMessage.msg = 'An internal server error occurred.';
+            errorMessage.msg = err.message;
             break;
     }
 

@@ -18,4 +18,10 @@ router.patch('/update/:id', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), u
 
 router.delete('/:id',checkAuth, checkRoleAuth(['ADMIN', 'PROFESIONAL']), deleteBenefitController);
 
+router.get('/form', (req, res) => {
+    const benefit = req.query.id ? getBenefitById(req.query.id) : null;
+    const sections = getAllSections(); // Asumiendo que tienes una función para obtener las secciones
+    res.render('benefit-form', { benefit, sections });
+});
+
 module.exports = router;

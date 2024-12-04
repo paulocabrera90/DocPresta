@@ -203,3 +203,37 @@
   border: 1px solid #888;
   width: 80%; /* Could be more or less, depending on screen size */
 }
+
+
+/* Estilos para el overlay */
+.overlay {
+  display: none; /* Inicialmente oculto */
+  position: fixed; /* Posicionamiento fijo en toda la pantalla */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparente */
+  z-index: 1050; /* Alto z-index para estar sobre otros elementos */
+  justify-content: center; /* Centra horizontalmente el contenido */
+  align-items: center; /* Centra verticalmente el contenido */
+}
+
+/* Estilos para el popup */
+.popup {
+  width: 60%; /* O cualquier anchura que prefieras */
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px; /* Bordes redondeados */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra sutil */
+  z-index: 1051; /* Asegura que el popup está sobre el overlay */
+  display: flex; /* Flexbox para organizar el contenido internamente */
+  flex-direction: column; /* Organización vertical del contenido */
+  position: relative; /* Posicionamiento relativo dentro del overlay */
+}
+
+/* Estilos para el botón de cancelar, colocado dentro del popup */
+.popup button {
+  margin-top: 10px; /* Espacio por encima del botón */
+  align-self: flex-end; /* Alineación a la derecha del contenedor flex */
+}

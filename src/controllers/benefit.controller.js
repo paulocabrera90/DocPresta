@@ -7,7 +7,6 @@ async function getListAllBenefitsController(req, res){
         const benefits = await getListAllBenefitsService();
         
         console.log(benefits);
-       // const listMapPatient = patient.map(mapPatientData);
 
         res.render('benefit-landing', { 
             benefits: benefits
