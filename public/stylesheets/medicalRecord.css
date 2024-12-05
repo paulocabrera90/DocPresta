@@ -53,7 +53,6 @@
   width: 82%;
   margin-right:3%;
   padding: 20px;
-  background-color: #3498db;
   color: #fff;
   border-radius: 5px;
 }
@@ -123,6 +122,27 @@
   cursor: pointer;
 }
 
+#formMedicalRecordNew {
+  padding: 20px;
+  border: 2px solid #5fbae9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.container-prestaciones,
+.container-paciente,
+.container-paciente,
+.container-prescripcion,
+.container-medicamentos {
+  padding: 20px;
+  border: 2px solid #5fbae9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  margin-bottom: 10px;
+}
+
 .card-footer a.btn-secondary,
 .card-footer button.btn-danger {
   padding: 5px 10px;
@@ -189,8 +209,8 @@
   z-index: 1; /* Sit on top */
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
+  width: 80%; /* Full width */
+  height: 80%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
@@ -204,36 +224,47 @@
   width: 80%; /* Could be more or less, depending on screen size */
 }
 
+#form-benefit-popup {
+  background-color: #fff;
+  padding: 20px;
+  border: 2px solid #5fbae9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  height: 100%;
+}
+
 
 /* Estilos para el overlay */
 .overlay {
-  display: none; /* Inicialmente oculto */
-  position: fixed; /* Posicionamiento fijo en toda la pantalla */
+  display: none;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparente */
-  z-index: 1050; /* Alto z-index para estar sobre otros elementos */
-  justify-content: center; /* Centra horizontalmente el contenido */
-  align-items: center; /* Centra verticalmente el contenido */
+  background-color: rgba(0, 0, 0, 0.7); 
+  z-index: 1050; 
+  justify-content: center; 
+  align-items: center; 
 }
 
 /* Estilos para el popup */
-.popup {
-  width: 60%; /* O cualquier anchura que prefieras */
+.popupPres {
+  width: 50%; 
+  height: 100%;
   background-color: white;
   padding: 20px;
-  border-radius: 8px; /* Bordes redondeados */
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra sutil */
-  z-index: 1051; /* Asegura que el popup está sobre el overlay */
-  display: flex; /* Flexbox para organizar el contenido internamente */
-  flex-direction: column; /* Organización vertical del contenido */
-  position: relative; /* Posicionamiento relativo dentro del overlay */
+  border-radius: 8px; 
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  z-index: 1051; 
+  display: flex; 
+  flex-direction: column;
+  position: relative; 
 }
 
 /* Estilos para el botón de cancelar, colocado dentro del popup */
-.popup button {
-  margin-top: 10px; /* Espacio por encima del botón */
+.popupPres button {
+  margin-top: 5px; /* Espacio por encima del botón */
   align-self: flex-end; /* Alineación a la derecha del contenedor flex */
 }

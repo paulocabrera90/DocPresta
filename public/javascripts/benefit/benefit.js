@@ -1,14 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('button-addPrestacion').addEventListener('click', function() {
-        fetch('/api/benefit/form')
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('popupContent').innerHTML = html; // Asegúrate de tener un div con id="popupContent" en tu popup
-                document.getElementById('overlayPrestacion').style.display = 'flex';
-            })
-            .catch(error => console.error('Error loading form:', error));
-    });
-    
+   
    
     const form = document.getElementById('form-benefit');
     if (form) {

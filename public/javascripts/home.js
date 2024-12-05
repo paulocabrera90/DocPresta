@@ -5,10 +5,10 @@ document.addEventListener("DOMContentLoaded", function () {
     links.forEach(link => {
         link.addEventListener('click', function (e) {
             e.preventDefault();
-            showSpinner(true); // Mostrar el spinner
+            showSpinner(true); 
             setTimeout(() => {
-                window.location.href = this.href; // Cambiar la página después de un breve retraso
-            }, 1000);  // Este retraso es opcional y puede ser más corto
+                window.location.href = this.href;
+            }, 1000); 
         });
     });
 
@@ -46,8 +46,8 @@ document.addEventListener("DOMContentLoaded", function () {
             ];
         } else if (userData.rol === 'PROFESIONAL') {
             linksList = [
-                { href: "/api/home", id: "lista-prescripcion-sidenav", text: "Prescripciones" },
-                { href: "#", id: "prestaciones-sidenav", text: "Prestaciones" },
+                { href: "/api/home", id: "lista-prescripcion-sidenav", text: "Prescripciones" },                
+                { href: "/api/benefit", id: "prestaciones-sidenav", text: "Prestaciones" },
                 { href: "/api/patient", id: "pacientes-sidenav", text: "Pacientes" },
                 { href: "/api/perfil", id: "profesionales-sidenav", text: "Perfil" }
             ];

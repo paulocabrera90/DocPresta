@@ -6,6 +6,7 @@ const PDFDocument = require('pdfkit');
 const { getAllMedicalRecordsService } = require('../services/medical-record.service');
 const { getListAllPatients } = require('./patient.controller');
 const { getListAllPatientsService } = require('../services/patient.service');
+const { getFindAllSections } = require('../services/benefit.service');
 
 async function medicalRecordNew(req, res){   
     try {
@@ -43,6 +44,8 @@ async function medicalRecordNew(req, res){
     
         const speciality = profesional.dataValues.Speciality.dataValues;
         const profesion = await Profesion.findOne({ where: { id: speciality.profesionId } })
+
+        const sections = await getFindAllSections(); 
     
         res.render('medical-record-new', { 
             medicalRecord,
@@ -50,7 +53,8 @@ async function medicalRecordNew(req, res){
             profesional: profesional.dataValues,
             speciality,
             profesion:profesion.dataValues,
-            patients:allPatient
+            patients:allPatient,
+            sections
         });
 
         // res.json({ 
@@ -59,7 +63,7 @@ async function medicalRecordNew(req, res){
         //     profesional: profesional.dataValues,
         //     speciality,
         //     profesion:profesion.dataValues,
-        //     patients:allPatient
+        //     patients:allPatient, sections
         // })
     } catch (error) {
         httpError(res, error);
