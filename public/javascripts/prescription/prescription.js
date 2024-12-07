@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function() {
         acceptPopup(patientGlobal);
       });
     
-      document.querySelectorAll('#acceptButtonPopup, #cancelButtonPopup, .overlay').forEach(element => {
+      document.querySelectorAll('#acceptButtonPopup').forEach(element => {
         element.addEventListener('click', function() {
             hidePopup();
         });
@@ -36,7 +36,6 @@ document.addEventListener("DOMContentLoaded", function() {
   }
   
   function showPopup(data) {
-   // $('#patientInfo').text(`Nombre: ${data.firstName} ${data.lastName}\nEmail: ${data.email}\nDNI: ${data.numberDocument}`);
     let patientInfoHtml = `
       <p>Nombre: ${data.User.Person.firstName} ${data.User.Person.lastName}</p>
       <p>Email: ${data.User.email}</p>
@@ -46,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function() {
       <p>Sexo: ${data.User.Person.sex}</p>
       <p>Rol: ${data.User.rol}</p>
       <p>Obra Social: ${data.PlanOS.SocialWork.name}</p>
-      <p>Plan de Obra Social: ${data.PlanOS.planOSName}</p>
+      <p>Plan de Obra Social: ${data.PlanOS.name}</p>
     `;
     document.getElementById('patientInfo').innerHTML = patientInfoHtml; 
     document.querySelector('.overlay').style.display = 'block';
@@ -73,8 +72,30 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('paciente_apellido').value = patientGlobal.User.Person.lastName;
     document.getElementById('paciente_fecha_nacimiento').value = new Date(patientGlobal.User.Person.birthDate).toISOString().split('T')[0];
     document.getElementById('paciente_obra_social').value = patientGlobal.PlanOS.SocialWork.name;
-    document.getElementById('paciente_plan').value = patientGlobal.PlanOS.planOSName;
+    document.getElementById('paciente_plan').value = patientGlobal.PlanOS.name;
     document.getElementById('paciente_sexo').value = patientGlobal.User.Person.sex.toUpperCase() === 'FEMENINO' ? 'FEMALE' : patientGlobal.User.Person.sex.toUpperCase() === 'MASCULINO' ? 'MALE' : 'OTHER';
 
     hidePopup();
+}
+
+function closePopup() {
+  var overlay = document.getElementById('overlayPrestacion');
+  var popup = document.querySelector('.popupPres');
+  if (overlay && popup) {
+      overlay.style.display = 'none';
+      popup.style.display = 'none';
+      resetPatientList();
+  } else {
+      console.log("No se pudo cerrar el popup porque los elementos no fueron encontrados.");
+  }
+}
+
+function resetPatientList() {
+  var patientList = document.getElementById('patientList');
+  if (patientList) {
+      patientList.selectedIndex = 0;
+      for (let i = patientList.options.length - 1; i > 0; i--) {
+          patientList.remove(i);
+      }
+  }
 }

@@ -12,32 +12,17 @@ async function medicalRecordNew(req, res){
     try {
         const medicalRecord  = await Prescription.findAll({
             include: [
-                {
-                    model: Benefit,
-                    as: 'Benefits'
-                },
-                {
-                    model: Patient,
-                    as: 'Patients'
-                },
-                {
-                    model: Sickness,
-                    as: 'Sicknesses'
-                },
-                {
-                    model: Profesional,
-                    as: 'Profesionals'
-                }
+                { model: Benefit, as: 'Benefits' },
+                { model: Patient, as: 'Patients' },
+                { model: Sickness, as: 'Sicknesses' },
+                { model: Profesional, as: 'Profesionals' }
             ]
         })
 
         const profesional = await Profesional.findOne({
             where: {userId: storage.state.user.id},
             include: [
-                {
-                    model: Speciality,
-                    as: 'Speciality'
-                }
+                { model: Speciality, as: 'Speciality' }
             ]
         })
         const allPatient = await getListAllPatientsService();
@@ -46,6 +31,7 @@ async function medicalRecordNew(req, res){
         const profesion = await Profesion.findOne({ where: { id: speciality.profesionId } })
 
         const sections = await getFindAllSections(); 
+        const sickness = await Sickness.findAll()
     
         res.render('medical-record-new', { 
             medicalRecord,
@@ -54,17 +40,20 @@ async function medicalRecordNew(req, res){
             speciality,
             profesion:profesion.dataValues,
             patients:allPatient,
-            sections
+            sections,
+            sickness
         });
 
-        // res.json({ 
+        // res.json( { 
         //     medicalRecord,
         //     person: storage.state.user.Person,
         //     profesional: profesional.dataValues,
         //     speciality,
         //     profesion:profesion.dataValues,
-        //     patients:allPatient, sections
-        // })
+        //     patients:allPatient,
+        //     sections,
+        //     sickness
+        // });
     } catch (error) {
         httpError(res, error);
     }

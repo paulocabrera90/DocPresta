@@ -48,7 +48,8 @@ document.addEventListener("DOMContentLoaded", function () {
             linksList = [
                 { href: "/api/home", id: "lista-prescripcion-sidenav", text: "Prescripciones" },                
                 { href: "/api/benefit", id: "prestaciones-sidenav", text: "Prestaciones" },
-                { href: "/api/patient", id: "pacientes-sidenav", text: "Pacientes" },
+                { href: "/api/patient", id: "pacientes-sidenav", 
+                    text: "Pacientes" },
                 { href: "/api/perfil", id: "profesionales-sidenav", text: "Perfil" }
             ];
         }
