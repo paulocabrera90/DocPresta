@@ -45,6 +45,7 @@ block content
             input(type="text", name="paciente_obra_social", id="paciente_obra_social", required, disabled)
             label(for="paciente_plan") Plan:
             input(type="text", name="paciente_plan", id="paciente_plan", required, disabled)
+            button(type="button", class="btn btn-success", onclick="editarObraSocial()") Editar Obra Social
 
       // Prestaciones
       h2 Prestaciones
@@ -53,10 +54,11 @@ block content
                 label(for="prestaciones") Prestaciones:
                 .search-dni
                     input(type="text", name="prestaciones", id="prestaciones")
-                    button(id="button-addPrestacion" type="button")
-                      i.fa.fa-plus  Añadir Prestación
-                    button(id="button-searchPrestaci" type="submit")
+                    button(id="button-searchPrestaci" type="button")
                       i.fa.fa-search  Buscar Prestación
+                    button(id="button-clearListBenefit" type="button")
+                      i.fa.fa-plus  Limpiar
+                .benefits-list-container
 
       // Detalles de la prescripción
       h2 Detalles de la Prescripción
@@ -95,31 +97,7 @@ block content
 
   .overlay#overlayPrestacion
       .popupPres#popupPrestacion
-                h2 Nueva Prestación
-                form(id="form-benefit-popup" action="/api/benefit/create" method="post")
-                    label(for="name") Nombre:
-                    input(type="text" name="name" id="name" required=true )
-
-                    label(for="code") Código:
-                    input(type="text" name="code" id="code" required=true )
-
-                    label(for="sectionId") Sección:
-                    select(name="sectionId" id="sectionId" required=true)
-                            option(value="") Seleccione una Sección
-                            each section in sections
-                                option(value=section.id )= section.name
-
-                    label(for="description") Descripción:
-                    textarea(name="description" id="description" rows="3" cols="225")= ''
-
-                  
-                    label(for="justification") Justificación:
-                    textarea(name="justification" id="justification" rows="3" cols="225")=  ''
-
-                    label(for="state") Estado:
-                    select(name="state" id="state")
-                            option(value=1 ) Activo
-                            option(value=0 ) Inactivo        
-
-                    button(type="submit") Crear
-                    button(type="button" onclick="closePopup()") Cancelar  
+                h2 Listado de Prestaciones
+                .benefits-list-container-popup
+                button(type="button", class="btn btn-success", onclick="agregarListadoPrest()") Agregar
+                button(type="button", class="btn btn-danger", onclick="closePopup()") Cancelar
