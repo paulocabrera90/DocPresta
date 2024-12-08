@@ -232,8 +232,8 @@
   height: 100%;
 }
 
-input[type="checkbox"].benefitSelected {
-  /* Estilos específicos para checkboxes con la clase 'benefitSelected' */
+input[type="checkbox"].benefitSelected,
+input[type="checkbox"].medicineSelected {
   accent-color: blue;
   margin: 5px;
   cursor: pointer;
@@ -256,7 +256,8 @@ input[type="checkbox"].benefitSelected {
 }
 
 /* Estilos para el popup */
-.popupPres {
+.popupPres,
+.popupMedicine {
   width: 80%; 
   height: 60%;
   background-color: white;
@@ -270,12 +271,14 @@ input[type="checkbox"].benefitSelected {
 }
 
 /* Estilos para el botón de cancelar, colocado dentro del popup */
-.popupPres button {
+.popupPres button,
+.popupMedicine button {
   margin-top: 5px; 
   align-self: flex-end;
 }
 
-.benefits-list-container-popup {
+.benefits-list-container-popup,
+.medicines-list-container-popup  {
   max-height: 300px; 
   overflow-y: auto;  
   padding: 10px;
@@ -283,6 +286,7 @@ input[type="checkbox"].benefitSelected {
   background-color: #f4f4f4;
 }
 
+.medicine-item,
 .benefit-item {
   margin: 10px 0;
   padding: 5px;
@@ -292,6 +296,7 @@ input[type="checkbox"].benefitSelected {
   justify-content: space-between;
 }
 
+.delete-medicine,
 .delete-benefit {
   padding: 2px 5px;
   margin-left: 10px;
@@ -304,6 +309,7 @@ input[type="checkbox"].benefitSelected {
   width: 10%;
 }
 
+.delete-medicine:hover,
 .delete-benefit:hover {
   background-color: darkred;
 }

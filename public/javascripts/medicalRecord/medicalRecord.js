@@ -43,6 +43,25 @@ document.addEventListener('DOMContentLoaded', function() {
     }else{
         console.log("No se encontró el elemento 'button-searchPrestaci'.");
     }
+
+    const buttonSearchMedicine = document.getElementById('button-searchListMedicine');
+    if(buttonSearchMedicine){
+        buttonSearchMedicine.addEventListener('click', function(event) {
+            showSpinner(true);
+    
+            setTimeout(() => {
+                var overlay = document.getElementById('overlayMedicine');
+                var popup = document.querySelector('.popupMedicine');
+                if (overlay && popup) {
+                    overlay.style.display = 'flex';
+                    popup.style.display = 'flex';
+                    attachSearchMedicineRequest();
+                }
+            }, 1000);
+        });
+    }else{
+        console.log("No se encontró el elemento 'button-searchPrestaci'.");
+    }
     
     const clearListBenefitButton = document.getElementById('button-clearListBenefit');
     if (clearListBenefitButton) {
@@ -74,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (popupListBenefit) {
            
             const queryParam = encodeURIComponent(mainInput.value.trim());
-            const url = `/api/benefit?format=json&search=${queryParam}`; 
+            const url = `/api/benefit?format=json&search=${queryParam}&state=true`; 
             const method = 'GET';
 
                 console.log('Fetching  Benefit:', url);
@@ -110,8 +129,53 @@ document.addEventListener('DOMContentLoaded', function() {
             showSpinner(false);
             console.log("No se encontró el formulario.");
         }
+    }    
+
+    async function attachSearchMedicineRequest() {
+        const medicamentoInput = document.getElementById('medicamentos');
+        const popupListMedicine = document.getElementById('popupMedicine');
+        showSpinner(false);
+        if (popupListMedicine) {
+           
+            const queryParam = encodeURIComponent(medicamentoInput.value.trim());
+            const url = `/api/medicine?format=json&search=${queryParam}&state=true`;
+            const method = 'GET';
+
+                console.log('Fetching  Medicine:', url);
+        
+                fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.medicines) {
+                        console.log(result.medicine);
+                        displayMedicines(result.medicines);
+                        showSpinner(false);
+                    } else {
+                        throw new Error('No se recibieron datos');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching benefits:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: error.message,
+                        confirmButtonColor: '#d33',
+                    });
+                    showSpinner(false);
+                });
+                        
+        } else {
+            showSpinner(false);
+            console.log("No se encontró el formulario.");
+        }
     }
-    
+
     var popup = document.querySelector('.popupPres');
     popup.addEventListener('click', function(event) {
         event.stopPropagation(); 
@@ -126,7 +190,7 @@ document.addEventListener('DOMContentLoaded', function() {
         table.className = 'table table-striped'; 
         const thead = document.createElement('thead');
         const trHead = document.createElement('tr');
-        ['Seleccionar','Nombre', 'Código', 'Descripción', 'Justificación', 'Estado', 'Sección'].forEach(text => {
+        ['Seleccionar','Nombre', 'Código', 'Descripción', 'Justificación', 'Sección'].forEach(text => {
             const th = document.createElement('th');
             th.textContent = text;
             trHead.appendChild(th);
@@ -170,11 +234,6 @@ document.addEventListener('DOMContentLoaded', function() {
             tdJustification.textContent = benefit.justification;
             tr.appendChild(tdJustification);
     
-            // Estado
-            const tdState = document.createElement('td');
-            tdState.textContent = benefit.state ? 'Activo' : 'Inactivo';
-            tr.appendChild(tdState);
-    
             // Sección
             const tdSection = document.createElement('td');
             tdSection.textContent = benefit.Sections.code + "-" + benefit.Sections.name; 
@@ -192,7 +251,77 @@ document.addEventListener('DOMContentLoaded', function() {
         table.appendChild(tbody);
         benefitsListContainer.appendChild(table);
     }
-
+    
+    function displayMedicines(medicines) {
+        const medicinesListContainer = document.querySelector('.medicine-list-container-popup');
+        medicinesListContainer.innerHTML = '';
+    
+        // Create the table and its headers
+        const table = document.createElement('table');
+        table.className = 'table table-striped';
+        const thead = document.createElement('thead');
+        const trHead = document.createElement('tr');
+        ['Seleccionar', 'Nombre', 'Código', 'Comercial', 'Concentrado (Cant. y Mag.)', 'Forma Farmacéutica', 'Familia'].forEach(text => {
+            const th = document.createElement('th');
+            th.textContent = text;
+            trHead.appendChild(th);
+        });
+        thead.appendChild(trHead);
+        table.appendChild(thead);
+    
+        // Body of the table
+        const tbody = document.createElement('tbody');
+    
+        medicines.forEach(medicine => {
+            const tr = document.createElement('tr');
+    
+            // Checkbox
+            const tdCheck = document.createElement('td');
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.name = 'medicineSelected';
+            checkbox.className = 'medicineSelected';
+            checkbox.value = medicine.id;
+            tdCheck.appendChild(checkbox);
+            tr.appendChild(tdCheck);
+            
+            // Commercial Name (concatenate all commercial names if multiple)
+            const tdName = document.createElement('td');
+            tdName.textContent = medicine.name.toUpperCase(); 
+            tr.appendChild(tdName);           
+    
+            // Code
+            const tdCode = document.createElement('td');
+            tdCode.textContent = medicine.code;
+            tr.appendChild(tdCode);
+    
+            // Name
+            const tdNameCom = document.createElement('td');
+            tdNameCom.textContent = medicine.ComercialMedicines.map(m => m.name).join(', ');
+            tr.appendChild(tdNameCom);
+    
+            // Concentrated Medicines description (concatenate quantity and magnitude)
+            const tdConcentratedMedicines = document.createElement('td');
+            tdConcentratedMedicines.textContent = medicine.ConcentratedMedicines.map(cm => `${cm.quantity} ${cm.magnitude}`).join(', ');
+            tr.appendChild(tdConcentratedMedicines);
+    
+            // Pharmaceutical Forms (concatenate all forms if multiple)
+            const tdPharmaForms = document.createElement('td');
+            tdPharmaForms.textContent = medicine.PharmaForms.map(pf => pf.name).join(', ');
+            tr.appendChild(tdPharmaForms);
+    
+            // Family (concatenate all family names if multiple)
+            const tdFamily = document.createElement('td');
+            tdFamily.textContent = medicine.FamilyMedicines.map(fm => fm.name).join(', ');
+            tr.appendChild(tdFamily);
+    
+            tbody.appendChild(tr);
+        });
+    
+        table.appendChild(tbody);
+        medicinesListContainer.appendChild(table);
+    }
+    
     
 });
 
@@ -200,6 +329,13 @@ function closePopup() {
     var overlay = document.getElementById('overlayPrestacion');
     overlay.style.display = 'none';
     var popup = document.querySelector('.popupPres');
+    popup.style.display = 'none';
+}
+
+function closePopupMedicine() {    
+    var overlay = document.getElementById('overlayMedicine');
+    overlay.style.display = 'none';
+    var popup = document.querySelector('.popupMedicine');
     popup.style.display = 'none';
 }
 
@@ -238,7 +374,7 @@ function editarObraSocial(){
     document.getElementById('paciente_plan').disabled = false;
 }
 
-function clearFields() {
+function clearFieldsPrest() {
     document.getElementById('enfermedad-nombre').value = '';
     document.getElementById('enfermedad-code').value = '';
     document.getElementById('diagnostico').value = '';
@@ -276,7 +412,7 @@ function agregarListadoPrest() {
         deleteButton.textContent = 'Eliminar';
         deleteButton.className = 'delete-benefit';
         deleteButton.onclick = function() {
-            benefitDiv.remove(); // Elimina el div del beneficio del DOM
+            benefitDiv.remove();
         };
 
         benefitDiv.appendChild(deleteButton);
@@ -286,3 +422,39 @@ function agregarListadoPrest() {
     console.log(selectedBenefits);
     closePopup();
 }
+
+function agregarListadoMedicine() {
+    const selectedCheckboxes = document.querySelectorAll('.medicineSelected:checked');
+
+    const selectedMedicines = Array.from(selectedCheckboxes).map(checkbox => {
+        return {
+            id: checkbox.value,
+            name: checkbox.closest('tr').querySelector('td:nth-child(3)').textContent,
+            code: checkbox.closest('tr').querySelector('td:nth-child(2)').textContent 
+        };
+    });
+
+    const medicinesListContainer = document.querySelector('.medicines-list-container');
+
+    medicinesListContainer.innerHTML = '';
+
+    selectedMedicines.forEach(medicine => {
+        const medicineDiv = document.createElement('div');
+        medicineDiv.className = 'medicine-item';
+        medicineDiv.innerHTML = `<strong>${medicine.name} (Código: ${medicine.code})</strong>`;
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Eliminar';
+        deleteButton.className = 'delete-medicine';
+        deleteButton.onclick = function() {
+            medicineDiv.remove();
+        };
+
+        medicineDiv.appendChild(deleteButton);
+        medicinesListContainer.appendChild(medicineDiv);
+    });
+
+    console.log(selectedMedicines);
+    closePopupMedicine();
+}
+

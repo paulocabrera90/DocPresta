@@ -12,6 +12,10 @@ async function getListAllBenefitsService(queryParams) {
         ];
     }
 
+    if (queryParams.state !== undefined) {
+        whereClause.state = queryParams.state === 'true';
+    }
+
     return Benefit.findAll({
         where: whereClause,
         include: [{ model: Section, as: 'Sections' }]

@@ -82,7 +82,7 @@ block content
         input(type="date", name="fecha_prescripcion", id="fecha_prescripcion", required)
         label(for="vigencia") Vigencia:
         input(type="text", name="vigencia", id="vigencia")
-        button(type="button", onclick="clearFields()") Limpiar
+        button(type="button", onclick="clearFieldsPrest()") Limpiar
 
       // Medicamentos
       h2 Medicamentos
@@ -90,10 +90,13 @@ block content
         label(for="medicamentos") Medicamentos:        
         .search-dni                
                 input(type="text" name="medicamentos", id="medicamentos", required)
-                button(type="submit")
+                button(id="button-searchListMedicine" type="button")
                     i.fa.fa-search  Buscar
+                button(id="button-clearListMedicine" type="button")
+                      i.fa.fa-plus  Limpiar
+        .medicines-list-container
       
-      button(type="submit") Guardar
+      button(type="submit", class="btn btn-success") Guardar
 
   .overlay#overlayPrestacion
       .popupPres#popupPrestacion
@@ -101,3 +104,10 @@ block content
                 .benefits-list-container-popup
                 button(type="button", class="btn btn-success", onclick="agregarListadoPrest()") Agregar
                 button(type="button", class="btn btn-danger", onclick="closePopup()") Cancelar
+
+  .overlay#overlayMedicine
+      .popupMedicine#popupMedicine
+                h2 Listado de Medicamentos
+                .medicine-list-container-popup
+                button(type="button", class="btn btn-success", onclick="agregarListadoMedicine()") Agregar
+                button(type="button", class="btn btn-danger", onclick="closePopupMedicine()") Cancelar
