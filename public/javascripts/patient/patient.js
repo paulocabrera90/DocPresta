@@ -50,15 +50,19 @@ document.addEventListener('DOMContentLoaded', function() {
                     method: method,
                     headers: {
                         'Content-Type': 'application/json',
-                        // Include other necessary headers, e.g., authorization
                     },
                     body: JSON.stringify(data)
                 });
 
                 const result = await response.json();
                 if (!response.ok) {
-                    throw new Error('Algo salió mal en el servidor: ' + response.statusText);
-                }
+                    if (result.errors && Array.isArray(result.errors)) {          
+                        let messages = result.errors.map(item => item.msg);
+                        throw new Error(messages);
+                      } else {
+                        throw new Error('Algo salió mal en el servidor: ' + response.statusText);
+                      }
+                }                
 
                 await showAlert(
                     isUpdate ? 'Actualizado' : 'Creado',

@@ -7,9 +7,16 @@ const {
 
         static associate(models) {
           
-            Prescription.belongsTo(models.Benefit, {
-                foreignKey: 'benefitId',
-                as: 'Benefits'
+            Prescription.belongsToMany(models.Benefit, {
+                through: 'Prescription_Benefit',
+                as: 'Benefits',
+                foreignKey: 'prescriptionId'
+            });
+            
+            Prescription.belongsToMany(models.Medicine, {
+                through: 'Prescription_Medicine',
+                as: 'Medicines',
+                foreignKey: 'prescriptionId'
             });
 
             Prescription.belongsTo(models.Patient, {
@@ -25,7 +32,7 @@ const {
             Prescription.belongsTo(models.Profesional, {
                 foreignKey: 'profesionalId',
                 as: 'Profesionals',
-            });
+            });            
         }
     }
 
@@ -35,9 +42,8 @@ const {
             allowNull: false,
         },
         validate: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            unique: true,
+            type: DataTypes.STRING,
+            allowNull: false
         },
         creationDate: {
             type: DataTypes.DATE,
@@ -48,6 +54,9 @@ const {
             type: DataTypes.DATE,
             allowNull: false,
             defaultValue: DataTypes.NOW,
+        },
+        benefitDescription: {
+            type: DataTypes.STRING
         }
     }, {
     sequelize,

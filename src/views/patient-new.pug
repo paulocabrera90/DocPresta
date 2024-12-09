@@ -7,41 +7,41 @@ block content
             
             .form-group
                 label(for="firstName") Nombre:
-                input(type="text" name="firstName" id="firstName" value=patient ? patient.firstName : '')
+                input(type="text" name="firstName" required id="firstName" value=patient ? patient.firstName : '')
 
                 label(for="lastName") Apellido:
-                input(type="text" name="lastName" id="lastName" value=patient ? patient.lastName : '')
+                input(type="text" name="lastName" required id="lastName" value=patient ? patient.lastName : '')
             
             .form-group
                 label(for="typeDocument") Tipo Documento:
-                select(name="typeDocument" id="typeDocument" disabled=patient)
+                select(name="typeDocument" id="typeDocument" required disabled=patient)
                         option(value="" ) Seleccione un Tipo
                         option(value="DNI" selected=patient && patient.typeDocument == 'DNI') DNI
                         option(value="Pasaporte" selected=patient && patient.typeDocument == 'Pasaporte') Pasaporte
                         option(value="Otro" selected=patient && patient.typeDocument == 'Otro') Otros
 
                 label(for="numberDocument") N° Documento:
-                input(type="text" name="numberDocument" id="numberDocument" readonly=patient value=patient ? patient.numberDocument : '')
+                input(type="text" name="numberDocument" required id="numberDocument" readonly=patient value=patient ? patient.numberDocument : '')
             .form-group
                 label(for="birthDate") Fecha Nacimiento:
-                input(type="date" name="birthDate" id="birthDate" value=(patient && patient.birthDate ? new Date(patient.birthDate).toISOString().split('T')[0] : ''))
+                input(type="date" name="birthDate" id="birthDate" required value=(patient && patient.birthDate ? new Date(patient.birthDate).toISOString().split('T')[0] : ''))
 
                 label(for="sex") Sexo:
-                select(name="sex" id="sex")
+                select(name="sex" id="sex" required)
                         option(value="" ) Seleccione un Sexo
                         option(value="Masculino" selected=patient && patient.sex == 'Masculino') Masculino
                         option(value="Femenino" selected=patient && patient.sex == 'Femenino') Femenino
                         option(value="Otros" selected=patient && patient.sex == 'Otros') Otros
             .form-group
                 label(for="socialWorkInput") Obra Social:
-                input(list="socialWorkList" id="socialWorkInput" name="socialWorkInput" placeholder="Escriba una Obra Social" value=patient ? patient.socialWorkName : '')
+                input(list="socialWorkList" id="socialWorkInput" required name="socialWorkInput" placeholder="Escriba una Obra Social" value=patient ? patient.socialWorkName : '')
                 datalist(id="socialWorkList")
                         option(value="" selected=!patient) Seleccione una Obra social
                         each socialWork in socialsWork
                             option(value=socialWork.name selected=patient && patient.socialWorkName == socialWork.name data-id=socialWork.id)= socialWork.name
 
                 label(for="planOSInput") Planes:
-                input(list="plansOSList" id="planOSInput" name="planOSInput" placeholder="Escriba una Plan" value=patient ? patient.planOSName : '')
+                input(list="plansOSList" id="planOSInput" required name="planOSInput" placeholder="Escriba una Plan" value=patient ? patient.planOSName : '')
                 datalist(id="plansOSList")
                         option(value="" selected=!patient) Seleccione un Plan
                         each planOS in plansOS
@@ -52,13 +52,13 @@ block content
             if !patient
                 h3 Usuario
                 label(for="username") Username:
-                input(type="text" name="username" id="username" value=patient ? patient.username : '')
+                input(type="text" name="username" required id="username" value=patient ? patient.username : '')
 
                 label(for="email", readonly=patient) Email:
-                input(type="email" name="email" id="email" value=patient ? patient.email : '')
+                input(type="email" name="email" id="email" required value=patient ? patient.email : '')
                 
                 label(for="passwordHash", readonly=patient) Password:
-                input(type="password" name="passwordhash" id="passwordHash")
+                input(type="password" name="passwordhash" required id="passwordHash")
 
             .form-actions
                 button.btn.btn-primary(id='btnFormNewPat' type="submit") #{patient ? 'Actualizar' : 'Crear'}

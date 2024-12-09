@@ -1,5 +1,5 @@
 var express = require('express');
-const { medicalRecordNew, getListAllMedicalRecord, generatePdf } = require('../controllers/medical-record.controller');
+const { medicalRecordNew, getListAllMedicalRecord, generatePdf, createMedicalRecord } = require('../controllers/medical-record.controller');
 const checkAuth = require("../middleware/auth.middle");
 const checkRoleAuth = require('../middleware/roleAuth.middle');
 var router = express.Router();
@@ -9,7 +9,7 @@ router.get('/new', checkAuth, checkRoleAuth(['PROFESIONAL']), medicalRecordNew);
 
 router.get('/', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), getListAllMedicalRecord);
 
-// router.post('/create', checkAuth, checkRoleAuth(['PROFESIONAL']), createMedicalRecord);
+router.post('/create', checkAuth, checkRoleAuth(['PROFESIONAL']), createMedicalRecord);
 
 //  router.get('/:id', checkAuth, checkRoleAuth(['PROFESIONAL']), getMedicalRecordById);
 

@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
    
+   
     const form = document.getElementById('form-benefit');
     if (form) {
         form.addEventListener('submit', function(event) {
@@ -51,8 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }else {
-        console.log("No se encontró el formulario.");
-        
+        console.log("No se encontró el formulario.");        
     }    
     
 });

@@ -4,16 +4,13 @@ const { sequelize } = require('../models/index.models');
 
 async function getListAllBenefitsController(req, res){
     try {
-        const benefits = await getListAllBenefitsService();
-        
-        console.log(benefits);
-       // const listMapPatient = patient.map(mapPatientData);
+        const benefits = await getListAllBenefitsService(req.query);
 
-        res.render('benefit-landing', { 
-            benefits: benefits
-        });       
-       //res.json({data:listMapPatient})
-
+        if (req.query.format === 'json') {
+            res.json({ benefits });
+        } else {
+            res.render('benefit-landing', { benefits });
+        }
     } catch(error) {
         httpError(res, error);
     }

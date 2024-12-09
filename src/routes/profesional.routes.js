@@ -14,7 +14,7 @@ router.post('/create', checkAuth, checkRoleAuth(['ADMIN']), validateRegister, cr
 
 router.get('/:id', checkAuth, checkRoleAuth(['ADMIN']), getProfesionalById);
 
-router.patch('/update/:id', checkAuth, checkRoleAuth(['ADMIN']), updateProfesional);
+router.patch('/update/:id', checkAuth, checkRoleAuth(['ADMIN']), validateRegister, updateProfesional);
 
 router.delete('/:id',checkAuth, checkRoleAuth(['ADMIN']), deleteProfesional);
 

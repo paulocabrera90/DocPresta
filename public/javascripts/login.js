@@ -2,11 +2,6 @@ document.addEventListener("DOMContentLoaded", function() {
   var modal = document.getElementById('errorModal');
   var message = document.getElementById('errorMessage');
 
-  // if (!modal || !message) {
-  //   console.error('Los elementos del modal no están disponibles.');
-  //   return;  // Detiene la ejecución si los elementos no están disponibles
-  // }
-
     document.getElementById("loginForm").addEventListener("submit", async function(event) {
       event.preventDefault();
       var email = document.getElementById("login").value;

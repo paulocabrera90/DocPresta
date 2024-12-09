@@ -44,7 +44,21 @@ async function getDropdownData() {
     };
 }
 
-async function getAllMedicinesService() {
+async function getAllMedicinesService(queryParams) {
+
+    const whereClause = {};
+
+    if (queryParams.search) {
+        whereClause[Op.or] = [
+            { name: { [Op.like]: `%${queryParams.search}%` } },
+            { code: { [Op.like]: `%${queryParams.search}%` } }
+        ];
+    }
+
+    if (queryParams.state !== undefined) {
+        whereClause.state = queryParams.state === 'true';
+    }
+
     return await Medicine.findAll({
         include: [
             { model: ConcentratedMedicine, as: 'ConcentratedMedicines' },
@@ -124,7 +138,7 @@ async function updateMedicineService(id, medicineData) {
         });
 
         if (!updatedMedicine) {
-            throw new Error('Medicine not found');
+            throw new Error('Medicamento no encontrado.');
         }
 
         await updatedMedicine.setConcentratedMedicines([], { transaction });

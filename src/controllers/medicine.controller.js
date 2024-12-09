@@ -35,12 +35,15 @@ async function getMedicineByIdController(req, res) {
 
 async function getListAllMedicinesController(req, res) {
     try {
-        const medicines = await getAllMedicinesService();
-
-        res.render('medicine-landing', {
-            medicines
-        });
-        //res.json({data:medicine})
+        const medicines = await getAllMedicinesService(req.query);
+        
+        if (req.query.format === 'json') {
+            res.json({medicines})
+        }else{
+            res.render('medicine-landing', {
+                medicines
+            });
+        }
 
     } catch (error) {
         httpError(res, error);

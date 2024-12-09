@@ -5,10 +5,10 @@ document.addEventListener("DOMContentLoaded", function () {
     links.forEach(link => {
         link.addEventListener('click', function (e) {
             e.preventDefault();
-            showSpinner(true); // Mostrar el spinner
+            showSpinner(true); 
             setTimeout(() => {
-                window.location.href = this.href; // Cambiar la página después de un breve retraso
-            }, 1000);  // Este retraso es opcional y puede ser más corto
+                window.location.href = this.href;
+            }, 1000); 
         });
     });
 
@@ -46,9 +46,10 @@ document.addEventListener("DOMContentLoaded", function () {
             ];
         } else if (userData.rol === 'PROFESIONAL') {
             linksList = [
-                { href: "/api/home", id: "lista-prescripcion-sidenav", text: "Prescripciones" },
-                { href: "#", id: "prestaciones-sidenav", text: "Prestaciones" },
-                { href: "/api/patient", id: "pacientes-sidenav", text: "Pacientes" },
+                { href: "/api/home", id: "lista-prescripcion-sidenav", text: "Prescripciones" },                
+                { href: "/api/benefit", id: "prestaciones-sidenav", text: "Prestaciones" },
+                { href: "/api/patient", id: "pacientes-sidenav", 
+                    text: "Pacientes" },
                 { href: "/api/perfil", id: "profesionales-sidenav", text: "Perfil" }
             ];
         }
@@ -97,18 +98,33 @@ async function confirmDelete(event) {
             const response = await fetch(url, { method: 'DELETE' });
             const data = await response.json();
             if (!response.ok) {
+                //throw new Error(data.msg != null? data.msg: data);
                 throw new Error(data.msg);
             }
-            Swal.fire('Eliminado!', `${module} con ID ${id} eliminado con éxito`, 'success');
+            Swal.fire({
+                title: '¡Eliminado!',
+                text: `${getModuleName(module)} con ID ${id} eliminado con éxito`,
+                icon: 'success',
+                allowOutsideClick: false,
+                showConfirmButton: true, willClose: () => {
+                    window.location.href = `/api/${module}/`;
+                }
+            });
+
             showSpinner(false);
-            window.location.href = `/api/${module}/`;
+
         } catch (error) {
-            Swal.fire('Error!', error.message, 'error');
+            Swal.fire({
+                title: 'Error!', 
+                text: error.message, 
+                icon: 'error',
+                timer: 5000,
+                timerProgressBar: true
+            });
             showSpinner(false);
         }
     }
 }
-
 
 function showSpinner(show) {
     const overlay = document.querySelector('.loading-overlay');
@@ -140,4 +156,15 @@ if (window.location.pathname == '/api/profesional') {
 if (window.location.pathname == '/api/patient') {
     const pacientes = document.getElementById('pacientes-sidenav')
     pacientes.style.backgroundColor = 'blue'
+}
+
+function getModuleName(moduleCode) {
+    const moduleNames = {
+        'benefit': 'Prescripción',
+        'medicine': 'Medicamento',
+        'patient': 'Paciente',
+        // Agrega más mapeos según necesites
+    };
+
+    return moduleNames[moduleCode] || moduleCode;
 }

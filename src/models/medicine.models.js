@@ -38,6 +38,13 @@ module.exports = (sequelize, DataTypes) => {
                     through: 'FamilyMedicine_Medicine',
                     as: 'FamilyMedicines',
                 });
+
+            Medicine.belongsToMany(
+                models.Prescription,
+                {
+                    through: 'Prescription_Medicine',
+                    as: 'Prescriptions',
+                });
         }
     }
 

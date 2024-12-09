@@ -2,44 +2,25 @@ extends home
 
 block content
   .medical-record-new
-    form(action="/guardar", method="post" id="form-medical-record-new")
+    form(id="form-medical-record" action= medical-record ? "/api/medical-record/update" : "/api/medical-record/create" data-id = medicalRecord ? medicalRecord.id: '' method="post")
       // Datos del profesional
+      h1 #{medicalRecord ? 'Editar' : 'Crear'} la prescripción
       h2 Datos del Profesional
       .container-profesional
         .column
-            label(for="profesional_documento") Documento:  
-            input(type="text", name="profesional_documento", id="profesional_documento", required, value= person.numberDocument, disabled=true)
-            label(for="profesional_profesion") Profesión:
-            input(type="text", name="profesional_profesion", id="profesional_profesion", required, value=profesion.code+"-"+profesion.description, disabled=true)
-            label(for="profesional_nombre") Nombre:
-            input(type="text", name="profesional_nombre", id="profesional_nombre", required, value= person.firstName, disabled=true)
-            label(for="profesional_apellido") Apellido:
-            input(type="text", name="profesional_apellido", id="profesional_apellido", required, value= person.lastName, disabled=true)
-            
-        .column            
-            label(for="profesional_especialidad") Especialidad:
-            input(type="text", name="profesional_especialidad", id="profesional_especialidad", required, value= profesional.legalAddress, disabled=true)
-            label(for="profesional_domicilio") Domicilio:
-            input(type="text", name="profesional_domicilio", id="profesional_domicilio", required, value= profesional.legalAddress, disabled=true)
-            label(for="profesional_matricula") Matrícula:
-            input(type="text", name="profesional_matricula", id="profesional_matricula", required, value= profesional.registrationNumber, disabled=true)
-      // Prestaciones
-      h2 Prestaciones
-      .container-prestaciones
-            label(for="prestaciones") Prestaciones:
-            .search-dni                           
-                input(type="text", name="prestaciones", id="prestaciones", required)
-                button(id="button-searchPrestaci" type="submit")
-                  i.fa.fa-search  Buscar           
+          input(type="hidden" id="profesionalId" name="profesionalId" value= profesional ? profesional.id:'')
+          label(for="profesional_nombre" name="profesional_nombre") Nombre: #{person.firstName} #{person.lastName}
+        .column
+          label(for="profesional_matricula" name="profesional_matricula") Matrícula: #{profesional.registrationNumber}
+                     
       // Datos del paciente
       h2 Datos del Paciente
       .container-paciente
         .column
             label(for="paciente_documento") Documento:
             .search-dni  
-                input(type="hidden", id="patientsData", value= patients?JSON.stringify(patients):'')                    
-                //input(name="prestaciones-dni" id="prestaciones-dni" list="patientList" placeholder="Buscar pacientes..." required)
-                select(id="patientList")
+                input(type="hidden" id="patientsData" value= patients?JSON.stringify(patients):'')
+                select(id="patientList" name="patientList")
                   option(value="") Seleccione un paciente
                                
             .overlay
@@ -47,43 +28,90 @@ block content
                 h2 Paciente
                 p#patientInfo
                 button#acceptButtonPopup(type="button") Agregar
-                button#cancelButtonPopup(type="button") Cancelar
+                button(type="button" id="cancelButtonPopup" onclick="closePopup()") Cancelar
             label(for="paciente_nombre") Nombre:
-            input(type="text", name="paciente_nombre", id="paciente_nombre", required)
+            input(type="text" name="paciente_nombre" id="paciente_nombre" required )
             label(for="paciente_apellido") Apellido:
-            input(type="text", name="paciente_apellido", id="paciente_apellido", required)
+            input(type="text" name="paciente_apellido" id="paciente_apellido" required )
             label(for="paciente_fecha_nacimiento") Fecha de Nacimiento:
-            input(type="date", name="paciente_fecha_nacimiento", id="paciente_fecha_nacimiento", required)
+            input(type="date" name="paciente_fecha_nacimiento" id="paciente_fecha_nacimiento" required )
         .column
             label(for="paciente_sexo") Sexo:
-            select(name="paciente_sexo", id="paciente_sexo", required)
+            select(name="paciente_sexo" id="paciente_sexo" required )
                 option(value="") Seleccione Sexo
                 option(value="MALE") MASCULINO
                 option(value="FEMALE") FEMENINO
                 option(value="OTHER") OTRO
             label(for="paciente_obra_social") Obra Social:
-            input(type="text", name="paciente_obra_social", id="paciente_obra_social", required)
+            input(type="text" name="paciente_obra_social" id="paciente_obra_social" required )
             label(for="paciente_plan") Plan:
-            input(type="text", name="paciente_plan", id="paciente_plan", required)
+            input(type="text" name="paciente_plan" id="paciente_plan" required)
+            //button(type="button" class="btn btn-success" onclick="editarObraSocial()") Editar Obra Social
+
+      // Prestaciones
+      h2 Prestaciones
+      input(type="hidden" name="sectionId" id="sectionId" value='')
+      .container-prestaciones
+                label(for="prestaciones") Prestaciones:
+                .search-dni
+                    input(type="text" name="prestaciones" id="prestaciones")
+                    button(id="button-searchPrestaci" type="button")
+                      i.fa.fa-search  Buscar Prestación
+                    button(id="button-clearListBenefit" type="button")
+                      i.fa.fa-plus  Limpiar
+                .benefits-list-container(name="benefitsList" required id="benefitsList")
 
       // Detalles de la prescripción
       h2 Detalles de la Prescripción
+                               
       .container-prescripcion
+        label(for="enfermedad") Diagnóstico Comun:
+            .search-sckiness  
+                input(type="hidden" id="sickness" value= sickness?JSON.stringify(sickness):'')
+                select(id="sicknessList" onchange="updateFields()")
+                  option(value="") Seleccione un diagnostico
+                  each sk in sickness
+                      option(value=sk.id)= sk.code + '-' + sk.name
+
+        label(for="enfermedad-nombre") Nombre:
+        input(type="text" name="enfermedad-nombre" id="enfermedad-nombre" rows="4" required)
+        label(for="enfermedad-code") Codigo:
+        input(type="text" name="enfermedad-code" id="enfermedad-code" rows="4" required)
         label(for="diagnostico") Diagnóstico:
-        textarea(name="diagnostico", id="diagnostico", rows="4", required)
+        textarea(name="diagnostico" id="diagnostico" rows="4" required)
+        label(for="tratamiento") Tratamiento:
+        textarea(name="tratamiento" id="tratamiento" rows="4" required)
         label(for="fecha_prescripcion") Fecha de la Prescripción:
-        input(type="date", name="fecha_prescripcion", id="fecha_prescripcion", required)
+        input(type="date" name="fecha_prescripcion" id="fecha_prescripcion" required)
         label(for="vigencia") Vigencia:
-        input(type="text", name="vigencia", id="vigencia")
+        input(type="text" name="vigencia" id="vigencia")
+        button(type="button" onclick="clearFieldsPrest()") Limpiar
 
       // Medicamentos
       h2 Medicamentos
       .container-medicamentos
         label(for="medicamentos") Medicamentos:        
         .search-dni                
-                input(type="text" name="medicamentos", id="medicamentos", required)
-                button(type="submit")
+                input(type="text" name="medicamentos" id="medicamentos")
+                button(id="button-searchListMedicine" type="button")
                     i.fa.fa-search  Buscar
+                button(id="button-clearListMedicine" type="button")
+                      i.fa.fa-plus  Limpiar
+        .medicines-list-container(name="medicinesList" id="medicinesList" required)
+
       
-      // Botón de enviar
-      button(type="submit") Guardar
+      button(type="submit" id='btnFormNewMedicalRecord' class="btn btn-success") #{medicalRecord ? 'Actualizar' : 'Crear'}
+      button.btn.btn-secondary.ml-2(type="button" onclick="window.history.back();") Cancelar
+  .overlay#overlayPrestacion
+      .popupPres#popupPrestacion
+                h2 Listado de Prestaciones
+                .benefits-list-container-popup
+                button(type="button" class="btn btn-success" onclick="agregarListadoPrest()") Agregar
+                button(type="button" class="btn btn-danger" onclick="closePopup()") Cancelar
+
+  .overlay#overlayMedicine
+      .popupMedicine#popupMedicine
+                h2 Listado de Medicamentos
+                .medicine-list-container-popup
+                button(type="button" class="btn btn-success" onclick="agregarListadoMedicine()") Agregar
+                button(type="button" class="btn btn-danger" onclick="closePopupMedicine()") Cancelar

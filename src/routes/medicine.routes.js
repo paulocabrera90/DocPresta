@@ -7,14 +7,14 @@ var router = express.Router();
 
 router.get('/', checkAuth,checkRoleAuth(['ADMIN','PROFESIONAL']), getListAllMedicinesController);
 
-router.get('/new', checkAuth,checkRoleAuth(['PROFESIONAL']), newMedicineController);
+router.get('/new', checkAuth, checkRoleAuth(['ADMIN']), newMedicineController);
 
-router.post('/create', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), createMedicineController);
+router.post('/create', checkAuth, checkRoleAuth(['ADMIN']), createMedicineController);
 
 router.get('/:id', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), getMedicineByIdController);
 
-router.patch('/update/:id', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), updateMedicineController);
+router.patch('/update/:id', checkAuth, checkRoleAuth(['ADMIN']), updateMedicineController);
 
-router.delete('/:id',checkAuth, checkRoleAuth(['ADMIN', 'PROFESIONAL']), deleteMedicineController);
+router.delete('/:id',checkAuth, checkRoleAuth(['ADMIN']), deleteMedicineController);
 
 module.exports = router;

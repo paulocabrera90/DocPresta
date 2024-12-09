@@ -1,4 +1,34 @@
-document.addEventListener('DOMContentLoaded', function() {   
+document.addEventListener('DOMContentLoaded', function() { 
+
+    const newElement = document.getElementById('newElementMedicalMedicine')
+    if(newElement) {
+        newElement.addEventListener('click', function(event) {
+            event.preventDefault();
+    
+            fetch(this.getAttribute('href'))
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = '/api/medicine/new';
+                    } else if (response.status === 401) {
+                        return response.json().then(err => {
+                            throw new Error(err.msg || "No tienes permiso para realizar esta acción.");
+                        });
+                    } else {
+                        throw new Error('Algo salió mal en la solicitud. Por favor intenta de nuevo.');
+                    }
+                })
+                .then(data => {               
+                    console.log('Respuesta recibida:', data);              
+                })
+                .catch(error => {
+                    console.error('Error en la solicitud:', error);
+                    showAlert('Acceso Denegado', error.message, 'error');
+    
+                });
+        });
+    } else {
+        console.log("No se encontró el elemento 'newElementMedicalMedicine'.");
+    }
 
     const addButton = document.getElementById('addConcentration');
     const list = document.getElementById('concentrationList');
@@ -120,9 +150,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const items = document.querySelectorAll('#concentrationList li');
         return Array.from(items).some(item => item.textContent.includes(content));
     }
-    
-    //_______________________________________________________________________________-
-    //_______________________________________________________________________________-
 
     const form = document.getElementById('form-medicamento');
     if (form) {
@@ -186,4 +213,5 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         console.log("No se encontró el formulario.");
     }
+    
 });

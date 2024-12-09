@@ -1,66 +1,60 @@
-const { Profesional, Speciality,Benefit, Profesion, Prescription , Patient, Sickness} = require('../models/index.models');
+const { Profesional, Speciality,Benefit, Profesion, Prescription , Patient, Sickness, sequelize} = require('../models/index.models');
 const { httpError } = require('../helpers/handleError');
 const { where } = require('sequelize');
 const storage = require('../storage/session');
 const PDFDocument = require('pdfkit');
-const { getAllMedicalRecordsService } = require('../services/medical-record.service');
+const { getAllMedicalRecordsService, createMedicalRecordService } = require('../services/medical-record.service');
 const { getListAllPatients } = require('./patient.controller');
 const { getListAllPatientsService } = require('../services/patient.service');
+const { getFindAllSections } = require('../services/benefit.service');
+const { createMedicineService } = require('../services/medicine.service');
 
 async function medicalRecordNew(req, res){   
     try {
-        const medicalRecord  = await Prescription.findAll({
-            include: [
-                {
-                    model: Benefit,
-                    as: 'Benefits'
-                },
-                {
-                    model: Patient,
-                    as: 'Patients'
-                },
-                {
-                    model: Sickness,
-                    as: 'Sicknesses'
-                },
-                {
-                    model: Profesional,
-                    as: 'Profesionals'
-                }
-            ]
-        })
+        // const medicalRecord  = await Prescription.findAll({
+        //     include: [
+        //         { model: Benefit, as: 'Benefits' },
+        //         { model: Patient, as: 'Patients' },
+        //         { model: Sickness, as: 'Sicknesses' },
+        //         { model: Profesional, as: 'Profesionals' }
+        //     ]
+        // })
 
         const profesional = await Profesional.findOne({
             where: {userId: storage.state.user.id},
             include: [
-                {
-                    model: Speciality,
-                    as: 'Speciality'
-                }
+                { model: Speciality, as: 'Speciality' }
             ]
         })
         const allPatient = await getListAllPatientsService();
     
         const speciality = profesional.dataValues.Speciality.dataValues;
         const profesion = await Profesion.findOne({ where: { id: speciality.profesionId } })
+
+        const sections = await getFindAllSections(); 
+        const sickness = await Sickness.findAll()
     
         res.render('medical-record-new', { 
-            medicalRecord,
+            medicalRecord: '',
             person: storage.state.user.Person,
             profesional: profesional.dataValues,
             speciality,
             profesion:profesion.dataValues,
-            patients:allPatient
-        })
+            patients:allPatient,
+            sections,
+            sickness
+        });
 
-        // res.json({ 
+        // res.json( { 
         //     medicalRecord,
         //     person: storage.state.user.Person,
         //     profesional: profesional.dataValues,
         //     speciality,
         //     profesion:profesion.dataValues,
-        //     patients:allPatient
-        // })
+        //     patients:allPatient,
+        //     sections,
+        //     sickness
+        // });
     } catch (error) {
         httpError(res, error);
     }
@@ -77,6 +71,21 @@ async function getListAllMedicalRecord(req, res){
         //res.json({ medicalRecords, speciality, profesion, profesional });
        
     } catch (error) {
+        httpError(res, error);
+    }
+}
+
+async function createMedicalRecord(req, res) {
+    const userId = storage.state.user.id;
+    const transaction = await sequelize.transaction();
+    try {
+        const newMedicine = await createMedicalRecordService(req.body);
+        console.log("Create medicine successfully: ", req.body);
+       // res.status(200).json({ message: "Create medicine successfully", data: newMedicine });
+
+       res.json({ medicalRecords: "Llegamos al inserte"});
+    } catch (error) {
+        await transaction.rollback();
         httpError(res, error);
     }
 }
@@ -136,5 +145,6 @@ async function generatePdf (req, res) {
 module.exports= { 
     medicalRecordNew,
     getListAllMedicalRecord,
+    createMedicalRecord,
     generatePdf
 }

@@ -1,7 +1,23 @@
+const { Op } = require('sequelize');
 const { Benefit, Section, Prescription, sequelize } = require('../models/index.models');
 
-async function getListAllBenefitsService() {
+async function getListAllBenefitsService(queryParams) {
+
+    const whereClause = {};
+
+    if (queryParams.search) {
+        whereClause[Op.or] = [
+            { name: { [Op.like]: `%${queryParams.search}%` } },
+            { code: { [Op.like]: `%${queryParams.search}%` } }
+        ];
+    }
+
+    if (queryParams.state !== undefined) {
+        whereClause.state = queryParams.state === 'true';
+    }
+
     return Benefit.findAll({
+        where: whereClause,
         include: [{ model: Section, as: 'Sections' }]
     });
 }

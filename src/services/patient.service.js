@@ -96,6 +96,7 @@ async function createPatientService(data) {
         return patient;
     } catch (error) {
         await transaction.rollback();
+        
         throw error;
     }
 }
