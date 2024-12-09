@@ -3,7 +3,7 @@ const { httpError } = require('../helpers/handleError');
 const { where } = require('sequelize');
 const storage = require('../storage/session');
 const PDFDocument = require('pdfkit');
-const { getAllMedicalRecordsService, createMedicalRecordService } = require('../services/medical-record.service');
+const { getAllMedicalRecordsService, createMedicalRecordService, updateMedicalRecordService, deleteMedicalRecordService } = require('../services/medical-record.service');
 const { getListAllPatients } = require('./patient.controller');
 const { getListAllPatientsService } = require('../services/patient.service');
 const { getFindAllSections } = require('../services/benefit.service');
@@ -81,9 +81,25 @@ async function createMedicalRecord(req, res) {
     try {
         const newMedicine = await createMedicalRecordService(req.body);
         console.log("Create medicine successfully: ", req.body);
-       // res.status(200).json({ message: "Create medicine successfully", data: newMedicine });
+        res.status(200).json({ message: "Create medicine successfully", data: newMedicine });
 
-       res.json({ medicalRecords: "Llegamos al inserte"});
+       //res.json({ medicalRecords: "Llegamos al inserte"});
+    } catch (error) {
+        await transaction.rollback();
+        httpError(res, error);
+    }
+}
+
+async function updateMedicalRecord(req, res) {
+    const { id } = req.params;
+    const transaction = await sequelize.transaction();
+
+    try {
+        console.log("Updating medical record with ID:", id);
+        const updatedMedicalRecord = await updateMedicalRecordService(id, req.body);
+        console.log("Update medical record successfully");
+        res.status(200).json({ message: "Update medical record successfully", data: updatedMedicalRecord });
+    
     } catch (error) {
         await transaction.rollback();
         httpError(res, error);
@@ -142,9 +158,27 @@ async function generatePdf (req, res) {
       }
 }
 
+async function deleteMedicalRecord(req, res) {
+    const { id } = req.params;
+    const transaction = await sequelize.transaction();
+
+    const userId = storage.state.user.id;
+    try {
+        await deleteMedicalRecordService(id, userId);
+        await transaction.commit();
+        res.status(200).json({ id });
+    } catch (error) {
+
+        await transaction.rollback();
+        httpError(res, error);
+    }
+}
+
 module.exports= { 
     medicalRecordNew,
     getListAllMedicalRecord,
     createMedicalRecord,
+    updateMedicalRecord,
+    deleteMedicalRecord,
     generatePdf
 }
