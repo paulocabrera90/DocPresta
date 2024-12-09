@@ -75,5 +75,5 @@ block content
                                     | Concentración: #{item.quantityId}#{item.magnitude}, Cantidades/Unidades: #{item.quantityMedList}, Forma Farmacéutica: #{item.pharmaTypeId}, Familia Farmacéutica: #{item.familyMedicineName}, Nombre Comercial: #{item.comercialName}
                                     button.remove-item(data-index=index) Eliminar    
 
-            button(id='btnFormNewMedicine' type="submit") #{medicine ? 'Actualizar' : 'Crear'}
+            button(id='btnFormNewMedicine' type="submit" class="btn btn-success") #{medicine ? 'Actualizar' : 'Crear'}
             button.btn.btn-secondary.ml-2(type="button" onclick="window.history.back();") Cancelar

@@ -150,9 +150,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const items = document.querySelectorAll('#concentrationList li');
         return Array.from(items).some(item => item.textContent.includes(content));
     }
-    
-    //_______________________________________________________________________________-
-    //_______________________________________________________________________________-
 
     const form = document.getElementById('form-medicamento');
     if (form) {

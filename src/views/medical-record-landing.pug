@@ -37,12 +37,22 @@ block content
                             p
                                 strong Enfermedad: 
                                 | #{record.Sicknesses.name}
-                            p
-                                strong Beneficio: 
-                                | #{record.Benefits.name}
-                            p
-                                strong Seccion: 
-                                | #{record.Benefits.Sections.name}
+                            each benefit in record.Benefits
+                                .benefit-medical-record
+                                    p
+                                        strong Prestación: 
+                                        | #{benefit.name}
+                                    p
+                                        strong Sección: 
+                                        | #{benefit.Sections.name}
+                            each medicine in record.Medicines
+                                .benefit-medical-record
+                                    p
+                                        strong Medicamento: 
+                                        | #{medicine.name} - #{medicine.code}
+                                        br
+                                        strong Forma: 
+                                        | #{medicine.PharmaForms.map(form => form.name).join(", ")}
                         .card-footer
                             a(href=`/api/medical-record/${record.id}` class="btn btn-secondary") Editar
 

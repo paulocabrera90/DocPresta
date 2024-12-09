@@ -176,10 +176,95 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    const form = document.getElementById('form-medical-record');
+    if (form) {
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            if (!validateMedications()) {
+                await showAlert(
+                    'Atención!',
+                     'Por favor elija una medicación del listado.',
+                     'warning'
+                )
+                return;
+            }
+            // if (!validateBenefits()) {
+            //     await showAlert(
+            //         'Atención!',
+            //          'Por favor elija una prestación del listado.',
+            //          'warning'
+            //     )
+            //     return;
+            // }
+            showSpinner(true);
+    
+            const formData = new FormData(form);
+           // const data = Object.fromEntries(formData.entries());
+            const data = {};
+            formData.forEach((value, key) => {
+                if (data.hasOwnProperty(key)) {
+                    if (!Array.isArray(data[key])) {
+                        data[key] = [data[key]];
+                    }
+                    data[key].push(value);
+                } else {
+                    data[key] = value;
+                }
+            });
+            const medicalRecordId = form.getAttribute("data-id");
+    
+            const isUpdate = medicalRecordId ? true : false;
+            const url = isUpdate ? `/api/medical-record/update/${medicineId}` : '/api/medical-record/create';
+            const method = isUpdate ? 'PATCH' : 'POST';
+    
+            try {
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+    
+                const result = await response.json();
+                if (!response.ok) {
+                    throw new Error('Algo salió mal en el servidor: ' + response.statusText);
+                }
+
+                await showAlert(
+                    isUpdate ? 'Actualizado' : 'Creado',
+                     isUpdate ? `Se actualizó correctamente la prescripción` : 'Se agregó correctamente la prescripción',
+                     'success'
+                )
+                showSpinner(false);
+                window.location.href = '/api/medical-record';
+            } catch (error) {
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: error.message,
+                    confirmButtonColor: '#d33',
+                });
+                showSpinner(false);
+            }
+        });
+    } else {
+        console.log("No se encontró el formulario.");
+    }
+
     var popup = document.querySelector('.popupPres');
     popup.addEventListener('click', function(event) {
         event.stopPropagation(); 
     });
+
+    function validateMedications() {
+        return document.querySelector('.medicines-list-container').hasChildNodes();
+    }validateBenefits
+
+    function validateBenefits() {
+        return document.querySelector('.benefits-list-container').hasChildNodes();
+    }
 
     function displayBenefits(benefits) {
         const benefitsListContainer = document.querySelector('.benefits-list-container-popup');
@@ -321,8 +406,6 @@ document.addEventListener('DOMContentLoaded', function() {
         table.appendChild(tbody);
         medicinesListContainer.appendChild(table);
     }
-    
-    
 });
 
 function closePopup() {    
@@ -350,22 +433,23 @@ function updateFields() {
         document.getElementById('enfermedad-nombre').value = selectedSickness.name;
         document.getElementById('enfermedad-code').value = selectedSickness.code;
         document.getElementById('diagnostico').value = selectedSickness.description; 
+        document.getElementById('tratamiento').value = selectedSickness.treatment
         document.getElementById('fecha_prescripcion').value = new Date().toISOString().split('T')[0];
         document.getElementById('vigencia').value = "Vigencia por defecto"; 
         
-        document.getElementById('enfermedad-nombre').disabled = true;
-        document.getElementById('enfermedad-code').disabled = true;
-        document.getElementById('diagnostico').disabled = true;
-        document.getElementById('fecha_prescripcion').disabled = true;
-        document.getElementById('paciente_obra_social').disabled = true;
-        document.getElementById('paciente_plan').disabled = true;
+        // document.getElementById('enfermedad-nombre').disabled = true;
+        // document.getElementById('enfermedad-code').disabled = true;
+        // document.getElementById('diagnostico').disabled = true;
+        // document.getElementById('fecha_prescripcion').disabled = true;
+        // document.getElementById('paciente_obra_social').disabled = true;
+        // document.getElementById('paciente_plan').disabled = true;
     } else {
-        document.getElementById('enfermedad-nombre').disabled = false;
-        document.getElementById('enfermedad-code').disabled = false;
-        document.getElementById('diagnostico').disabled = false;
-        document.getElementById('fecha_prescripcion').disabled = false;
-        document.getElementById('paciente_obra_social').disabled = true;
-        document.getElementById('paciente_plan').disabled = true;
+        // document.getElementById('enfermedad-nombre').disabled = false;
+        // document.getElementById('enfermedad-code').disabled = false;
+        // document.getElementById('diagnostico').disabled = false;
+        // document.getElementById('fecha_prescripcion').disabled = false;
+        // document.getElementById('paciente_obra_social').disabled = true;
+        // document.getElementById('paciente_plan').disabled = true;
     }
 }
 
@@ -382,10 +466,10 @@ function clearFieldsPrest() {
     document.getElementById('vigencia').value = '';
     document.getElementById('sicknessList').selectedIndex = 0; 
 
-    document.getElementById('enfermedad-nombre').disabled = false;
-    document.getElementById('enfermedad-code').disabled = false;
-    document.getElementById('diagnostico').disabled = false;
-    document.getElementById('fecha_prescripcion').disabled = false;
+    // document.getElementById('enfermedad-nombre').disabled = false;
+    // document.getElementById('enfermedad-code').disabled = false;
+    // document.getElementById('diagnostico').disabled = false;
+    // document.getElementById('fecha_prescripcion').disabled = false;
 }
 
 function agregarListadoPrest() {
@@ -414,6 +498,12 @@ function agregarListadoPrest() {
         deleteButton.onclick = function() {
             benefitDiv.remove();
         };
+
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'benefits';
+        input.value = benefit.id;
+        benefitDiv.appendChild(input);
 
         benefitDiv.appendChild(deleteButton);
         benefitsListContainer.appendChild(benefitDiv);
@@ -449,6 +539,12 @@ function agregarListadoMedicine() {
         deleteButton.onclick = function() {
             medicineDiv.remove();
         };
+
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'medications';
+        input.value = medicine.id;
+        medicineDiv.appendChild(input);
 
         medicineDiv.appendChild(deleteButton);
         medicinesListContainer.appendChild(medicineDiv);

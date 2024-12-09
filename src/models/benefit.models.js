@@ -19,6 +19,13 @@ const {
                 foreignKey: 'sectionId',
                 as: 'Benefit',
             });
+
+            Benefit.belongsToMany(
+                models.Prescription,
+                {
+                    through: 'Prescription_Benefit',
+                    as: 'Prescriptions',
+                });        
            
         }
     }

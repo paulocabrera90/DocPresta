@@ -138,7 +138,7 @@ async function updateMedicineService(id, medicineData) {
         });
 
         if (!updatedMedicine) {
-            throw new Error('Medicine not found');
+            throw new Error('Medicamento no encontrado.');
         }
 
         await updatedMedicine.setConcentratedMedicines([], { transaction });
