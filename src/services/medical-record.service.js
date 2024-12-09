@@ -1,4 +1,4 @@
-const { Prescription, PrescriptionBenefits, Medicine, Benefit, ConcentratedMedicine, QuantityMed, Section, Patient, PlanOS, SocialWork, User, PharmaForm, ComercialMedicine, FamilyMedicine, Person, Sickness, Profesional, Speciality, Profesion, sequelize } =  require('../models/index.models');
+const { Prescription, Medicine, Benefit, ConcentratedMedicine, QuantityMed, Section, Patient, PlanOS, SocialWork, User, PharmaForm, ComercialMedicine, FamilyMedicine, Person, Sickness, Profesional, Speciality, Profesion, sequelize } =  require('../models/index.models');
 const { getPatientByDniService } = require('./patient.service');
 
 async function getAllMedicalRecordsService(userId) {
@@ -172,29 +172,6 @@ async function getMedicalRecordByIdService(recordId, userId) {
                 {
                     model: Sickness,
                     as: 'Sicknesses'
-                },
-                {
-                    model: Profesional,
-                    as: 'Profesionals',
-                    where: { userId: userId },
-                    include: [
-                        {
-                            model: Speciality,
-                            as: 'Speciality',
-                            include: {
-                                model: Profesion,
-                                as: 'Profesion'
-                            }
-                        },
-                        {
-                            model: User,
-                            as: 'User',
-                            include: {
-                                model: Person,
-                                as: 'Person',
-                            }
-                        }
-                    ]
                 }
             ]
         });

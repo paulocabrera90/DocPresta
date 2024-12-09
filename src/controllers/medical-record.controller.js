@@ -3,7 +3,7 @@ const { httpError } = require('../helpers/handleError');
 const { where } = require('sequelize');
 const storage = require('../storage/session');
 const PDFDocument = require('pdfkit');
-const { getAllMedicalRecordsService, createMedicalRecordService, updateMedicalRecordService, deleteMedicalRecordService } = require('../services/medical-record.service');
+const { getAllMedicalRecordsService, createMedicalRecordService, updateMedicalRecordService, deleteMedicalRecordService, getMedicalRecordByIdService } = require('../services/medical-record.service');
 const { getListAllPatients } = require('./patient.controller');
 const { getListAllPatientsService } = require('../services/patient.service');
 const { getFindAllSections } = require('../services/benefit.service');
@@ -57,8 +57,44 @@ async function medicalRecordNew(req, res){
         // });
     } catch (error) {
         httpError(res, error);
-    }
+    }    
+}
+
+async function getMedicalRecordById (req, res) {
+    const { id } = req.params;
+    try {
+        const medicalRecord = await getMedicalRecordByIdService(id);
+        if (!medicalRecord) {
+            return res.status(404).json({ message: 'Prescripcion no encontrada.' });
+        }
+
+        const profesional = await Profesional.findOne({
+            where: {userId: storage.state.user.id},
+            include: [
+                { model: Speciality, as: 'Speciality' }
+            ]
+        })
+        const allPatient = await getListAllPatientsService();
     
+        const speciality = profesional.dataValues.Speciality.dataValues;
+        const profesion = await Profesion.findOne({ where: { id: speciality.profesionId } })
+
+        const sections = await getFindAllSections(); 
+        const sickness = await Sickness.findAll()
+    
+        res.render('medical-record-new', { 
+            medicalRecord,
+            person: storage.state.user.Person,
+            profesional: profesional.dataValues,
+            speciality,
+            profesion:profesion.dataValues,
+            patients:allPatient,
+            sections,
+            sickness
+        });
+    } catch (error) {
+        httpError(res, error);
+    }
 }
 
 async function getListAllMedicalRecord(req, res){
@@ -180,5 +216,6 @@ module.exports= {
     createMedicalRecord,
     updateMedicalRecord,
     deleteMedicalRecord,
-    generatePdf
+    generatePdf,
+    getMedicalRecordById
 }
