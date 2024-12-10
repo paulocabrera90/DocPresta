@@ -62,9 +62,9 @@ block content
                 .benefits-list-container(name="benefitsList" required id="benefitsList")
                   each benefit in medicalRecord.benefits
                     .benefit-item
-                      input(type="hidden" id="benefits" value= benefit.id)
-                      strong Prestación: #{benefit.name} (#{benefit.code}) - Sección: #{benefit.sectionName} (#{benefit.sectionCode})
-                      button(type="button" class="delete-benefit") Eliminar
+                      input(type="hidden" name="benefits" id="benefits" value= benefit.id)
+                      strong Prestación: #{benefit.name} - #{benefit.code}
+                      button(type="button" class="delete-benefit" onclick='this.parentNode.remove()') Eliminar
 
       // Detalles de la prescripción
       h2 Detalles de la Prescripción
@@ -109,8 +109,9 @@ block content
         .medicines-list-container(name="medicinesList" id="medicinesList" required)
            each medicine in medicalRecord.medicines
             .medicine-item
+              input(type="hidden" name="medications" id="medications" value= medicine.id)
               strong Medicamento: #{medicine.name} (Código: #{medicine.code})
-              button(type="button" class="delete-medicine") Eliminar
+              button(type="button" class="delete-medicine" onclick='this.parentNode.remove()') Eliminar
               
       button(type="submit" id='btnFormNewMedicalRecord' class="btn btn-success") #{medicalRecord ? 'Actualizar' : 'Crear'}
       button.btn.btn-secondary.ml-2(type="button" onclick="window.history.back();") Cancelar

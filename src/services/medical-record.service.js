@@ -291,7 +291,10 @@ async function updateMedicalRecordService(prescriptionId, medicalRecordData) {
             patientId: patient.id,
             prescriptionDate: new Date(prescriptionData['fecha_prescripcion']),
             benefitDescription: prescriptionData['benefitDescription']
-        }, { transaction });
+        }, { 
+            where: { prescriptionId },
+            transaction 
+        });
 
         const existingBenefits = await prescription.getBenefits({ transaction });
         await prescription.removeBenefits(existingBenefits, { transaction });

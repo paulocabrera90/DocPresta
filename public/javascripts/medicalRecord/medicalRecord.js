@@ -189,18 +189,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 )
                 return;
             }
-            // if (!validateBenefits()) {
-            //     await showAlert(
-            //         'Atención!',
-            //          'Por favor elija una prestación del listado.',
-            //          'warning'
-            //     )
-            //     return;
-            // }
             showSpinner(true);
     
             const formData = new FormData(form);
-           // const data = Object.fromEntries(formData.entries());
             const data = {};
             formData.forEach((value, key) => {
                 if (data.hasOwnProperty(key)) {
@@ -215,7 +206,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const medicalRecordId = form.getAttribute("data-id");
     
             const isUpdate = medicalRecordId ? true : false;
-            const url = isUpdate ? `/api/medical-record/update/${medicineId}` : '/api/medical-record/create';
+            const url = isUpdate ? `/api/medical-record/update/${medicalRecordId}` : '/api/medical-record/create';
             const method = isUpdate ? 'PATCH' : 'POST';
     
             try {
@@ -260,10 +251,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function validateMedications() {
         return document.querySelector('.medicines-list-container').hasChildNodes();
-    }validateBenefits
-
-    function validateBenefits() {
-        return document.querySelector('.benefits-list-container').hasChildNodes();
     }
 
     function displayBenefits(benefits) {
@@ -464,19 +451,19 @@ function agregarListadoPrest() {
     const selectedBenefits = Array.from(selectedCheckboxes).map(checkbox => {
         return {
             id: checkbox.value,
-            name: checkbox.closest('tr').querySelector('td:nth-child(2)').textContent, // Nombre es el segundo td
-            code: checkbox.closest('tr').querySelector('td:nth-child(3)').textContent // Código es el tercer td
+            name: checkbox.closest('tr').querySelector('td:nth-child(2)').textContent,
+            code: checkbox.closest('tr').querySelector('td:nth-child(3)').textContent 
         };
     });
 
     const benefitsListContainer = document.querySelector('.benefits-list-container');
 
-    benefitsListContainer.innerHTML = '';
+   // benefitsListContainer.innerHTML = '';
 
     selectedBenefits.forEach(benefit => {
         const benefitDiv = document.createElement('div');
         benefitDiv.className = 'benefit-item';
-        benefitDiv.innerHTML = `<strong>Prestación: ${benefit.name} - Sección: ${benefit.sectionName}  ${benefit.code})</strong>` ;
+        benefitDiv.innerHTML = `<strong>Prestación: ${benefit.name} - ${benefit.code}</strong>` ;
 
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Eliminar';
@@ -505,20 +492,20 @@ function agregarListadoMedicine() {
     const selectedMedicines = Array.from(selectedCheckboxes).map(checkbox => {
         return {
             id: checkbox.value,
-            name: checkbox.closest('tr').querySelector('td:nth-child(3)').textContent,
-            code: checkbox.closest('tr').querySelector('td:nth-child(2)').textContent 
+            name: checkbox.closest('tr').querySelector('td:nth-child(2)').textContent,
+            code: checkbox.closest('tr').querySelector('td:nth-child(3)').textContent 
         };
     });
 
     const medicinesListContainer = document.querySelector('.medicines-list-container');
 
-    medicinesListContainer.innerHTML = '';
+   // medicinesListContainer.innerHTML = '';
 
     selectedMedicines.forEach(medicine => {
         const medicineDiv = document.createElement('div');
         medicineDiv.className = 'medicine-item';
         medicineDiv.innerHTML = `<strong> Medicamento: ${medicine.name} (Código: ${medicine.code})</strong>`;
-        
+
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Eliminar';
         deleteButton.className = 'delete-medicine';
