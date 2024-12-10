@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
                 .catch(error => {
                     console.error('Error en la solicitud:', error);
-                    showAlert('Acceso Denegado', error.message, 'error');
+                    showAlert('Error', error.message, 'error');
                 });
         });
     } else {
@@ -436,21 +436,7 @@ function updateFields() {
         document.getElementById('tratamiento').value = selectedSickness.treatment
         document.getElementById('fecha_prescripcion').value = new Date().toISOString().split('T')[0];
         document.getElementById('vigencia').value = "Vigencia por defecto"; 
-        
-        // document.getElementById('enfermedad-nombre').disabled = true;
-        // document.getElementById('enfermedad-code').disabled = true;
-        // document.getElementById('diagnostico').disabled = true;
-        // document.getElementById('fecha_prescripcion').disabled = true;
-        // document.getElementById('paciente_obra_social').disabled = true;
-        // document.getElementById('paciente_plan').disabled = true;
-    } else {
-        // document.getElementById('enfermedad-nombre').disabled = false;
-        // document.getElementById('enfermedad-code').disabled = false;
-        // document.getElementById('diagnostico').disabled = false;
-        // document.getElementById('fecha_prescripcion').disabled = false;
-        // document.getElementById('paciente_obra_social').disabled = true;
-        // document.getElementById('paciente_plan').disabled = true;
-    }
+    } 
 }
 
 function editarObraSocial(){
@@ -490,8 +476,8 @@ function agregarListadoPrest() {
     selectedBenefits.forEach(benefit => {
         const benefitDiv = document.createElement('div');
         benefitDiv.className = 'benefit-item';
-        benefitDiv.innerHTML = `<strong>${benefit.name} (Código: ${benefit.code})</strong>` ;
-        
+        benefitDiv.innerHTML = `<strong>Prestación: ${benefit.name} - Sección: ${benefit.sectionName}  ${benefit.code})</strong>` ;
+
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Eliminar';
         deleteButton.className = 'delete-benefit';
@@ -531,8 +517,8 @@ function agregarListadoMedicine() {
     selectedMedicines.forEach(medicine => {
         const medicineDiv = document.createElement('div');
         medicineDiv.className = 'medicine-item';
-        medicineDiv.innerHTML = `<strong>${medicine.name} (Código: ${medicine.code})</strong>`;
-
+        medicineDiv.innerHTML = `<strong> Medicamento: ${medicine.name} (Código: ${medicine.code})</strong>`;
+        
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Eliminar';
         deleteButton.className = 'delete-medicine';

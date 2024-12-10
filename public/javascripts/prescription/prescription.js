@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function() {
   const patientsData = JSON.parse(document.getElementById('patientsData').value);
 
     patientsData.forEach(patient => {
-      const option = new Option(`${patient.User.Person.firstName} ${patient.User.Person.lastName} - ${patient.User.Person.numberDocument}`);
+      const option = new Option(`${patient.firstName} ${patient.lastName} - ${patient.numberDocument}`);
       dataList.add(option);
     });
         
@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
       dataList.addEventListener("change", function() {
         const selectedValue = this.value;
-        const patient = patientsData.find(p => `${p.User.Person.firstName} ${p.User.Person.lastName} - ${p.User.Person.numberDocument}` === selectedValue);
+        const patient = patientsData.find(p => `${p.firstName} ${p.lastName} - ${p.numberDocument}` === selectedValue);
         if (patient) {
             patientGlobal= patient
             showPopup(patient);
@@ -37,15 +37,14 @@ document.addEventListener("DOMContentLoaded", function() {
   
   function showPopup(data) {
     let patientInfoHtml = `
-      <p>Nombre: ${data.User.Person.firstName} ${data.User.Person.lastName}</p>
-      <p>Email: ${data.User.email}</p>
-      <p>DNI: ${data.User.Person.numberDocument}</p>
-      <p>Fecha de nacimiento: ${data.User.Person.birthDate}</p>
-      <p>Tipo de documento: ${data.User.Person.typeDocument}</p>
-      <p>Sexo: ${data.User.Person.sex}</p>
-      <p>Rol: ${data.User.rol}</p>
-      <p>Obra Social: ${data.PlanOS.SocialWork.name}</p>
-      <p>Plan de Obra Social: ${data.PlanOS.name}</p>
+      <p>Nombre: ${data.firstName} ${data.lastName}</p>
+      <p>Email: ${data.email}</p>
+      <p>Tipo de documento: ${data.typeDocument}</p>
+      <p>DNI: ${data.numberDocument}</p>
+      <p>Fecha de nacimiento: ${data.birthDate}</p>      
+      <p>Sexo: ${data.sex}</p>
+      <p>Obra Social: ${data.socialWorkName}</p>
+      <p>Plan de Obra Social: ${data.planOSName}</p>
     `;
     document.getElementById('patientInfo').innerHTML = patientInfoHtml; 
     document.querySelector('.overlay').style.display = 'block';

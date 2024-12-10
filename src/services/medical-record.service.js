@@ -162,6 +162,7 @@ async function getMedicalRecordByIdService(recordId, userId) {
                         {
                             model: User,
                             as: 'User',
+                            attributes: { exclude: ['hashPassword'] }, 
                             include: {
                                 model: Person,
                                 as: 'Person',
@@ -201,10 +202,10 @@ async function createMedicalRecordService(medicalRecordData){
 
         if(!sickness){
             sickness = await Sickness.create({
-                name: prescriptionData['enfermedad-code'], 
+                name: prescriptionData['enfermedad-nombre'], 
                 code: prescriptionData['enfermedad-code'],
-                description: prescriptionData['enfermedad-code'],
-                treatment: prescriptionData['enfermedad-code'],
+                description: prescriptionData['diagnostico'],
+                treatment: prescriptionData['tratamiento'],
                 creationDate: new Date(), 
                 ModificationDate: new Date()
             }, { transaction });

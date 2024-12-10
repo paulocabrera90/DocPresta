@@ -8,17 +8,11 @@ const { getListAllPatients } = require('./patient.controller');
 const { getListAllPatientsService } = require('../services/patient.service');
 const { getFindAllSections } = require('../services/benefit.service');
 const { createMedicineService } = require('../services/medicine.service');
+const { mapPatientData } = require('../models/mappers/patient.mapper');
+const { mapMedicalRecord } = require('../models/mappers/medicalRecord.mapper');
 
 async function medicalRecordNew(req, res){   
     try {
-        // const medicalRecord  = await Prescription.findAll({
-        //     include: [
-        //         { model: Benefit, as: 'Benefits' },
-        //         { model: Patient, as: 'Patients' },
-        //         { model: Sickness, as: 'Sicknesses' },
-        //         { model: Profesional, as: 'Profesionals' }
-        //     ]
-        // })
 
         const profesional = await Profesional.findOne({
             where: {userId: storage.state.user.id},
@@ -83,15 +77,28 @@ async function getMedicalRecordById (req, res) {
         const sickness = await Sickness.findAll()
     
         res.render('medical-record-new', { 
-            medicalRecord,
+            medicalRecord: mapMedicalRecord(medicalRecord),
             person: storage.state.user.Person,
             profesional: profesional.dataValues,
             speciality,
             profesion:profesion.dataValues,
-            patients:allPatient,
+            patients: allPatient.map(mapPatientData),
             sections,
             sickness
         });
+
+
+        // res.json( { 
+        //     medicalRecord: mapMedicalRecord(medicalRecord),
+        //     person: storage.state.user.Person,
+        //     profesional: profesional.dataValues,
+        //     speciality,
+        //     profesion:profesion.dataValues,
+        //     patients: allPatient.map(mapPatientData),
+        //     sections,
+        //     sickness
+        // });
+
     } catch (error) {
         httpError(res, error);
     }
@@ -142,8 +149,8 @@ async function updateMedicalRecord(req, res) {
     }
 }
 
-async function generatePdf (req, res) {
-   try {
+async function generatePdf(req, res) {
+    try {
 
         const userId = storage.state.user.id;
         const { medicalRecords, profesional, speciality, profesion } = await getAllMedicalRecordsService(userId);
@@ -154,45 +161,61 @@ async function generatePdf (req, res) {
         doc.on('end', () => {
             let pdfData = Buffer.concat(buffers);
             res.writeHead(200, {
-              'Content-Length': Buffer.byteLength(pdfData),
-              'Content-Type': 'application/pdf',
-              'Content-disposition': 'attachment;filename=registros.pdf',
+                'Content-Length': Buffer.byteLength(pdfData),
+                'Content-Type': 'application/pdf',
+                'Content-disposition': 'attachment;filename=registros_medicos.pdf',
             })
             .end(pdfData);
         });
-        
-         // Configuración inicial del PDF
+
+        // Configuración inicial del PDF
         doc.font('Helvetica')
-         .fontSize(12)
-         .text('Registros Médicos', { align: 'center' });
+           .fontSize(12)
+           .text('Registros Médicos', { align: 'center' });
         doc.moveDown();
 
         // Iterar sobre cada registro médico
         medicalRecords.forEach(record => {
-            console.log("RECORD", record)
-            doc.fontSize(10).text(`NRO de Receta: ${record.id}`, { underline: true });
-            doc.text(`Fecha de Prescripción: ${record.prescriptionDate}`);
-            doc.text(`Paciente: ${record.Patients.User.Person.firstName} ${record.Patients.User.Person.lastName}`);
-            doc.text(`Enfermedad: ${record.Sicknesses.name}`);
-            doc.text(`Profesional: ${record.Profesionals.User.Person.firstName} ${record.Profesionals.User.Person.lastName}`);
-            doc.moveDown();
+            doc.fontSize(10)
+               .text(`NRO de Receta: ${record.id}`, { underline: true })
+               .text(`Fecha de Prescripción: ${new Date(record.prescriptionDate).toLocaleDateString()}`)
+               .text(`Paciente: ${record.Patients.User.Person.firstName} ${record.Patients.User.Person.lastName}`)
+               .text(`Enfermedad: ${record.Sicknesses.name}`)
+               .text(`Profesional: ${record.Profesionals.User.Person.firstName} ${record.Profesionals.User.Person.lastName}`)
+               .moveDown();
 
             // Beneficios
-            doc.text(`Beneficio: ${record.Benefits.name}`);
-            doc.text(`Código de Beneficio: ${record.Benefits.code}`);
-            doc.text(`Descripción: ${record.Benefits.description}`);
-            doc.moveDown(2);
+            if (record.Benefits && record.Benefits.length > 0) {
+                record.Benefits.forEach(benefit => {
+                    doc.text(`Beneficio: ${benefit.name}`)
+                       .text(`Código de Beneficio: ${benefit.code}`)
+                       .text(`Descripción: ${benefit.description}`)
+                       .moveDown();
+                });
+            }
+
+            // Medicamentos
+            if (record.Medicines && record.Medicines.length > 0) {
+                record.Medicines.forEach(medicine => {
+                    doc.text(`Medicamento: ${medicine.name} - ${medicine.code}`)
+                       .text(`Forma: ${medicine.PharmaForms.map(form => form.name).join(", ")}`)
+                       .moveDown();
+                });
+            }
 
             // Usar líneas divisorias para mejorar la legibilidad
             doc.strokeColor("#aaaaaa").lineWidth(0.5).moveTo(80, doc.y).lineTo(520, doc.y).stroke();
             doc.moveDown();
         });
+
         doc.end();
         console.log('PDF generado exitosamente.');
-      } catch (error) {
-        httpError(res, error);
-      }
+    } catch (error) {
+        console.error('Error al generar el PDF:', error);
+        res.status(500).send('Error al generar el PDF: ', error);
+    }
 }
+
 
 async function deleteMedicalRecord(req, res) {
     const { id } = req.params;
