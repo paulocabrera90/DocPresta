@@ -90,6 +90,56 @@ async function getProfesionalById(req, res){
     }
 }
 
+async function getProfesionalByUserId(req, res){
+    const { id } = req.params;
+    try {
+        const profesional = await Profesional.findOne({
+            where: { userId: id },
+            include: [
+                {
+                    model: Speciality,
+                    as: 'Speciality',
+                    include: {
+                        model: Profesion,
+                        as: 'Profesion'
+                    }
+                },
+                {
+                    model: User,
+                    as: 'User',
+                    include: {
+                        model: Person,
+                        as: 'Person',
+                    }
+                }
+            ]
+        });
+
+        if (!profesional || !profesional.User || !profesional.User.Person) {
+            return res.status(404).json({ message: 'Profesional not found' });
+        }
+
+        if (!profesional) {
+            return res.render('profesional-new', { 
+                profesional: '',
+                profesions: await Profesion.findAll(), 
+                specialities: await Speciality.findAll()
+            });
+        }
+
+        const mapProfesional = mapProfesionalData(profesional);
+
+        res.render('profesional-new', { 
+            profesional: mapProfesional, 
+            profesions: await Profesion.findAll(), 
+            specialities: await Speciality.findAll() 
+        });
+
+    } catch(error) {
+        httpError(res, error);
+    }
+}
+
 async function newProfesional(req, res) {
     try {
         return res.render('profesional-new', { 
@@ -301,5 +351,6 @@ module.exports= {
     newProfesional,
     deleteProfesional,
     getProfesionalById,
-    updateProfesional
+    updateProfesional,
+    getProfesionalByUserId
 }

@@ -405,11 +405,11 @@ async function updateMedicalRecordService(prescriptionId, medicalRecordData) {
     }
 }
 
-async function deleteMedicalRecordService(recordId, userId) {
+async function deleteMedicalRecordService(recordId) {
     const transaction = await sequelize.transaction();
     try {
         const prescription = await Prescription.findOne({
-            where: { id: recordId, profesionalId: userId },
+            where: { id: recordId },
             transaction: transaction
         });
 
@@ -417,16 +417,12 @@ async function deleteMedicalRecordService(recordId, userId) {
             throw new Error('Registro médico no encontrado o no tiene permiso para eliminarlo.');
         }
 
-        await PrescriptionBenefit.destroy({
-            where: { prescriptionId: recordId },
-            transaction: transaction
-        });
+        const existingBenefits = await prescription.getBenefits({ transaction });
+        await prescription.removeBenefits(existingBenefits, { transaction });
 
-        await PrescriptionMedicine.destroy({
-            where: { prescriptionId: recordId },
-            transaction: transaction
-        });
-
+        const existingMedicines = await prescription.getMedicines({ transaction });
+        await prescription.removeMedicines(existingMedicines, { transaction });
+        
         await Prescription.destroy({
             where: { id: recordId },
             transaction: transaction

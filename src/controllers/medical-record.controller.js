@@ -38,17 +38,6 @@ async function medicalRecordNew(req, res){
             sections,
             sickness
         });
-
-        // res.json( { 
-        //     medicalRecord,
-        //     person: storage.state.user.Person,
-        //     profesional: profesional.dataValues,
-        //     speciality,
-        //     profesion:profesion.dataValues,
-        //     patients:allPatient,
-        //     sections,
-        //     sickness
-        // });
     } catch (error) {
         httpError(res, error);
     }    
@@ -128,8 +117,6 @@ async function getListAllMedicalRecord(req, res){
         const { medicalRecords, profesional, speciality, profesion } = await getAllMedicalRecordsService(userId);
             
         res.render('medical-record-landing', { medicalRecords, speciality, profesion, profesional });
-          
-        //res.json({ medicalRecords, speciality, profesion, profesional });
        
     } catch (error) {
         httpError(res, error);
@@ -143,8 +130,6 @@ async function createMedicalRecord(req, res) {
         const newMedicine = await createMedicalRecordService(req.body);
         console.log("Create medicine successfully: ", req.body);
         res.status(200).json({ message: "Create medicine successfully", data: newMedicine });
-
-       //res.json({ medicalRecords: "Llegamos al inserte"});
     } catch (error) {
         await transaction.rollback();
         httpError(res, error);
@@ -239,9 +224,8 @@ async function deleteMedicalRecord(req, res) {
     const { id } = req.params;
     const transaction = await sequelize.transaction();
 
-    const userId = storage.state.user.id;
     try {
-        await deleteMedicalRecordService(id, userId);
+        await deleteMedicalRecordService(id);
         await transaction.commit();
         res.status(200).json({ id });
     } catch (error) {

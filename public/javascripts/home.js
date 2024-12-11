@@ -28,28 +28,34 @@ document.addEventListener("DOMContentLoaded", function () {
         var welcomeText = document.createElement('h4');
         welcomeText.textContent = `Bienvenido: ${userData.fullName}`;
         sidenav.appendChild(welcomeText);
-
+        var userId = userData.id;
         var linksList = [];
 
-        if (userData.rol === 'ADMIN') {
-            linksList = [
-                { href: "/api/home", id: "lista-prescripcion-sidenav", text: "Prescripciones" },
-                { href: "/api/benefit", id: "prestaciones-sidenav", text: "Prestaciones" },
-                { href: "/api/medicine", id: "medicamentos-sidenav", text: "Medicamentos" },
-                { href: "/api/profesional", id: "profesionales-sidenav", text: "Profesionales" },
-                { href: "/api/patient", id: "pacientes-sidenav", text: "Pacientes" }
-            ];
-        } else if (userData.rol === 'PACIENTE') {
-            linksList = [
-                { href: "/api/home", id: "lista-prescripcion-sidenav", text: "Prescripciones" },
-                { href: "/api/perfil", id: "profesionales-sidenav", text: "Perfil" }
-            ];
-        } else if (userData.rol === 'PROFESIONAL') {
-            linksList = [
-                { href: "/api/home", id: "lista-prescripcion-sidenav", text: "Prescripciones" },  
-                { href: "/api/perfil", id: "profesionales-sidenav", text: "Perfil" }
-            ];
+        console.log("User ID: ", userId);
+        try {
+            if (userData.rol === 'ADMIN') {
+                linksList = [
+                    { href: "/api/home", id: "lista-prescripcion-sidenav", text: "Prescripciones" },
+                    { href: "/api/benefit", id: "prestaciones-sidenav", text: "Prestaciones" },
+                    { href: "/api/medicine", id: "medicamentos-sidenav", text: "Medicamentos" },
+                    { href: "/api/profesional", id: "profesionales-sidenav", text: "Profesionales" },
+                    { href: "/api/patient", id: "pacientes-sidenav", text: "Pacientes" }
+                ];
+            } else if (userData.rol === 'PACIENTE') {
+                linksList = [
+                    { href: "/api/home", id: "lista-prescripcion-sidenav", text: "Prescripciones" },
+                    { href: `/api/patient/perfil/${userId}`, id: "pacientes-sidenav", text: "Perfil" }
+                ];
+            } else if (userData.rol === 'PROFESIONAL') {
+                linksList = [
+                    { href: "/api/home", id: "lista-prescripcion-sidenav", text: "Prescripciones" },  
+                    { href: `/api/profesional/perfil/${userId}`, id: "profesionales-sidenav", text: "Perfil" }
+                ];
+            }
+        } catch (error) {
+            console.error('userData not available');
         }
+        
 
         linksList.forEach(function (link) {
             var a = document.createElement('a');
@@ -157,9 +163,11 @@ if (window.location.pathname == '/api/patient') {
 
 function getModuleName(moduleCode) {
     const moduleNames = {
-        'benefit': 'Prescripción',
+        'benefit': 'Prestación',
+        'medical-record': 'Prescripción',
         'medicine': 'Medicamento',
         'patient': 'Paciente',
+        'profesional': 'Profesional',
         // Agrega más mapeos según necesites
     };
 
