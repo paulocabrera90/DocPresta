@@ -46,10 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
             ];
         } else if (userData.rol === 'PROFESIONAL') {
             linksList = [
-                { href: "/api/home", id: "lista-prescripcion-sidenav", text: "Prescripciones" },                
-                { href: "/api/benefit", id: "prestaciones-sidenav", text: "Prestaciones" },
-                { href: "/api/patient", id: "pacientes-sidenav", 
-                    text: "Pacientes" },
+                { href: "/api/home", id: "lista-prescripcion-sidenav", text: "Prescripciones" },  
                 { href: "/api/perfil", id: "profesionales-sidenav", text: "Perfil" }
             ];
         }

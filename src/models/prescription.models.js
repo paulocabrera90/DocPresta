@@ -57,7 +57,11 @@ const {
         },
         benefitDescription: {
             type: DataTypes.STRING
-        }
+        },
+        observation: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
     }, {
     sequelize,
     modelName: 'Prescription',

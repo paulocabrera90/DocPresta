@@ -2,17 +2,12 @@ document.addEventListener("DOMContentLoaded", function() {
   const inputField = document.getElementById('prestaciones-dni');
   const dataList = document.getElementById('patientList');
   const patientsData = JSON.parse(document.getElementById('patientsData').value);
-
-    patientsData.forEach(patient => {
-      const option = new Option(`${patient.User.Person.firstName} ${patient.User.Person.lastName} - ${patient.User.Person.numberDocument}`);
-      dataList.add(option);
-    });
         
     let patientGlobal = {};
     
       dataList.addEventListener("change", function() {
         const selectedValue = this.value;
-        const patient = patientsData.find(p => `${p.User.Person.firstName} ${p.User.Person.lastName} - ${p.User.Person.numberDocument}` === selectedValue);
+        const patient = patientsData.find(p => `${p.id}` === selectedValue);
         if (patient) {
             patientGlobal= patient
             showPopup(patient);
@@ -37,15 +32,14 @@ document.addEventListener("DOMContentLoaded", function() {
   
   function showPopup(data) {
     let patientInfoHtml = `
-      <p>Nombre: ${data.User.Person.firstName} ${data.User.Person.lastName}</p>
-      <p>Email: ${data.User.email}</p>
-      <p>DNI: ${data.User.Person.numberDocument}</p>
-      <p>Fecha de nacimiento: ${data.User.Person.birthDate}</p>
-      <p>Tipo de documento: ${data.User.Person.typeDocument}</p>
-      <p>Sexo: ${data.User.Person.sex}</p>
-      <p>Rol: ${data.User.rol}</p>
-      <p>Obra Social: ${data.PlanOS.SocialWork.name}</p>
-      <p>Plan de Obra Social: ${data.PlanOS.name}</p>
+      <p>Nombre: ${data.firstName} ${data.lastName}</p>
+      <p>Email: ${data.email}</p>
+      <p>Tipo de documento: ${data.typeDocument}</p>
+      <p>DNI: ${data.numberDocument}</p>
+      <p>Fecha de nacimiento: ${formatDate(data.birthDate)}</p>      
+      <p>Sexo: ${data.sex}</p>
+      <p>Obra Social: ${data.socialWorkName}</p>
+      <p>Plan de Obra Social: ${data.planOSName}</p>
     `;
     document.getElementById('patientInfo').innerHTML = patientInfoHtml; 
     document.querySelector('.overlay').style.display = 'block';
@@ -66,28 +60,31 @@ document.addEventListener("DOMContentLoaded", function() {
 }
   
   function acceptPopup(patientGlobal) {
-    const birthDate = formatDate(patientGlobal.birthDate);
 
-    document.getElementById('paciente_nombre').value = patientGlobal.User.Person.firstName;
-    document.getElementById('paciente_apellido').value = patientGlobal.User.Person.lastName;
-    document.getElementById('paciente_fecha_nacimiento').value = new Date(patientGlobal.User.Person.birthDate).toISOString().split('T')[0];
-    document.getElementById('paciente_obra_social').value = patientGlobal.PlanOS.SocialWork.name;
-    document.getElementById('paciente_plan').value = patientGlobal.PlanOS.name;
-    document.getElementById('paciente_sexo').value = patientGlobal.User.Person.sex.toUpperCase() === 'FEMENINO' ? 'FEMALE' : patientGlobal.User.Person.sex.toUpperCase() === 'MASCULINO' ? 'MALE' : 'OTHER';
+    const birthDateFormatted = formatDate(patientGlobal.birthDate);
+
+    document.getElementById('patientId').value = patientGlobal.id;
+    document.getElementById('paciente_nombre').value = patientGlobal.firstName;
+    document.getElementById('paciente_apellido').value = patientGlobal.lastName;
+    document.getElementById('paciente_fecha_nacimiento').value = birthDateFormatted;
+    document.getElementById('paciente_obra_social').value = patientGlobal.socialWorkName;
+    document.getElementById('paciente_plan').value = patientGlobal.planOSName;
+    document.getElementById('paciente_sexo').value = patientGlobal.sex.toUpperCase() === 'FEMENINO' ? 'FEMALE' : patientGlobal.sex.toUpperCase() === 'MASCULINO' ? 'MALE' : 'OTHER';
+    
 
     hidePopup();
 }
 
-function closePopup() {
-  var overlay = document.getElementById('overlayPrestacion');
-  var popup = document.querySelector('.popupPres');
-  if (overlay && popup) {
-      overlay.style.display = 'none';
-      popup.style.display = 'none';
-      resetPatientList();
-  } else {
-      console.log("No se pudo cerrar el popup porque los elementos no fueron encontrados.");
-  }
+function closePopupPersona() {
+    document.getElementById('patientList').value = "";
+    document.getElementById('patientId').value = "";
+    document.getElementById('paciente_nombre').value = "";
+    document.getElementById('paciente_apellido').value = "";
+    document.getElementById('paciente_fecha_nacimiento').value = "";
+    document.getElementById('paciente_obra_social').value = "";
+    document.getElementById('paciente_plan').value = "";
+    document.getElementById('paciente_sexo').value  = "";
+  hidePopup();
 }
 
 function resetPatientList() {

@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
                 .catch(error => {
                     console.error('Error en la solicitud:', error);
-                    showAlert('Acceso Denegado', error.message, 'error');
+                    showAlert('Error', error.message, 'error');
                 });
         });
     } else {
@@ -44,6 +44,25 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log("No se encontró el elemento 'button-searchPrestaci'.");
     }
 
+    const buttonElegirPrestaci = document.getElementById('button-elegirPrestaci');
+    if(buttonElegirPrestaci){
+        buttonElegirPrestaci.addEventListener('click', function(event) {
+            showSpinner(true);
+    
+            setTimeout(() => {
+                var overlay = document.getElementById('overlayMedicalRecord');
+                var popup = document.querySelector('.popupMedicalRecord');
+                if (overlay && popup) {
+                    overlay.style.display = 'flex';
+                    popup.style.display = 'flex';
+                    attachElegirPrestRequest();
+                }
+            }, 1000);
+        });
+    }else{
+        console.log("No se encontró el elemento 'button-elegirPrestaci'.");
+    }
+
     const buttonSearchMedicine = document.getElementById('button-searchListMedicine');
     if(buttonSearchMedicine){
         buttonSearchMedicine.addEventListener('click', function(event) {
@@ -60,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 1000);
         });
     }else{
-        console.log("No se encontró el elemento 'button-searchPrestaci'.");
+        console.log("No se encontró el elemento 'button-searchListMedicine'.");
     }
     
     const clearListBenefitButton = document.getElementById('button-clearListBenefit');
@@ -176,6 +195,51 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    async function attachElegirPrestRequest() {
+        const patientId = document.getElementById('patientId');
+        const popupListMedicalRecord = document.getElementById('popupMedicalRecord');
+        showSpinner(false);
+        if (popupListMedicalRecord) {
+           
+            const queryParam = encodeURIComponent(patientId.value.trim());
+            const url = `/api/medical-record/patient/${queryParam}?format=json`; 
+            const method = 'GET';
+
+                console.log('Fetching  Medical Record:', url);
+        
+                fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.medicalRecords) {
+                        console.log(result.medicalRecords);
+                        displayMedicalRecords(result.medicalRecords);
+                        showSpinner(false);
+                    } else {
+                        throw new Error('No se recibieron datos');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching medical Records:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: error.message,
+                        confirmButtonColor: '#d33',
+                    });
+                    showSpinner(false);
+                });
+                        
+        } else {
+            showSpinner(false);
+            console.log("No se encontró el formulario.");
+        }
+    }    
+
     const form = document.getElementById('form-medical-record');
     if (form) {
         form.addEventListener('submit', async function(event) {
@@ -189,18 +253,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 )
                 return;
             }
-            // if (!validateBenefits()) {
-            //     await showAlert(
-            //         'Atención!',
-            //          'Por favor elija una prestación del listado.',
-            //          'warning'
-            //     )
-            //     return;
-            // }
             showSpinner(true);
     
             const formData = new FormData(form);
-           // const data = Object.fromEntries(formData.entries());
             const data = {};
             formData.forEach((value, key) => {
                 if (data.hasOwnProperty(key)) {
@@ -215,7 +270,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const medicalRecordId = form.getAttribute("data-id");
     
             const isUpdate = medicalRecordId ? true : false;
-            const url = isUpdate ? `/api/medical-record/update/${medicineId}` : '/api/medical-record/create';
+            const url = isUpdate ? `/api/medical-record/update/${medicalRecordId}` : '/api/medical-record/create';
             const method = isUpdate ? 'PATCH' : 'POST';
     
             try {
@@ -260,10 +315,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function validateMedications() {
         return document.querySelector('.medicines-list-container').hasChildNodes();
-    }validateBenefits
-
-    function validateBenefits() {
-        return document.querySelector('.benefits-list-container').hasChildNodes();
     }
 
     function displayBenefits(benefits) {
@@ -406,6 +457,79 @@ document.addEventListener('DOMContentLoaded', function() {
         table.appendChild(tbody);
         medicinesListContainer.appendChild(table);
     }
+    
+    function displayMedicalRecords(medicalRecords) {
+        const medicalrecordListContainer = document.querySelector('.medicalrecord-list-container-popup');
+        medicalrecordListContainer.innerHTML = '';
+    
+        // Crear la tabla y sus cabeceras
+        const table = document.createElement('table');
+        table.className = 'table table-striped'; 
+        const thead = document.createElement('thead');
+        const trHead = document.createElement('tr');
+        ['Seleccionar', 'Fecha de Prescripción', 'Vigencia (días)', 'Fecha de Modificación', 'Enfermedad (Código - Descripción)', 'Profesional (Nombre Apellido)', 'Observación'].forEach(text => {
+            const th = document.createElement('th');
+            th.textContent = text;
+            trHead.appendChild(th);
+        });
+        thead.appendChild(trHead);
+        table.appendChild(thead);
+    
+        // Cuerpo de la tabla
+        const tbody = document.createElement('tbody');
+    
+        medicalRecords.forEach(medicalRecord => {
+                const tr = document.createElement('tr');
+    
+                // Radio button para selección única
+                const tdCheck = document.createElement('td');
+                const radioButton = document.createElement('input');
+                radioButton.type = 'radio';
+                radioButton.name = 'medicalRecordSelected';
+                radioButton.className = 'medicalRecordRadioButton';
+                radioButton.id = 'medicalRecordId-' + medicalRecord.id;
+                radioButton.value = medicalRecord.id;
+                tdCheck.appendChild(radioButton);
+                tr.appendChild(tdCheck);
+                
+                // Fecha de Prescripción
+                const tdPrescriptionDate = document.createElement('td');
+                tdPrescriptionDate.textContent = new Date(medicalRecord.prescriptionDate).toLocaleDateString();
+                tr.appendChild(tdPrescriptionDate);
+
+                // Fecha de Modificación
+                const tdModificationDate = document.createElement('td');
+                tdModificationDate.textContent = new Date(medicalRecord.modificationDate).toLocaleDateString();
+                tr.appendChild(tdModificationDate);
+
+                // Vigencia
+                const tdValidate = document.createElement('td');
+                tdValidate.textContent = medicalRecord.validate;
+                tr.appendChild(tdValidate);
+
+                // Enfermedad (Código - Descripción)
+                const tdSickness = document.createElement('td');
+                tdSickness.textContent = `${medicalRecord.Sicknesses.code} - ${medicalRecord.Sicknesses.name}`;
+                tr.appendChild(tdSickness);
+
+                // Profesional (Nombre Apellido)
+                const tdProfessional = document.createElement('td');
+                tdProfessional.textContent = `${medicalRecord.Profesionals.User.Person.firstName} ${medicalRecord.Profesionals.User.Person.lastName}`;
+                tr.appendChild(tdProfessional);
+
+                // Observacion (Nombre Apellido)
+                const tdObservacion = document.createElement('td');
+                tdObservacion.textContent = medicalRecord.observation ? `${medicalRecord.observation}` : 'No hay observaciones.';
+                tr.appendChild(tdObservacion);
+
+                tbody.appendChild(tr);
+            
+        });
+    
+        table.appendChild(tbody);
+        medicalrecordListContainer.appendChild(table);
+    }
+    
 });
 
 function closePopup() {    
@@ -419,6 +543,13 @@ function closePopupMedicine() {
     var overlay = document.getElementById('overlayMedicine');
     overlay.style.display = 'none';
     var popup = document.querySelector('.popupMedicine');
+    popup.style.display = 'none';
+}
+
+function closePopupMedicalRecord() {    
+    var overlay = document.getElementById('overlayMedicalRecord');
+    overlay.style.display = 'none';
+    var popup = document.querySelector('.popupMedicalRecord');
     popup.style.display = 'none';
 }
 
@@ -436,21 +567,7 @@ function updateFields() {
         document.getElementById('tratamiento').value = selectedSickness.treatment
         document.getElementById('fecha_prescripcion').value = new Date().toISOString().split('T')[0];
         document.getElementById('vigencia').value = "Vigencia por defecto"; 
-        
-        // document.getElementById('enfermedad-nombre').disabled = true;
-        // document.getElementById('enfermedad-code').disabled = true;
-        // document.getElementById('diagnostico').disabled = true;
-        // document.getElementById('fecha_prescripcion').disabled = true;
-        // document.getElementById('paciente_obra_social').disabled = true;
-        // document.getElementById('paciente_plan').disabled = true;
-    } else {
-        // document.getElementById('enfermedad-nombre').disabled = false;
-        // document.getElementById('enfermedad-code').disabled = false;
-        // document.getElementById('diagnostico').disabled = false;
-        // document.getElementById('fecha_prescripcion').disabled = false;
-        // document.getElementById('paciente_obra_social').disabled = true;
-        // document.getElementById('paciente_plan').disabled = true;
-    }
+    } 
 }
 
 function editarObraSocial(){
@@ -464,12 +581,9 @@ function clearFieldsPrest() {
     document.getElementById('diagnostico').value = '';
     document.getElementById('fecha_prescripcion').value = '';
     document.getElementById('vigencia').value = '';
+    document.getElementById('observation').value = '';
     document.getElementById('sicknessList').selectedIndex = 0; 
 
-    // document.getElementById('enfermedad-nombre').disabled = false;
-    // document.getElementById('enfermedad-code').disabled = false;
-    // document.getElementById('diagnostico').disabled = false;
-    // document.getElementById('fecha_prescripcion').disabled = false;
 }
 
 function agregarListadoPrest() {
@@ -478,20 +592,18 @@ function agregarListadoPrest() {
     const selectedBenefits = Array.from(selectedCheckboxes).map(checkbox => {
         return {
             id: checkbox.value,
-            name: checkbox.closest('tr').querySelector('td:nth-child(2)').textContent, // Nombre es el segundo td
-            code: checkbox.closest('tr').querySelector('td:nth-child(3)').textContent // Código es el tercer td
+            name: checkbox.closest('tr').querySelector('td:nth-child(2)').textContent,
+            code: checkbox.closest('tr').querySelector('td:nth-child(3)').textContent 
         };
     });
 
     const benefitsListContainer = document.querySelector('.benefits-list-container');
 
-    benefitsListContainer.innerHTML = '';
-
     selectedBenefits.forEach(benefit => {
         const benefitDiv = document.createElement('div');
         benefitDiv.className = 'benefit-item';
-        benefitDiv.innerHTML = `<strong>${benefit.name} (Código: ${benefit.code})</strong>` ;
-        
+        benefitDiv.innerHTML = `<strong>Prestación: ${benefit.name} - ${benefit.code}</strong>` ;
+
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Eliminar';
         deleteButton.className = 'delete-benefit';
@@ -519,19 +631,19 @@ function agregarListadoMedicine() {
     const selectedMedicines = Array.from(selectedCheckboxes).map(checkbox => {
         return {
             id: checkbox.value,
-            name: checkbox.closest('tr').querySelector('td:nth-child(3)').textContent,
-            code: checkbox.closest('tr').querySelector('td:nth-child(2)').textContent 
+            name: checkbox.closest('tr').querySelector('td:nth-child(2)').textContent,
+            code: checkbox.closest('tr').querySelector('td:nth-child(3)').textContent 
         };
     });
 
     const medicinesListContainer = document.querySelector('.medicines-list-container');
 
-    medicinesListContainer.innerHTML = '';
+   // medicinesListContainer.innerHTML = '';
 
     selectedMedicines.forEach(medicine => {
         const medicineDiv = document.createElement('div');
         medicineDiv.className = 'medicine-item';
-        medicineDiv.innerHTML = `<strong>${medicine.name} (Código: ${medicine.code})</strong>`;
+        medicineDiv.innerHTML = `<strong> Medicamento: ${medicine.name} (Código: ${medicine.code})</strong>`;
 
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Eliminar';
@@ -554,3 +666,100 @@ function agregarListadoMedicine() {
     closePopupMedicine();
 }
 
+async function abrirPrescripcionExistente(){
+    const selectedRadio = document.querySelector('input[name="medicalRecordSelected"]:checked').value;
+    const primaryMedicalRecordId = document.getElementById('medicalRecordIdPri').value;
+
+    try {
+        const result = await Swal.fire({
+            title: '¿Confirmas tu decisión?',
+            text: 'Esta acción va a tomar esta prescripción como template para el nuevo o existente elemento.',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Confirmar',
+            cancelButtonText: 'Cancelar',
+        });
+
+        if (result.isConfirmed) {
+            
+            showSpinner(true);
+            const url = `/api/medical-record/${selectedRadio}?format=json` 
+            const method = 'GET';
+
+            fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.medicalRecord) {
+                    console.log(result.medicalRecord);
+                    displayMedicalRecords(result.medicalRecord);
+                    showSpinner(false);
+                    closePopupMedicalRecord();
+                } else {
+                    throw new Error('No se recibieron datos, posibles problemas con dicha prescripción');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching medical Records:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: error.message,
+                    confirmButtonColor: '#d33',
+                });
+                showSpinner(false);
+            });
+        } else if (result.isDismissed) {
+            console.log('La acción fue cancelada anteriormente');
+        }
+    } catch (error) {
+        console.error('Error al mostrar Swal', error);
+    }
+}
+
+function displayMedicalRecords(medicalRecord) {
+    // Clear existing entries
+    document.querySelector('.benefits-list-container').innerHTML = '';
+    document.querySelector('.medicines-list-container').innerHTML = '';
+
+    // Populate benefits
+    if (medicalRecord.benefits && medicalRecord.benefits.length > 0) {
+        medicalRecord.benefits.forEach(benefit => {
+            const benefitElement = document.createElement('div');
+            benefitElement.className = 'benefit-item';
+            benefitElement.innerHTML = `
+                <input type="hidden" name="benefits" value="${benefit.id}">
+                <strong>Prestación: ${benefit.name} - ${benefit.code}</strong>
+                <button type="button" class="delete-benefit" onclick='this.parentNode.remove()'>Eliminar</button>
+            `;
+            document.querySelector('.benefits-list-container').appendChild(benefitElement);
+        });
+    }
+
+    // Populate medicines
+    if (medicalRecord.medicines && medicalRecord.medicines.length > 0) {
+        medicalRecord.medicines.forEach(medicine => {
+            const medicineElement = document.createElement('div');
+            medicineElement.className = 'medicine-item';
+            medicineElement.innerHTML = `
+                <input type="hidden" name="medications" value="${medicine.id}">
+                <strong>Medicamento: ${medicine.name} (Código: ${medicine.code})</strong>
+                <button type="button" class="delete-medicine" onclick='this.parentNode.remove()'>Eliminar</button>
+            `;
+            document.querySelector('.medicines-list-container').appendChild(medicineElement);
+        });
+    }
+
+    // Update other fields like sickness and prescription details
+    document.getElementById('enfermedad-nombre').value = medicalRecord.sickness.name;
+    document.getElementById('enfermedad-code').value = medicalRecord.sickness.code;
+    document.getElementById('diagnostico').value = medicalRecord.sickness.description;
+    document.getElementById('tratamiento').value = medicalRecord.sickness.treatment;
+    document.getElementById('fecha_prescripcion').value = new Date(medicalRecord.prescriptionDate).toISOString().split('T')[0];
+    document.getElementById('vigencia').value = medicalRecord.validate;
+    document.getElementById('observation').value = medicalRecord.observation;
+}
