@@ -1,5 +1,6 @@
+const { getPatientById } = require('../controllers/patient.controller');
 const { Prescription, Medicine, Benefit, ConcentratedMedicine, QuantityMed, Section, Patient, PlanOS, SocialWork, User, PharmaForm, ComercialMedicine, FamilyMedicine, Person, Sickness, Profesional, Speciality, Profesion, sequelize } =  require('../models/index.models');
-const { getPatientByDniService } = require('./patient.service');
+const { getPatientByDniService, getPatientByIdService } = require('./patient.service');
 
 async function getAllMedicalRecordsService(userId) {
     try{
@@ -298,10 +299,10 @@ async function createMedicalRecordService(medicalRecordData){
             }, { transaction });
         }
 
-        let parts = prescriptionData['patientList'].split('-');
-        let documentPart = parts.length > 1 ? parts[1].trim() : null;
-
-        const patient = await getPatientByDniService(documentPart);
+        let idPatient = prescriptionData['patientList'];
+     //   let documentPart = parts.length > 1 ? parts[1].trim() : null;
+        const patient = await getPatientByIdService(idPatient);
+        //const patient = await getPatientByDniService(documentPart);
 
         if(!patient){
             throw new Error('Paciente no encontrado.');
@@ -359,9 +360,12 @@ async function updateMedicalRecordService(prescriptionId, medicalRecordData) {
             }, { transaction });
         }
 
-        let parts = prescriptionData['patientList'].split('-');
-        let documentPart = parts.length > 1 ? parts[1].trim() : null;
-        const patient = await getPatientByDniService(documentPart);
+        // let parts = prescriptionData['patientList'].split('-');
+        // let documentPart = parts.length > 1 ? parts[1].trim() : null;
+        // const patient = await getPatientByDniService(documentPart);
+
+        let idPatient = Number(prescriptionData['patientList']);
+        const patient = await getPatientByIdService(idPatient);
 
         if (!patient) {
             throw new Error('Paciente no encontrado.');
@@ -422,7 +426,7 @@ async function deleteMedicalRecordService(recordId) {
 
         const existingMedicines = await prescription.getMedicines({ transaction });
         await prescription.removeMedicines(existingMedicines, { transaction });
-        
+
         await Prescription.destroy({
             where: { id: recordId },
             transaction: transaction
