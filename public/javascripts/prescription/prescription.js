@@ -70,6 +70,7 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('paciente_obra_social').value = patientGlobal.socialWorkName;
     document.getElementById('paciente_plan').value = patientGlobal.planOSName;
     document.getElementById('paciente_sexo').value = patientGlobal.sex.toUpperCase() === 'FEMENINO' ? 'FEMALE' : patientGlobal.sex.toUpperCase() === 'MASCULINO' ? 'MALE' : 'OTHER';
+    
 
     hidePopup();
 }

@@ -3,6 +3,7 @@ const mapMedicalRecord = (medicalRecord) => {
         id: medicalRecord.id,
         prescriptionDate: medicalRecord.prescriptionDate,
         validate: medicalRecord.dataValues.validate,
+        observation: medicalRecord.dataValues.observation,
         patientId: medicalRecord.patientId,
         sicknessId: medicalRecord.sicknessId,
         profesionalId: medicalRecord.profesionalId,

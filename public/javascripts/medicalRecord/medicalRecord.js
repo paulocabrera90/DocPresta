@@ -467,7 +467,7 @@ document.addEventListener('DOMContentLoaded', function() {
         table.className = 'table table-striped'; 
         const thead = document.createElement('thead');
         const trHead = document.createElement('tr');
-        ['Seleccionar', 'Fecha de Prescripción', 'Vigencia (días)', 'Fecha de Modificación', 'Enfermedad (Código - Descripción)', 'Profesional (Nombre Apellido)'].forEach(text => {
+        ['Seleccionar', 'Fecha de Prescripción', 'Vigencia (días)', 'Fecha de Modificación', 'Enfermedad (Código - Descripción)', 'Profesional (Nombre Apellido)', 'Observación'].forEach(text => {
             const th = document.createElement('th');
             th.textContent = text;
             trHead.appendChild(th);
@@ -516,6 +516,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 const tdProfessional = document.createElement('td');
                 tdProfessional.textContent = `${medicalRecord.Profesionals.User.Person.firstName} ${medicalRecord.Profesionals.User.Person.lastName}`;
                 tr.appendChild(tdProfessional);
+
+                // Observacion (Nombre Apellido)
+                const tdObservacion = document.createElement('td');
+                tdObservacion.textContent = medicalRecord.observation ? `${medicalRecord.observation}` : 'No hay observaciones.';
+                tr.appendChild(tdObservacion);
 
                 tbody.appendChild(tr);
             
@@ -576,12 +581,9 @@ function clearFieldsPrest() {
     document.getElementById('diagnostico').value = '';
     document.getElementById('fecha_prescripcion').value = '';
     document.getElementById('vigencia').value = '';
+    document.getElementById('observation').value = '';
     document.getElementById('sicknessList').selectedIndex = 0; 
 
-    // document.getElementById('enfermedad-nombre').disabled = false;
-    // document.getElementById('enfermedad-code').disabled = false;
-    // document.getElementById('diagnostico').disabled = false;
-    // document.getElementById('fecha_prescripcion').disabled = false;
 }
 
 function agregarListadoPrest() {
@@ -596,8 +598,6 @@ function agregarListadoPrest() {
     });
 
     const benefitsListContainer = document.querySelector('.benefits-list-container');
-
-   // benefitsListContainer.innerHTML = '';
 
     selectedBenefits.forEach(benefit => {
         const benefitDiv = document.createElement('div');
@@ -673,7 +673,7 @@ async function abrirPrescripcionExistente(){
     try {
         const result = await Swal.fire({
             title: '¿Confirmas tu decisión?',
-            text: 'Esta acción no puede deshacerse.',
+            text: 'Esta acción va a tomar esta prescripción como template para el nuevo o existente elemento.',
             icon: 'question',
             showCancelButton: true,
             confirmButtonText: 'Confirmar',
@@ -694,12 +694,13 @@ async function abrirPrescripcionExistente(){
             })
             .then(response => response.json())
             .then(result => {
-                if (result.medicalRecords) {
-                    console.log(result.medicalRecords);
-                    displayMedicalRecords(result.medicalRecords);
+                if (result.medicalRecord) {
+                    console.log(result.medicalRecord);
+                    displayMedicalRecords(result.medicalRecord);
                     showSpinner(false);
+                    closePopupMedicalRecord();
                 } else {
-                    throw new Error('No se recibieron datos');
+                    throw new Error('No se recibieron datos, posibles problemas con dicha prescripción');
                 }
             })
             .catch(error => {
@@ -721,5 +722,44 @@ async function abrirPrescripcionExistente(){
 }
 
 function displayMedicalRecords(medicalRecord) {
-    
+    // Clear existing entries
+    document.querySelector('.benefits-list-container').innerHTML = '';
+    document.querySelector('.medicines-list-container').innerHTML = '';
+
+    // Populate benefits
+    if (medicalRecord.benefits && medicalRecord.benefits.length > 0) {
+        medicalRecord.benefits.forEach(benefit => {
+            const benefitElement = document.createElement('div');
+            benefitElement.className = 'benefit-item';
+            benefitElement.innerHTML = `
+                <input type="hidden" name="benefits" value="${benefit.id}">
+                <strong>Prestación: ${benefit.name} - ${benefit.code}</strong>
+                <button type="button" class="delete-benefit" onclick='this.parentNode.remove()'>Eliminar</button>
+            `;
+            document.querySelector('.benefits-list-container').appendChild(benefitElement);
+        });
+    }
+
+    // Populate medicines
+    if (medicalRecord.medicines && medicalRecord.medicines.length > 0) {
+        medicalRecord.medicines.forEach(medicine => {
+            const medicineElement = document.createElement('div');
+            medicineElement.className = 'medicine-item';
+            medicineElement.innerHTML = `
+                <input type="hidden" name="medications" value="${medicine.id}">
+                <strong>Medicamento: ${medicine.name} (Código: ${medicine.code})</strong>
+                <button type="button" class="delete-medicine" onclick='this.parentNode.remove()'>Eliminar</button>
+            `;
+            document.querySelector('.medicines-list-container').appendChild(medicineElement);
+        });
+    }
+
+    // Update other fields like sickness and prescription details
+    document.getElementById('enfermedad-nombre').value = medicalRecord.sickness.name;
+    document.getElementById('enfermedad-code').value = medicalRecord.sickness.code;
+    document.getElementById('diagnostico').value = medicalRecord.sickness.description;
+    document.getElementById('tratamiento').value = medicalRecord.sickness.treatment;
+    document.getElementById('fecha_prescripcion').value = new Date(medicalRecord.prescriptionDate).toISOString().split('T')[0];
+    document.getElementById('vigencia').value = medicalRecord.validate;
+    document.getElementById('observation').value = medicalRecord.observation;
 }

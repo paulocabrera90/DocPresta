@@ -309,6 +309,7 @@ async function createMedicalRecordService(medicalRecordData){
 
         const prescription = await Prescription.create({
             validate: prescriptionData['vigencia'],
+            observation: prescriptionData['observation'],
             profesionalId: prescriptionData['profesionalId'],
             sicknessId: sickness.id,
             patientId: patient.id,
@@ -373,6 +374,7 @@ async function updateMedicalRecordService(prescriptionId, medicalRecordData) {
 
         await prescription.update({
             validate: prescriptionData['vigencia'],
+            observation: prescriptionData['observation'],
             profesionalId: prescriptionData['profesionalId'],
             sicknessId: sickness.id,
             patientId: patient.id,
