@@ -29,24 +29,25 @@ block content
                 p#patientInfo
                 button#acceptButtonPopup(type="button") Agregar
                 button(type="button" id="cancelButtonPopup" onclick="closePopup()") Cancelar
+            input(type="hidden" id="patientId" value=medicalRecord ? medicalRecord.patientId : '')
             label(for="paciente_nombre") Nombre:
-            input(type="text" name="paciente_nombre" id="paciente_nombre" value=medicalRecord.patient ? medicalRecord.patient.firstName : '' required )
+            input(type="text" name="paciente_nombre" id="paciente_nombre" value= medicalRecord && medicalRecord.patient ? medicalRecord.patient.firstName : '' required )
             label(for="paciente_apellido") Apellido:
-            input(type="text" name="paciente_apellido" id="paciente_apellido" value=medicalRecord.patient ? medicalRecord.patient.lastName : '' required )
+            input(type="text" name="paciente_apellido" id="paciente_apellido" value=medicalRecord ? medicalRecord.patient.lastName : '' required )
             label(for="paciente_fecha_nacimiento") Fecha de Nacimiento:
-            input(type="date" name="birthDate" id="birthDate" required value=(medicalRecord.patient && medicalRecord.patient.birthDate ? new Date(medicalRecord.patient.birthDate).toISOString().split('T')[0] : ''))
+            input(type="date" name="birthDate" id="birthDate" required value=(medicalRecord && medicalRecord.patient.birthDate ? new Date(medicalRecord.patient.birthDate).toISOString().split('T')[0] : ''))
         .column
             label(for="paciente_sexo") Sexo:
             select(name="paciente_sexo" id="paciente_sexo" required )
                 option(value="") Seleccione Sexo
-                option(value="MALE" selected=medicalRecord.patient && medicalRecord.patient.sex === "Masculino" ? true : false) MASCULINO
-                option(value="FEMALE" selected=medicalRecord.patient && medicalRecord.patient.sex === "Femenino" ? true : false) FEMENINO
-                option(value="OTHER" selected=medicalRecord.patient && medicalRecord.patient.sex === "Otro" ? true : false) OTRO
+                option(value="MALE" selected=medicalRecord && medicalRecord.patient  && medicalRecord.patient.sex === "Masculino" ? true : false) MASCULINO
+                option(value="FEMALE" selected=medicalRecord && medicalRecord.patient  && medicalRecord.patient.sex === "Femenino" ? true : false) FEMENINO
+                option(value="OTHER" selected=medicalRecord && medicalRecord.patient  && medicalRecord.patient.sex === "Otro" ? true : false) OTRO
             label(for="paciente_obra_social") Obra Social:
-            input(type="text" name="paciente_obra_social" id="paciente_obra_social" value= medicalRecord.patient ? medicalRecord.patient.obraSocial :'' required )
+            input(type="text" name="paciente_obra_social" id="paciente_obra_social" value= medicalRecord && medicalRecord.patient  ? medicalRecord.patient.obraSocial :'' required )
             label(for="paciente_plan") Plan:
-            input(type="text" name="paciente_plan" id="paciente_plan" value= medicalRecord.patient ? medicalRecord.patient.plan :'' required)
-            button(type="button" class="btn btn-success" onclick="editarObraSocial()") Seleccionar prescripciones
+            input(type="text" name="paciente_plan" id="paciente_plan" value= medicalRecord ? medicalRecord.patient.plan :'' required)
+            button(type="button" class="btn btn-success" id="button-elegirPrestaci") Seleccionar prescripciones
 
       // Prestaciones
       h2 Prestaciones
@@ -60,36 +61,37 @@ block content
                     button(id="button-clearListBenefit" type="button")
                       i.fa.fa-plus  Limpiar
                 .benefits-list-container(name="benefitsList" required id="benefitsList")
-                  each benefit in medicalRecord.benefits
-                    .benefit-item
-                      input(type="hidden" name="benefits" id="benefits" value= benefit.id)
-                      strong Prestación: #{benefit.name} - #{benefit.code}
-                      button(type="button" class="delete-benefit" onclick='this.parentNode.remove()') Eliminar
+                  if medicalRecord && medicalRecord.benefits && medicalRecord.benefits.length > 0
+            
+                    each benefit in medicalRecord.benefits
+                      .benefit-item
+                        input(type="hidden" name="benefits" id="benefits" value= benefit.id)
+                        strong Prestación: #{benefit.name} - #{benefit.code}
+                        button(type="button" class="delete-benefit" onclick='this.parentNode.remove()') Eliminar
 
       // Detalles de la prescripción
-      h2 Detalles de la Prescripción
-                               
+      h2 Detalles de la Prescripción                               
       .container-prescripcion
         label(for="enfermedad") Diagnóstico Comun:
             .search-sckiness  
-                input(type="hidden" id="sickness" value= sickness?JSON.stringify(sickness):'')
-                select(id="sicknessList" onchange="updateFields()")
-                  if medicalRecord.sickness
-                    option(value=medicalRecord.sickness.id selected) #{medicalRecord.sickness.code} - #{medicalRecord.sickness.name}
-                  else
-                    option(value="") Seleccione un diagnostico
-                  each sk in sickness
-                    if sk.id !== medicalRecord.sickness.id
-                      option(value=sk.id)= sk.code + '-' + sk.name
+              input(type="hidden" id="sickness" value= sickness?JSON.stringify(sickness):'')                
+              select(id="sicknessList" onchange="updateFields()")
+                if medicalRecord && medicalRecord.sickness
+                  option(value=medicalRecord.sickness.id selected) #{medicalRecord.sickness.code} - #{medicalRecord.sickness.name}
+                else
+                  option(value="") Seleccione un diagnóstico
+                each sk in sickness
+                  if !medicalRecord || !medicalRecord.sickness || sk.id !== medicalRecord.sickness.id
+                    option(value=sk.id)= sk.code + '-' + sk.name
 
         label(for="enfermedad-nombre") Nombre:
-        input(type="text" name="enfermedad-nombre" id="enfermedad-nombre" rows="4" value= medicalRecord.sickness ? medicalRecord.sickness.name :'' required)
+        input(type="text" name="enfermedad-nombre" id="enfermedad-nombre" rows="4" value= medicalRecord ? medicalRecord.sickness.name :'' required)
         label(for="enfermedad-code") Codigo:
-        input(type="text" name="enfermedad-code" id="enfermedad-code" rows="4" value= medicalRecord.sickness ? medicalRecord.sickness.code :'' required)
+        input(type="text" name="enfermedad-code" id="enfermedad-code" rows="4" value= medicalRecord ? medicalRecord.sickness.code :'' required)
         label(for="diagnostico") Diagnóstico:
-        textarea(name="diagnostico" id="diagnostico" rows="4" required) #{medicalRecord.sickness ? medicalRecord.sickness.description : ''}
+        textarea(name="diagnostico" id="diagnostico" rows="4" required) #{medicalRecord ? medicalRecord.sickness.description : ''}
         label(for="tratamiento") Tratamiento:
-        textarea(name="tratamiento" id="tratamiento" rows="4" required) #{medicalRecord.sickness ? medicalRecord.sickness.treatment : ''}
+        textarea(name="tratamiento" id="tratamiento" rows="4" required) #{medicalRecord ? medicalRecord.sickness.treatment : ''}
         label(for="fecha_prescripcion") Fecha de la Prescripción:
         input(type="date" name="fecha_prescripcion" id="fecha_prescripcion" value=(medicalRecord && medicalRecord.prescriptionDate ? new Date(medicalRecord.prescriptionDate).toISOString().split('T')[0] : '') required)
         label(for="vigencia") Vigencia:
@@ -107,11 +109,12 @@ block content
                 button(id="button-clearListMedicine" type="button")
                       i.fa.fa-plus  Limpiar
         .medicines-list-container(name="medicinesList" id="medicinesList" required)
-           each medicine in medicalRecord.medicines
-            .medicine-item
-              input(type="hidden" name="medications" id="medications" value= medicine.id)
-              strong Medicamento: #{medicine.name} (Código: #{medicine.code})
-              button(type="button" class="delete-medicine" onclick='this.parentNode.remove()') Eliminar
+          if medicalRecord && medicalRecord.medicines && medicalRecord.medicines.length > 0
+            each medicine in medicalRecord.medicines
+              .medicine-item
+                input(type="hidden" name="medications" id="medications" value= medicine.id)
+                strong Medicamento: #{medicine.name} (Código: #{medicine.code})
+                button(type="button" class="delete-medicine" onclick='this.parentNode.remove()') Eliminar
               
       button(type="submit" id='btnFormNewMedicalRecord' class="btn btn-success") #{medicalRecord ? 'Actualizar' : 'Crear'}
       button.btn.btn-secondary.ml-2(type="button" onclick="window.history.back();") Cancelar
@@ -128,3 +131,10 @@ block content
                 .medicine-list-container-popup
                 button(type="button" class="btn btn-success" onclick="agregarListadoMedicine()") Agregar
                 button(type="button" class="btn btn-danger" onclick="closePopupMedicine()") Cancelar
+  
+  .overlay#overlayMedicalRecord
+      .popupMedicalRecord#popupMedicalRecord
+                h2 Listado de prescripciones
+                .medicalrecord-list-container-popup
+                button(type="button" class="btn btn-success" onclick="abrirPrescripcionExistente()") Agregar
+                button(type="button" class="btn btn-danger" onclick="closePopupMedicalRecord()") Cancelar

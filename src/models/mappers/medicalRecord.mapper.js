@@ -16,6 +16,7 @@ const mapMedicalRecord = (medicalRecord) => {
             profesionDescription: medicalRecord.profesional && medicalRecord.profesional.Speciality && medicalRecord.profesional.Speciality.Profesion ? medicalRecord.profesional.Speciality.Profesion.description : ''
         },
         patient: {
+            id: medicalRecord.Patients ? medicalRecord.Patients.User.Person.id : '',
             firstName: medicalRecord.Patients ? medicalRecord.Patients.User.Person.firstName : '',
             lastName: medicalRecord.Patients ? medicalRecord.Patients.User.Person.lastName : '',
             birthDate: medicalRecord.Patients ? medicalRecord.Patients.User.Person.birthDate : '',

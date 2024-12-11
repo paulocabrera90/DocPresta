@@ -233,6 +233,7 @@
 }
 
 input[type="checkbox"].benefitSelected,
+.medicalRecordRadioButton,
 input[type="checkbox"].medicineSelected {
   accent-color: blue;
   margin: 5px;
@@ -257,7 +258,8 @@ input[type="checkbox"].medicineSelected {
 
 /* Estilos para el popup */
 .popupPres,
-.popupMedicine {
+.popupMedicine,
+.popupMedicalRecord {
   width: 80%; 
   height: 60%;
   background-color: white;
@@ -272,12 +274,14 @@ input[type="checkbox"].medicineSelected {
 
 /* Estilos para el botón de cancelar, colocado dentro del popup */
 .popupPres button,
+.popupMedicalRecord button,
 .popupMedicine button {
   margin-top: 5px; 
   align-self: flex-end;
 }
 
 .benefits-list-container-popup,
+.medicalrecord-list-container-popup,
 .medicines-list-container-popup  {
   max-height: 300px; 
   overflow-y: auto;  

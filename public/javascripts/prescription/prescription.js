@@ -65,14 +65,15 @@ document.addEventListener("DOMContentLoaded", function() {
 }
   
   function acceptPopup(patientGlobal) {
-    const birthDate = formatDate(patientGlobal.birthDate);
+    const birthDateFormatted = formatDate(patientGlobal.birthDate);
 
-    document.getElementById('paciente_nombre').value = patientGlobal.User.Person.firstName;
-    document.getElementById('paciente_apellido').value = patientGlobal.User.Person.lastName;
-    document.getElementById('paciente_fecha_nacimiento').value = new Date(patientGlobal.User.Person.birthDate).toISOString().split('T')[0];
-    document.getElementById('paciente_obra_social').value = patientGlobal.PlanOS.SocialWork.name;
-    document.getElementById('paciente_plan').value = patientGlobal.PlanOS.name;
-    document.getElementById('paciente_sexo').value = patientGlobal.User.Person.sex.toUpperCase() === 'FEMENINO' ? 'FEMALE' : patientGlobal.User.Person.sex.toUpperCase() === 'MASCULINO' ? 'MALE' : 'OTHER';
+    document.getElementById('patientId').value = patientGlobal.id;
+    document.getElementById('paciente_nombre').value = patientGlobal.firstName;
+    document.getElementById('paciente_apellido').value = patientGlobal.lastName;
+    document.getElementById('paciente_fecha_nacimiento').value = birthDateFormatted;
+    document.getElementById('paciente_obra_social').value = patientGlobal.socialWorkName;
+    document.getElementById('paciente_plan').value = patientGlobal.planOSName;
+    document.getElementById('paciente_sexo').value = patientGlobal.sex.toUpperCase() === 'FEMENINO' ? 'FEMALE' : patientGlobal.User.Person.sex.toUpperCase() === 'MASCULINO' ? 'MALE' : 'OTHER';
 
     hidePopup();
 }

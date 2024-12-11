@@ -3,7 +3,7 @@ const { httpError } = require('../helpers/handleError');
 const { where } = require('sequelize');
 const storage = require('../storage/session');
 const PDFDocument = require('pdfkit');
-const { getAllMedicalRecordsService, createMedicalRecordService, updateMedicalRecordService, deleteMedicalRecordService, getMedicalRecordByIdService } = require('../services/medical-record.service');
+const { getAllMedicalRecordsService, createMedicalRecordService, updateMedicalRecordService, deleteMedicalRecordService, getMedicalRecordByIdService, getAllMedicalRecordsByPatientIdService } = require('../services/medical-record.service');
 const { getListAllPatients } = require('./patient.controller');
 const { getListAllPatientsService } = require('../services/patient.service');
 const { getFindAllSections } = require('../services/benefit.service');
@@ -99,6 +99,22 @@ async function getMedicalRecordById (req, res) {
         //     sickness
         // });
 
+    } catch (error) {
+        httpError(res, error);
+    }
+}
+
+async function getMedicalRecordByPatientId (req, res) {
+    const { id } = req.params;
+    try {
+        const { medicalRecords, profesional, speciality, profesion } = await getAllMedicalRecordsByPatientIdService(id);
+
+        if (req.query.format === 'json') {
+            res.json({ medicalRecords, speciality, profesion, profesional });
+        }else{
+            res.render('medical-record-landing', { medicalRecords, speciality, profesion, profesional });
+        }
+       
     } catch (error) {
         httpError(res, error);
     }
@@ -240,5 +256,6 @@ module.exports= {
     updateMedicalRecord,
     deleteMedicalRecord,
     generatePdf,
-    getMedicalRecordById
+    getMedicalRecordById,
+    getMedicalRecordByPatientId
 }

@@ -121,6 +121,93 @@ async function getAllMedicalRecordsService(userId) {
     
 }
 
+async function getAllMedicalRecordsByPatientIdService(patientId) {
+    try{
+        const medicalRecords  = await Prescription.findAll({
+            where: { patientId: patientId },
+            include: [
+                {
+                    model: Benefit,
+                    as: 'Benefits',
+                    through: { attributes: [] }, 
+                    include: [{
+                        model: Section,
+                        as: 'Sections'
+                    }]
+                },
+                {   
+                    model: Medicine,
+                    include: [
+                        { model: ConcentratedMedicine, as: 'ConcentratedMedicines' },
+                        { model: QuantityMed, as: 'QuantityMeds' },
+                        { model: PharmaForm, as: 'PharmaForms' },
+                        { model: ComercialMedicine, as: 'ComercialMedicines' },
+                        { model: FamilyMedicine, as: 'FamilyMedicines' }
+                    ],
+                    through: { attributes: [] },
+                    as: 'Medicines'
+                },
+                {
+                    model: Patient,
+                    as: 'Patients',
+                    required:true,
+                    where: { state: true },
+                    include: [
+                        {
+                            model: PlanOS,
+                            as: 'PlanOS',
+                            include: {
+                                model: SocialWork,
+                                as: 'SocialWork'
+                            }
+                        },
+                        {
+                            model: User,
+                            as: 'User',
+                            include: {
+                                model: Person,
+                                as: 'Person',
+                            }
+                        }
+                    ]
+                },
+                {
+                    model: Sickness,
+                    as: 'Sicknesses'
+                },
+                {
+                    model: Profesional,
+                    as: 'Profesionals',
+                    required: true,
+                    include: [
+                        {
+                            model: Speciality,
+                            as: 'Speciality',
+                            include: {
+                                model: Profesion,
+                                as: 'Profesion'
+                            }
+                        },
+                        {
+                            model: User,
+                            as: 'User',
+                            include: {
+                                model: Person,
+                                as: 'Person',
+                            }
+                        }
+                    ]
+                }
+            ]
+        })       
+    
+        return { medicalRecords, profesional:'', speciality:'', profesion:'' };
+    } catch (error) {
+        throw error;
+    }
+    
+}
+
 async function getMedicalRecordByIdService(recordId, userId) {
     try {
         const medicalRecord = await Prescription.findOne({
@@ -358,5 +445,6 @@ module.exports = {
     createMedicalRecordService,
     updateMedicalRecordService,
     getMedicalRecordByIdService,
-    deleteMedicalRecordService
+    deleteMedicalRecordService,
+    getAllMedicalRecordsByPatientIdService
 }
