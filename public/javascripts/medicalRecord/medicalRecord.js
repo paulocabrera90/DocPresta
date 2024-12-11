@@ -524,6 +524,7 @@ document.addEventListener('DOMContentLoaded', function() {
         table.appendChild(tbody);
         medicalrecordListContainer.appendChild(table);
     }
+    
 });
 
 function closePopup() {    
@@ -667,6 +668,7 @@ function agregarListadoMedicine() {
 
 async function abrirPrescripcionExistente(){
     const selectedRadio = document.querySelector('input[name="medicalRecordSelected"]:checked').value;
+    const primaryMedicalRecordId = document.getElementById('medicalRecordIdPri').value;
 
     try {
         const result = await Swal.fire({
@@ -681,43 +683,43 @@ async function abrirPrescripcionExistente(){
         if (result.isConfirmed) {
             
             showSpinner(true);
-            const url = `/api/medical-record/${selectedRadio}` 
+            const url = `/api/medical-record/${selectedRadio}?format=json` 
             const method = 'GET';
 
-            try {
-                const response = await fetch(url, {
-                    method: method,
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });
-
-                //const result = await response.json();
-                if (response.ok) {
-                    window.location.href = '/api/medical-record/new';
-                } else if (response.status === 401) {
-                    showSpinner(false);
-                    return response.json().then(err => {
-                        throw new Error(err.msg || "No tienes permiso para realizar esta acción.");
-                    });
-                } else {
-                    showSpinner(false);
-                    throw new Error('Algo salió mal en la solicitud. Por favor intenta de nuevo.');
+            fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
                 }
-                showSpinner(false);
-            } catch (error) {
-                await Swal.fire({
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.medicalRecords) {
+                    console.log(result.medicalRecords);
+                    displayMedicalRecords(result.medicalRecords);
+                    showSpinner(false);
+                } else {
+                    throw new Error('No se recibieron datos');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching medical Records:', error);
+                Swal.fire({
                     icon: 'error',
                     title: 'Error!',
                     text: error.message,
                     confirmButtonColor: '#d33',
                 });
                 showSpinner(false);
-            }
+            });
         } else if (result.isDismissed) {
             console.log('La acción fue cancelada anteriormente');
         }
     } catch (error) {
         console.error('Error al mostrar Swal', error);
     }
+}
+
+function displayMedicalRecords(medicalRecord) {
+    
 }

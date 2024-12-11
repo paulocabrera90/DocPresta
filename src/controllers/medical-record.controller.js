@@ -34,7 +34,7 @@ async function medicalRecordNew(req, res){
             profesional: profesional.dataValues,
             speciality,
             profesion:profesion.dataValues,
-            patients:allPatient,
+            patients: allPatient.map(mapPatientData),
             sections,
             sickness
         });
@@ -76,28 +76,30 @@ async function getMedicalRecordById (req, res) {
         const sections = await getFindAllSections(); 
         const sickness = await Sickness.findAll()
     
-        res.render('medical-record-new', { 
-            medicalRecord: mapMedicalRecord(medicalRecord),
-            person: storage.state.user.Person,
-            profesional: profesional.dataValues,
-            speciality,
-            profesion:profesion.dataValues,
-            patients: allPatient.map(mapPatientData),
-            sections,
-            sickness
-        });
-
-
-        // res.json( { 
-        //     medicalRecord: mapMedicalRecord(medicalRecord),
-        //     person: storage.state.user.Person,
-        //     profesional: profesional.dataValues,
-        //     speciality,
-        //     profesion:profesion.dataValues,
-        //     patients: allPatient.map(mapPatientData),
-        //     sections,
-        //     sickness
-        // });
+        
+        if (req.query.format === 'json') {
+            res.json({ 
+                medicalRecord: mapMedicalRecord(medicalRecord),
+                person: storage.state.user.Person,
+                profesional: profesional.dataValues,
+                speciality,
+                profesion:profesion.dataValues,
+                patients: allPatient.map(mapPatientData),
+                sections,
+                sickness
+            });
+        }else{
+            res.render('medical-record-new', { 
+                medicalRecord: mapMedicalRecord(medicalRecord),
+                person: storage.state.user.Person,
+                profesional: profesional.dataValues,
+                speciality,
+                profesion:profesion.dataValues,
+                patients: allPatient.map(mapPatientData),
+                sections,
+                sickness
+            });
+        }
 
     } catch (error) {
         httpError(res, error);

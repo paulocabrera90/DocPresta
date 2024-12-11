@@ -2,17 +2,12 @@ document.addEventListener("DOMContentLoaded", function() {
   const inputField = document.getElementById('prestaciones-dni');
   const dataList = document.getElementById('patientList');
   const patientsData = JSON.parse(document.getElementById('patientsData').value);
-
-    patientsData.forEach(patient => {
-      const option = new Option(`${patient.firstName} ${patient.lastName} - ${patient.numberDocument}`);
-      dataList.add(option);
-    });
         
     let patientGlobal = {};
     
       dataList.addEventListener("change", function() {
         const selectedValue = this.value;
-        const patient = patientsData.find(p => `${p.firstName} ${p.lastName} - ${p.numberDocument}` === selectedValue);
+        const patient = patientsData.find(p => `${p.id}` === selectedValue);
         if (patient) {
             patientGlobal= patient
             showPopup(patient);
@@ -41,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function() {
       <p>Email: ${data.email}</p>
       <p>Tipo de documento: ${data.typeDocument}</p>
       <p>DNI: ${data.numberDocument}</p>
-      <p>Fecha de nacimiento: ${data.birthDate}</p>      
+      <p>Fecha de nacimiento: ${formatDate(data.birthDate)}</p>      
       <p>Sexo: ${data.sex}</p>
       <p>Obra Social: ${data.socialWorkName}</p>
       <p>Plan de Obra Social: ${data.planOSName}</p>
@@ -65,6 +60,7 @@ document.addEventListener("DOMContentLoaded", function() {
 }
   
   function acceptPopup(patientGlobal) {
+
     const birthDateFormatted = formatDate(patientGlobal.birthDate);
 
     document.getElementById('patientId').value = patientGlobal.id;
@@ -73,21 +69,21 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('paciente_fecha_nacimiento').value = birthDateFormatted;
     document.getElementById('paciente_obra_social').value = patientGlobal.socialWorkName;
     document.getElementById('paciente_plan').value = patientGlobal.planOSName;
-    document.getElementById('paciente_sexo').value = patientGlobal.sex.toUpperCase() === 'FEMENINO' ? 'FEMALE' : patientGlobal.User.Person.sex.toUpperCase() === 'MASCULINO' ? 'MALE' : 'OTHER';
+    document.getElementById('paciente_sexo').value = patientGlobal.sex.toUpperCase() === 'FEMENINO' ? 'FEMALE' : patientGlobal.sex.toUpperCase() === 'MASCULINO' ? 'MALE' : 'OTHER';
 
     hidePopup();
 }
 
-function closePopup() {
-  var overlay = document.getElementById('overlayPrestacion');
-  var popup = document.querySelector('.popupPres');
-  if (overlay && popup) {
-      overlay.style.display = 'none';
-      popup.style.display = 'none';
-      resetPatientList();
-  } else {
-      console.log("No se pudo cerrar el popup porque los elementos no fueron encontrados.");
-  }
+function closePopupPersona() {
+    document.getElementById('patientList').value = "";
+    document.getElementById('patientId').value = "";
+    document.getElementById('paciente_nombre').value = "";
+    document.getElementById('paciente_apellido').value = "";
+    document.getElementById('paciente_fecha_nacimiento').value = "";
+    document.getElementById('paciente_obra_social').value = "";
+    document.getElementById('paciente_plan').value = "";
+    document.getElementById('paciente_sexo').value  = "";
+  hidePopup();
 }
 
 function resetPatientList() {
