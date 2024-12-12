@@ -37,10 +37,21 @@
   li {
     margin-bottom: 5px;
   }
+
+  .disabled {
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
+  .buttons-header a[disabled],
+  .buttons-header button[disabled] {
+      pointer-events: none;
+      opacity: 0.6;
+  }
   
   container-presta-list,
   container-medical-record-list {
-    width: 83%; 
+    width: 82%; 
     margin-right: 2%;
     margin-left: auto;
     box-sizing: border-box;

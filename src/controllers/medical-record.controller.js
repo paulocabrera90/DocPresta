@@ -3,7 +3,7 @@ const { httpError } = require('../helpers/handleError');
 const { where } = require('sequelize');
 const storage = require('../storage/session');
 const PDFDocument = require('pdfkit');
-const { getAllMedicalRecordsService, createMedicalRecordService, updateMedicalRecordService, deleteMedicalRecordService, getMedicalRecordByIdService, getAllMedicalRecordsByPatientIdService } = require('../services/medical-record.service');
+const { getAllMedicalRecordsService, createMedicalRecordService, updateMedicalRecordService, deleteMedicalRecordService, getMedicalRecordByIdService, getAllMedicalRecordsByPatientIdService, getAllMedicalRecordsFilterService } = require('../services/medical-record.service');
 const { getListAllPatients } = require('./patient.controller');
 const { getListAllPatientsService } = require('../services/patient.service');
 const { getFindAllSections } = require('../services/benefit.service');
@@ -46,21 +46,29 @@ async function medicalRecordNew(req, res){
 async function getMedicalRecordById (req, res) {
     const { id } = req.params;
     try {
+        const user = storage.state.user;
         const medicalRecord = await getMedicalRecordByIdService(id);
         if (!medicalRecord) {
             return res.status(404).json({ message: 'Prescripcion no encontrada.' });
         }
 
-        const profesional = await Profesional.findOne({
-            where: {userId: storage.state.user.id},
-            include: [
-                { model: Speciality, as: 'Speciality' }
-            ]
-        })
+        var profesional = {};
+        var speciality = {};
+        var profesion = {};
+
+        if(user.rol==='PROFESIONAL'){
+            profesional = await Profesional.findOne({
+                where: {userId: storage.state.user.id},
+                include: [
+                    { model: Speciality, as: 'Speciality' }
+                ]
+            })
+
+            speciality = profesional.dataValues.Speciality.dataValues;
+            profesion = await Profesion.findOne({ where: { id: speciality.profesionId } })
+        }
+        
         const allPatient = await getListAllPatientsService();
-    
-        const speciality = profesional.dataValues.Speciality.dataValues;
-        const profesion = await Profesion.findOne({ where: { id: speciality.profesionId } })
 
         const sections = await getFindAllSections(); 
         const sickness = await Sickness.findAll()
@@ -70,9 +78,9 @@ async function getMedicalRecordById (req, res) {
             res.json({ 
                 medicalRecord: mapMedicalRecord(medicalRecord),
                 person: storage.state.user.Person,
-                profesional: profesional.dataValues,
+                profesional: profesional ? profesional.dataValues: '',
                 speciality,
-                profesion:profesion.dataValues,
+                profesion: profesion ? profesion.dataValues: '',
                 patients: allPatient.map(mapPatientData),
                 sections,
                 sickness
@@ -81,12 +89,13 @@ async function getMedicalRecordById (req, res) {
             res.render('medical-record-new', { 
                 medicalRecord: mapMedicalRecord(medicalRecord),
                 person: storage.state.user.Person,
-                profesional: profesional.dataValues,
+                profesional: profesional ? profesional.dataValues: '',
                 speciality,
-                profesion:profesion.dataValues,
+                profesion: profesion ? profesion.dataValues: '',
                 patients: allPatient.map(mapPatientData),
                 sections,
-                sickness
+                sickness,
+                user:user.rol==='PACIENTE' || user.rol==='ADMIN'? user:''
             });
         }
 
@@ -94,16 +103,20 @@ async function getMedicalRecordById (req, res) {
         httpError(res, error);
     }
 }
+function isPatient(params) {
+    
+}
 
 async function getMedicalRecordByPatientId (req, res) {
     const { id } = req.params;
     try {
+        const user = storage.state.user;
         const { medicalRecords, profesional, speciality, profesion } = await getAllMedicalRecordsByPatientIdService(id);
 
         if (req.query.format === 'json') {
             res.json({ medicalRecords, speciality, profesion, profesional });
         }else{
-            res.render('medical-record-landing', { medicalRecords, speciality, profesion, profesional });
+            res.render('medical-record-landing', { medicalRecords, speciality, profesion, profesional, user:'' });
         }
        
     } catch (error) {
@@ -113,10 +126,44 @@ async function getMedicalRecordByPatientId (req, res) {
 
 async function getListAllMedicalRecord(req, res){
     try {
-        const userId = storage.state.user.id;
-        const { medicalRecords, profesional, speciality, profesion } = await getAllMedicalRecordsService(userId);
+        const user = storage.state.user;
+        
+        
+        if(user.rol === 'PACIENTE'){
+            const patientId = user.Patient.id;
+            const { medicalRecords, profesional, speciality, profesion } = await getAllMedicalRecordsByPatientIdService(patientId)
+            res.render('medical-record-landing',{ medicalRecords, speciality, profesion, profesional, user });
+            return;
+        }
+        const { medicalRecords, profesional, speciality, profesion } = await getAllMedicalRecordsService(user.id);
+        res.render('medical-record-landing',{ medicalRecords, speciality, profesion, profesional, user:'' });
+       
+    } catch (error) {
+        httpError(res, error);
+    }
+}
+
+async function getListAllMedicalRecordFilter(req, res){
+    try {
+        const user = storage.state.user;        
+
+        const filters = {
+            numberDocument: req.query.numberDocument || null,
+            prescriptionDate: req.query.prescriptionDate || null,
+            disease: req.query.disease || null
+        };
+
+        if(user.rol === 'PACIENTE'){
+            filters.numberDocument = user.Person.numberDocument;
+            user.id = '';
+        }
+
+        const { medicalRecords, profesional, speciality, profesion } = await getAllMedicalRecordsFilterService(user.id, filters);
             
-        res.render('medical-record-landing', { medicalRecords, speciality, profesion, profesional });
+        if(user.rol === 'PACIENTE'){
+             res.render('medical-record-landing',{ medicalRecords, speciality, profesion, profesional, user });
+        }
+        res.render('medical-record-landing',{ medicalRecords, speciality, profesion, profesional, user:'' });
        
     } catch (error) {
         httpError(res, error);
@@ -238,6 +285,7 @@ async function deleteMedicalRecord(req, res) {
 module.exports= { 
     medicalRecordNew,
     getListAllMedicalRecord,
+    getListAllMedicalRecordFilter,
     createMedicalRecord,
     updateMedicalRecord,
     deleteMedicalRecord,
