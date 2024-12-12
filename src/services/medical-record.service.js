@@ -1,6 +1,6 @@
-const { getPatientById } = require('../controllers/patient.controller');
+const { Op } = require('sequelize');
 const { Prescription, Medicine, Benefit, ConcentratedMedicine, QuantityMed, Section, Patient, PlanOS, SocialWork, User, PharmaForm, ComercialMedicine, FamilyMedicine, Person, Sickness, Profesional, Speciality, Profesion, sequelize } =  require('../models/index.models');
-const { getPatientByDniService, getPatientByIdService } = require('./patient.service');
+const { getPatientByIdService } = require('./patient.service');
 
 async function getAllMedicalRecordsService(userId) {
     try{
@@ -300,9 +300,7 @@ async function createMedicalRecordService(medicalRecordData){
         }
 
         let idPatient = prescriptionData['patientList'];
-     //   let documentPart = parts.length > 1 ? parts[1].trim() : null;
         const patient = await getPatientByIdService(idPatient);
-        //const patient = await getPatientByDniService(documentPart);
 
         if(!patient){
             throw new Error('Paciente no encontrado.');
@@ -359,10 +357,6 @@ async function updateMedicalRecordService(prescriptionId, medicalRecordData) {
                 modificationDate: new Date()
             }, { transaction });
         }
-
-        // let parts = prescriptionData['patientList'].split('-');
-        // let documentPart = parts.length > 1 ? parts[1].trim() : null;
-        // const patient = await getPatientByDniService(documentPart);
 
         let idPatient = Number(prescriptionData['patientList']);
         const patient = await getPatientByIdService(idPatient);
@@ -440,7 +434,144 @@ async function deleteMedicalRecordService(recordId) {
     }
 }
 
+async function getAllMedicalRecordsFilterService(userId, filters) {
+    try{
 
+        const whereConditions = {};
+
+        if (filters.numberDocument) {
+            whereConditions['$Patients.User.Person.numberDocument$'] = { [Op.like]: `%${filters.numberDocument}%` };
+        }
+
+        if (filters.prescriptionDate) {
+            whereConditions['prescriptionDate'] = {
+                [Op.gte]: `${filters.prescriptionDate} 00:00:00`,
+                [Op.lt]: `${filters.prescriptionDate} 23:59:59`
+            };
+        }
+
+        if (filters.disease) {
+            whereConditions['$Sicknesses.name$'] = { [Op.like]: `%${filters.disease}%` };
+        }
+
+        const medicalRecords  = await Prescription.findAll({
+            where: whereConditions,
+            include: [
+                {
+                    model: Benefit,
+                    as: 'Benefits',
+                    through: { attributes: [] }, 
+                    include: [{
+                        model: Section,
+                        as: 'Sections'
+                    }]
+                },
+                {   
+                    model: Medicine,
+                    include: [
+                        { model: ConcentratedMedicine, as: 'ConcentratedMedicines' },
+                        { model: QuantityMed, as: 'QuantityMeds' },
+                        { model: PharmaForm, as: 'PharmaForms' },
+                        { model: ComercialMedicine, as: 'ComercialMedicines' },
+                        { model: FamilyMedicine, as: 'FamilyMedicines' }
+                    ],
+                    through: { attributes: [] },
+                    as: 'Medicines'
+                },
+                {
+                    model: Patient,
+                    as: 'Patients',
+                    required:true,
+                    include: [
+                        {
+                            model: PlanOS,
+                            as: 'PlanOS',
+                            include: {
+                                model: SocialWork,
+                                as: 'SocialWork'
+                            }
+                        },
+                        {
+                            model: User,
+                            as: 'User',
+                            include: {
+                                model: Person,
+                                as: 'Person',
+                            }
+                        }
+                    ]
+                },
+                {
+                    model: Sickness,
+                    as: 'Sicknesses'
+                },
+                {
+                    model: Profesional,
+                    as: 'Profesionals',
+                    required: true,
+                    where: { userId: userId },
+                    include: [
+                        {
+                            model: Speciality,
+                            as: 'Speciality',
+                            include: {
+                                model: Profesion,
+                                as: 'Profesion'
+                            }
+                        },
+                        {
+                            model: User,
+                            as: 'User',
+                            include: {
+                                model: Person,
+                                as: 'Person',
+                            }
+                        }
+                    ]
+                }
+            ]
+        })
+    
+        const profesional = await Profesional.findOne({
+            where: {userId},
+            include: [
+                {
+                    model: Speciality,
+                    as: 'Speciality'
+                },
+                {
+                    model: User,
+                    as: 'User',
+                    include: {
+                        model: Person,
+                        as: 'Person',
+                    }
+                }
+            ]
+        })
+
+        var speciality = null;
+        var profesion = null;
+        if (profesional) {
+            speciality = profesional.dataValues.Speciality.dataValues;
+        
+            profesion = speciality && speciality.profesionId
+            ? await Profesion.findOne({ where: { id: speciality.profesionId } })
+            : null;
+
+            speciality = profesional.dataValues.Speciality.dataValues;
+        
+            profesion = speciality && speciality.profesionId
+            ? await Profesion.findOne({ where: { id: speciality.profesionId } })
+            : null;
+        }
+    
+        return { medicalRecords, profesional, speciality, profesion };
+    } catch (error) {
+        throw error;
+    }
+    
+}
 
 module.exports = { 
     getAllMedicalRecordsService,
@@ -448,5 +579,6 @@ module.exports = {
     updateMedicalRecordService,
     getMedicalRecordByIdService,
     deleteMedicalRecordService,
-    getAllMedicalRecordsByPatientIdService
+    getAllMedicalRecordsByPatientIdService,
+    getAllMedicalRecordsFilterService
 }

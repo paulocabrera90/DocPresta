@@ -10,6 +10,24 @@ block content
                 button(onclick="location.href='/api/medical-record/generate-pdf'" class="btn btn-primary")
                     | Descargar PDF
         hr(style="margin-top: 20px; margin-bottom: 20px;")
+
+        // Formulario de Filtro
+        .filter-section.mb-4
+            form(method="GET" action="/api/medical-record/filter")
+                .row
+                    .col-md-3
+                        label(for="filternumberDocument") Numero Documento
+                        input#dni.form-control(type="text" name="numberDocument" placeholder="Numero documento")
+                    .col-md-3
+                        label(for="filterDate") Fecha de Prescripción
+                        input#filterDate.form-control(type="date" name="prescriptionDate")
+                    .col-md-3
+                        label(for="filterDisease") Enfermedad
+                        input#filterDisease.form-control(type="text" name="disease" placeholder="Nombre de la enfermedad")
+                    .col-md-3
+                        label(for="filterSubmit") &nbsp;
+                        button#filterSubmit.btn.btn-primary(type="submit") Filtrar
+
         if profesional
             .professional-info
                 if profesional.User.rol == 'ADMIN'
@@ -29,7 +47,8 @@ block content
                 h3 Informacion de Registros Medicos
                 each record in medicalRecords
                     .card
-                        .card-header #{record.Patients.User.Person.firstName} #{record.Patients.User.Person.lastName}
+                        .card-header 
+                            strong #{record.Patients.User.Person.firstName} #{record.Patients.User.Person.lastName} - #{record.Patients.User.Person.typeDocument}: #{record.Patients.User.Person.numberDocument}
                         .card-body
                             p
                                 strong Fecha de la Prescripción: 

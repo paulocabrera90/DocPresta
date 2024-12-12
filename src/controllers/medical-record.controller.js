@@ -3,7 +3,7 @@ const { httpError } = require('../helpers/handleError');
 const { where } = require('sequelize');
 const storage = require('../storage/session');
 const PDFDocument = require('pdfkit');
-const { getAllMedicalRecordsService, createMedicalRecordService, updateMedicalRecordService, deleteMedicalRecordService, getMedicalRecordByIdService, getAllMedicalRecordsByPatientIdService } = require('../services/medical-record.service');
+const { getAllMedicalRecordsService, createMedicalRecordService, updateMedicalRecordService, deleteMedicalRecordService, getMedicalRecordByIdService, getAllMedicalRecordsByPatientIdService, getAllMedicalRecordsFilterService } = require('../services/medical-record.service');
 const { getListAllPatients } = require('./patient.controller');
 const { getListAllPatientsService } = require('../services/patient.service');
 const { getFindAllSections } = require('../services/benefit.service');
@@ -115,6 +115,24 @@ async function getListAllMedicalRecord(req, res){
     try {
         const userId = storage.state.user.id;
         const { medicalRecords, profesional, speciality, profesion } = await getAllMedicalRecordsService(userId);
+            
+        res.render('medical-record-landing', { medicalRecords, speciality, profesion, profesional });
+       
+    } catch (error) {
+        httpError(res, error);
+    }
+}
+
+async function getListAllMedicalRecordFilter(req, res){
+    try {
+        const userId = storage.state.user.id;
+        const filters = {
+            numberDocument: req.query.numberDocument || null,
+            prescriptionDate: req.query.prescriptionDate || null,
+            disease: req.query.disease || null
+        };
+
+        const { medicalRecords, profesional, speciality, profesion } = await getAllMedicalRecordsFilterService(userId, filters);
             
         res.render('medical-record-landing', { medicalRecords, speciality, profesion, profesional });
        
@@ -238,6 +256,7 @@ async function deleteMedicalRecord(req, res) {
 module.exports= { 
     medicalRecordNew,
     getListAllMedicalRecord,
+    getListAllMedicalRecordFilter,
     createMedicalRecord,
     updateMedicalRecord,
     deleteMedicalRecord,
