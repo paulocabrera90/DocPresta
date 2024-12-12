@@ -185,6 +185,11 @@ async function deleteMedicineService(id, transaction) {
         if (!medicine) {
             throw new Error('Medicine not found');
         }
+
+         // Check if the medicine is used in any prescriptions.
+         if (medicine.Prescriptions && medicine.Prescriptions.length > 0) {
+            throw new Error('No se puede eliminar el medicamento ya que está siendo utilizado en prescripciones');
+        }
     
         await medicine.setConcentratedMedicines([], { transaction });
         await medicine.setQuantityMeds([], { transaction });

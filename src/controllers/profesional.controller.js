@@ -1,10 +1,12 @@
 const { httpError } = require('../helpers/handleError');
-const { Profesional, Speciality, User, Person, sequelize, Profesion } = require('../models/index.models');
+const { Profesional, Speciality, User, Person, sequelize, Profesion, Prescription } = require('../models/index.models');
 const { mapProfesionalData } = require('../models/mappers/profesional.mapper');
 const { encrypt } = require('../utils/handleBcrypt');
 
+
 async function getListAllProfesional(req, res){
     try {
+        
         const profesional = await Profesional.findAll({
             include: [
                 {
@@ -27,6 +29,10 @@ async function getListAllProfesional(req, res){
         });
 
         const listMapProfesional = profesional.map(mapProfesionalData);
+
+        // if (hasPassedThreshold()) {
+        //     return res.status(404).json({ message: 'El profesional' });
+        // }    
 
         res.render('profesional-landing', { profesionals: listMapProfesional });       
 
@@ -61,7 +67,7 @@ async function getProfesionalById(req, res){
         });
 
         if (!profesional || !profesional.User || !profesional.User.Person) {
-            return res.status(404).json({ message: 'Profesional not found' });
+            return res.status(404).json({ message: 'Profesional no encontrado' });
         }
         // res.json({
         //     profes:mapProfesionalData(profesional), 
@@ -116,7 +122,7 @@ async function getProfesionalByUserId(req, res){
         });
 
         if (!profesional || !profesional.User || !profesional.User.Person) {
-            return res.status(404).json({ message: 'Profesional not found' });
+            return res.status(404).json({ message: 'Profesional no encontrado' });
         }
 
         if (!profesional) {
@@ -199,7 +205,7 @@ async function createProfesional(req, res) {
 
         await transaction.commit();
         console.log("Create professional successfully")
-        res.status(200).json({message: "Create professional successfully"});
+        res.status(200).json({message: "Profesional creado correctamente"});
     } catch (error) {
         await transaction.rollback();
         httpError(res, error);
@@ -216,11 +222,20 @@ async function deleteProfesional(req, res) {
 
         const existingProfesional = await Profesional.findOne({
             where: { id },
-            transaction
-        });
+            transaction            
+        });        
 
         if (!existingProfesional) {
-            throw new Error('Profesional not found');
+            throw new Error('Profesional no encontrado');
+        }
+
+        const existingPrescription = await Prescription.findOne({
+            where: { profesionalId: existingProfesional.id },
+            transaction            
+        });
+
+        if (existingPrescription) {
+            throw new Error('Profesional tiene asociado prescripciones.');
         }
 
         const existingUser = await User.findOne({
@@ -228,7 +243,7 @@ async function deleteProfesional(req, res) {
         }, { transaction });
 
         if (!existingUser) {
-            throw new Error('User not found');
+            throw new Error('Usuario no encontrado');
         }
 
         const existingPerson = await Person.findOne({
@@ -344,6 +359,8 @@ async function updateProfesional(req, res) {
         httpError(res, error);
     }
 }
+
+
 
 module.exports= { 
     getListAllProfesional,

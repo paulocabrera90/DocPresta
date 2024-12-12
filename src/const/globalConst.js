@@ -7,5 +7,6 @@ module.exports = {
     APPLICATION_NAME: process.env.APPLICATION_NAME,
     JWT_SECRET: process.env.JWT_SECRET,
     TIME_SESSION: process.env.TIME_SESSION,
+    EXPIRATION_PROFESIONAL: process.env.EXPIRATION_PROFESIONAL,
     JOIN: path.join
 }

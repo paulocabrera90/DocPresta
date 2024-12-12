@@ -6,13 +6,15 @@ block content
             .title-header-cards
                 h1 Lista de Profesionales
             .buttons-header
-                a(href="/api/profesional/new" id="newElementCard" class="btn btn-success") Nuevo
+                a(href="/api/profesional/new" id="newElementProfesional" class="btn btn-success") Nuevo
         hr(style="margin-top: 20px; margin-bottom: 20px;")
 
         if profesionals.length > 0
+            p(class='alert-background')
+                | <strong >Aviso: El profesional esta inactivo por favor actualice.</strong>
             container-card
                 each prof in profesionals
-                    .card
+                    .card(class= !prof.profesionalInactive ? '' : 'alert-background')
                         .card-header #{prof.firstName} #{prof.lastName} - ID REFEPS: #{prof.idREFEPS}
                         .card-body
                             p

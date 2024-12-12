@@ -1,1 +1,26 @@
-{ "token": "", "user": "" }
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjgsInJvbCI6IkFETUlOIiwiZW1haWwiOiJwYXVsb2NAZ21haWwuY29tIiwic3RhdGUiOnRydWUsImlhdCI6MTczMzk3ODUzMiwiZXhwIjoxNzMzOTgyMTMyfQ.QiIZhR3_yXAMfAD4pQ4CnUTbJSGXMPQvUzUOSY-19nM",
+    "user": {
+        "id": 28,
+        "username": "pauloc",
+        "hashPassword": "$2a$10$Ap9SF4uShR.YiHsVqHVIHOx1AaPXxGiAHeyJ1R4.hFEptoOBcLSVu",
+        "rol": "ADMIN",
+        "email": "pauloc@gmail.com",
+        "state": true,
+        "creationDate": "2024-12-11T14:18:15.000Z",
+        "modificationDate": "2024-12-11T14:18:15.000Z",
+        "personId": 60,
+        "Person": {
+            "id": 60,
+            "firstName": "Paulo",
+            "lastName": "Cabrera",
+            "birthDate": "1990-01-31T00:00:00.000Z",
+            "numberDocument": "35104988",
+            "typeDocument": "DNI",
+            "sex": "Masculino",
+            "state": true,
+            "creationDate": "2016-02-11T00:00:00.000Z",
+            "ModificationDate": "2016-02-11T00:00:00.000Z"
+        }
+    }
+}

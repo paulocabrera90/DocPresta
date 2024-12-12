@@ -1,9 +1,9 @@
 function mapMedicineToItems(medicine) {  
     return medicine.ConcentratedMedicines.map((cm, index) => {
-        const pharmaForm = medicine.PharmaForms[index] || { name: "Unknown" };
-        const quantityMed = medicine.QuantityMeds[index] || { quantity: "Unknown" };
-        const comercialMedicine = medicine.ComercialMedicines[index] || { name: "Unknown" };
-        const familyMedicine = medicine.FamilyMedicines[index] || { name: "Unknown" };
+        const pharmaForm = medicine.PharmaForms[index] || { name: "Desconocido" };
+        const quantityMed = medicine.QuantityMeds[index] || { quantity: "Desconocido" };
+        const comercialMedicine = medicine.ComercialMedicines[index] || { name: "Desconocido" };
+        const familyMedicine = medicine.FamilyMedicines[index] || { name: "Desconocido" };
 
         return {
             quantityId: cm.quantity.toString(),
