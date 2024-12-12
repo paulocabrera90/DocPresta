@@ -1,7 +1,8 @@
 
 const { loginError } = require('../helpers/handleError');
-const { User, Person } = require('../models/index.models');
+const { User, Person, Patient, Profesional} = require('../models/index.models');
 const storage = require('../storage/session');
+const { hasPassedThreshold } = require('../utils/expirationDateProfesional');
 const { tokenSign } = require('../utils/generateToken');
 const { compare } = require('../utils/handleBcrypt');
 
@@ -14,6 +15,14 @@ async function login(email, password) {
                 {
                     model: Person,
                     as: 'Person'
+                },
+                {
+                    model: Patient,
+                    as: 'Patient'
+                },
+                {
+                    model: Profesional,
+                    as: 'Profesionals'
                 }
             ]
         });
@@ -26,6 +35,10 @@ async function login(email, password) {
     
         if (!checkPassword) {
             throw new loginError(422, 'CREDENTIALS_INCORRECT', 'Credenciales incorrectas');
+        }
+
+        if(user.rol==='PROFESIONAL' && hasPassedThreshold(user.Profesionals.creationDate)){
+            throw new loginError(422, 'CREDENTIALS_INCORRECT', 'Su cuenta como profesional está caducada. Por favor, contacte al administrador para renovar su registro o actualizar su información.');
         }
     
         const tokenSession = await tokenSign(user);

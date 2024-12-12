@@ -436,7 +436,149 @@ async function deleteMedicalRecordService(recordId) {
 
 async function getAllMedicalRecordsFilterService(userId, filters) {
     try{
+        const whereConditions = {};
+        const whereUserId = {};
 
+        if (filters.numberDocument) {
+            whereConditions['$Patients.User.Person.numberDocument$'] = { [Op.like]: `%${filters.numberDocument}%` };
+        }
+
+        if (filters.prescriptionDate) {
+            whereConditions['prescriptionDate'] = {
+                [Op.gte]: `${filters.prescriptionDate} 00:00:00`,
+                [Op.lt]: `${filters.prescriptionDate} 23:59:59`
+            };
+        }
+
+        if (filters.disease) {
+            whereConditions['$Sicknesses.name$'] = { [Op.like]: `%${filters.disease}%` };
+        }
+
+        if (userId) {
+            whereUserId['userId'] = userId;
+        }
+
+        const medicalRecords  = await Prescription.findAll({
+            where: whereConditions,
+            include: [
+                {
+                    model: Benefit,
+                    as: 'Benefits',
+                    through: { attributes: [] }, 
+                    include: [{
+                        model: Section,
+                        as: 'Sections'
+                    }]
+                },
+                {   
+                    model: Medicine,
+                    include: [
+                        { model: ConcentratedMedicine, as: 'ConcentratedMedicines' },
+                        { model: QuantityMed, as: 'QuantityMeds' },
+                        { model: PharmaForm, as: 'PharmaForms' },
+                        { model: ComercialMedicine, as: 'ComercialMedicines' },
+                        { model: FamilyMedicine, as: 'FamilyMedicines' }
+                    ],
+                    through: { attributes: [] },
+                    as: 'Medicines'
+                },
+                {
+                    model: Patient,
+                    as: 'Patients',
+                    required:true,
+                    include: [
+                        {
+                            model: PlanOS,
+                            as: 'PlanOS',
+                            include: {
+                                model: SocialWork,
+                                as: 'SocialWork'
+                            }
+                        },
+                        {
+                            model: User,
+                            as: 'User',
+                            include: {
+                                model: Person,
+                                as: 'Person',
+                            }
+                        }
+                    ]
+                },
+                {
+                    model: Sickness,
+                    as: 'Sicknesses'
+                },
+                {
+                    model: Profesional,
+                    as: 'Profesionals',
+                    required: true,
+                    where: whereUserId,
+                    include: [
+                        {
+                            model: Speciality,
+                            as: 'Speciality',
+                            include: {
+                                model: Profesion,
+                                as: 'Profesion'
+                            }
+                        },
+                        {
+                            model: User,
+                            as: 'User',
+                            include: {
+                                model: Person,
+                                as: 'Person',
+                            }
+                        }
+                    ]
+                }
+            ]
+        })
+    
+        const profesional = await Profesional.findOne({
+            where: {userId},
+            include: [
+                {
+                    model: Speciality,
+                    as: 'Speciality'
+                },
+                {
+                    model: User,
+                    as: 'User',
+                    include: {
+                        model: Person,
+                        as: 'Person',
+                    }
+                }
+            ]
+        })
+
+        var speciality = null;
+        var profesion = null;
+        if (profesional) {
+            speciality = profesional.dataValues.Speciality.dataValues;
+        
+            profesion = speciality && speciality.profesionId
+            ? await Profesion.findOne({ where: { id: speciality.profesionId } })
+            : null;
+
+            speciality = profesional.dataValues.Speciality.dataValues;
+        
+            profesion = speciality && speciality.profesionId
+            ? await Profesion.findOne({ where: { id: speciality.profesionId } })
+            : null;
+        }
+    
+        return { medicalRecords, profesional, speciality, profesion };
+    } catch (error) {
+        throw error;
+    }
+    
+}
+
+async function getAllMedicalRecordsFilterByPatientService(userId, filters) {
+    try{
         const whereConditions = {};
 
         if (filters.numberDocument) {
@@ -509,7 +651,6 @@ async function getAllMedicalRecordsFilterService(userId, filters) {
                     model: Profesional,
                     as: 'Profesionals',
                     required: true,
-                    where: { userId: userId },
                     include: [
                         {
                             model: Speciality,
@@ -580,5 +721,6 @@ module.exports = {
     getMedicalRecordByIdService,
     deleteMedicalRecordService,
     getAllMedicalRecordsByPatientIdService,
-    getAllMedicalRecordsFilterService
+    getAllMedicalRecordsFilterService,
+    getAllMedicalRecordsFilterByPatientService
 }

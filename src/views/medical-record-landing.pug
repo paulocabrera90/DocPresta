@@ -5,19 +5,22 @@ block content
         header
             .title-header-cards
                 h1 Lista de Registros Médicos
-            .buttons-header                
-                a(href="/api/medical-record/new" id="newElementMedicalRecord" class="btn btn-success") Nuevo
-                button(onclick="location.href='/api/medical-record/generate-pdf'" class="btn btn-primary")
-                    | Descargar PDF
+            .buttons-header
+                if !user
+                    a(href="/api/medical-record/new" id="newElementMedicalRecord" class="btn btn-success" ) Nuevo
+                    button(onclick="location.href='/api/medical-record/generate-pdf'" class="btn btn-primary" )
+                        | Descargar PDF
+
         hr(style="margin-top: 20px; margin-bottom: 20px;")
 
         // Formulario de Filtro
         .filter-section.mb-4
             form(method="GET" action="/api/medical-record/filter")
                 .row
-                    .col-md-3
-                        label(for="filternumberDocument") Numero Documento
-                        input#dni.form-control(type="text" name="numberDocument" placeholder="Numero documento")
+                    if !user 
+                        .col-md-3
+                            label(for="filternumberDocument" visible) Numero Documento
+                            input#dni.form-control(type="text" name="numberDocument" placeholder="Numero documento")
                     .col-md-3
                         label(for="filterDate") Fecha de Prescripción
                         input#filterDate.form-control(type="date" name="prescriptionDate")
@@ -40,6 +43,22 @@ block content
                     p Role: #{profesional.User.rol}
                     p Email: #{profesional.User.email}
                     p REFEPS: #{profesional.idREFEPS}
+        if user 
+            .professional-info
+                    h3 Información del Paciente
+                    h4 #{user.Person.firstName} #{user.Person.lastName}
+                    p 
+                        strong Correo Electrónico: 
+                        | #{user.email}
+                    p 
+                        strong Documento: 
+                        | #{user.Person.typeDocument} - #{user.Person.numberDocument}
+                    p 
+                        strong Sexo: 
+                        | #{user.Person.sex}
+                    p 
+                        strong Fecha de Nacimiento: 
+                        | #{new Date(user.Person.birthDate).toLocaleDateString()}
 
         hr(style="margin-top: 20px; margin-bottom: 20px;")        
         if medicalRecords.length>0
@@ -73,10 +92,11 @@ block content
                                         strong Forma: 
                                         | #{medicine.PharmaForms.map(form => form.name).join(", ")}
                         .card-footer
-                            a(href=`/api/medical-record/${record.id}` class="btn btn-secondary") Editar
+                            a(href=`/api/medical-record/${record.id}` class="btn btn-secondary") #{!user ? 'Editar' : 'Ver'}
 
-                            form(id='formDeleteCard' data-id=record.id data-module="medical-record")
-                                button(id='btnFormDeleteCard' type='submit' class="btn btn-danger" onclick="confirmDelete(event)") Eliminar
+                            if !user
+                                form(id='formDeleteCard' data-id=record.id data-module="medical-record")
+                                    button(id='btnFormDeleteCard' type='submit' class="btn btn-danger" onclick="confirmDelete(event)" ) Eliminar
         
         else
             .alert.alert-warning.text-center(role='alert')

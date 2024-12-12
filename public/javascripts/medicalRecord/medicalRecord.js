@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-
+    
     const newElement = document.getElementById('newElementMedicalRecord');
     if (newElement) {
         newElement.addEventListener('click', function(event) {
