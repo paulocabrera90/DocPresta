@@ -37,7 +37,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
         setTimeout(() => {
           showSpinner(false);
-          window.location.href = `/api/home`;
+          if(data.userData.rol === 'ADMIN'){
+            window.location.href = `/api/admin`;
+          }else{
+            window.location.href = `/api/home`;
+          }
         }, 4000);
 
       } catch (error) {

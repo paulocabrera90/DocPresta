@@ -8,16 +8,16 @@ var router = express.Router();
 
 router.get('/', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), getListAllPatients);
 
-router.get('/new', checkAuth,checkRoleAuth(['ADMIN','PROFESIONAL']), newPatient);
+router.get('/new', checkAuth,checkRoleAuth(['ADMIN']), newPatient);
 
-router.post('/create', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), createPatient);
+router.post('/create', checkAuth, checkRoleAuth(['ADMIN']), createPatient);
 
 router.get('/:id', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), getPatientById);
 
 router.get('/dni/:dni', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']), getPatientByDni);
 
-router.patch('/update/:id', checkAuth, checkRoleAuth(['ADMIN','PROFESIONAL']),  updatePatient);
+router.patch('/update/:id', checkAuth, checkRoleAuth(['ADMIN']),  updatePatient);
 
-router.delete('/:id',checkAuth, checkRoleAuth(['ADMIN', 'PROFESIONAL']), deletePatient);
+router.delete('/:id',checkAuth, checkRoleAuth(['ADMIN']), deletePatient);
 
 module.exports = router;

@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
         try {
             if (userData.rol === 'ADMIN') {
                 linksList = [
-                    { href: "/api/home", id: "lista-prescripcion-sidenav", text: "Prescripciones" },
+                    { href: "/api/admin", id: "lista-administrador-sidenav", text: "Administrador" },
                     { href: "/api/benefit", id: "prestaciones-sidenav", text: "Prestaciones" },
                     { href: "/api/medicine", id: "medicamentos-sidenav", text: "Medicamentos" },
                     { href: "/api/profesional", id: "profesionales-sidenav", text: "Profesionales" },

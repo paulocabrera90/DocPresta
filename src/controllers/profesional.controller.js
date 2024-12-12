@@ -360,8 +360,6 @@ async function updateProfesional(req, res) {
     }
 }
 
-
-
 module.exports= { 
     getListAllProfesional,
     createProfesional,

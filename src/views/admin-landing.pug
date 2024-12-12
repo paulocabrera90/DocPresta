@@ -1,0 +1,52 @@
+extends home
+
+block content
+    container-admin-list
+        header
+            .title-header-cards
+                h1  Panel de Administración
+
+        hr(style="margin-top: 20px; margin-bottom: 20px;")
+        p.text-muted.text-center El proyecto consiste en desarrollar una solución web que permita a los médicos gestionar recetas electrónicas cumpliendo con la reglamentación oficial. La aplicación debe ofrecer herramientas para que los profesionales autenticados puedan registrar, modificar y emitir prescripciones que incluyan medicamentos, diagnósticos y prestaciones médicas. Además, deberá incluir funcionalidades para gestionar profesionales, integrar con el registro nacional de salud (REFEPS), y administrar un catálogo de medicamentos, garantizando precisión y cumplimiento de las normativas. La aplicación priorizará la agilidad, facilidad de uso y presentación adecuada de las prescripciones.
+        br
+        hr(style="margin-top: 20px; margin-bottom: 20px;")
+        container-lists
+            if patients.length > 0
+                container-card
+                        .card
+                            .card-header Pacientes
+                            .card-body
+                                p.card-text Actualmente hay #{patients.length} pacientes registrados.
+                                ul.list-group
+                                    each patient in patients.slice(0, 3)
+                                        li.list-group-item #{patient.firstName} #{patient.lastName} - #{patient.age} - Obra social: #{patient.socialWorkName} - Plan: #{patient.planOSName}
+                                a.btn.btn-primary.mt-3(href="/api/patient") Ver todos los pacientes
+                        
+                            .card-footer
+                                strong Última actualización: #{new Date().toLocaleDateString()}
+                                a.btn.btn-sm.btn-success.float-end(href="/api/patient/new") Agregar nuevo
+            else
+                .alert.alert-warning.text-center(role='alert')
+                    i.fas.fa-exclamation-triangle.fa-2x
+                    h4 No hay Pacientes disponibles.
+                    p Por favor, regrese más tarde o contacte al administrador del sistema.
+        
+            if profesionals.length > 0
+                container-card
+                        .card
+                            .card-header Profesionales
+                            .card-body
+                                p.card-text Actualmente hay #{profesionals.length} profesionales registrados.
+                                ul.list-group
+                                    each profesional in profesionals.slice(0, 3)
+                                      li.list-group-item #{profesional.firstName} #{profesional.lastName} - #{profesional.profesionName} - Situacion: #{profesional.profesionalInactive ? 'Inactivo' : 'Activo'}
+                                a.btn.btn-primary.mt-3(href="/api/profesional") Ver todos los profesionales
+                        
+                            .card-footer
+                                strong Última actualización: #{new Date().toLocaleDateString()}
+                                a.btn.btn-sm.btn-success.float-end(href="/api/profesional/new") Agregar nuevo
+            else
+                .alert.alert-warning.text-center(role='alert')
+                    i.fas.fa-exclamation-triangle.fa-2x
+                    h4 No hay Profesionales disponibles.
+                    p Por favor, regrese más tarde o contacte al administrador del sistema.
