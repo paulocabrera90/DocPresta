@@ -24,6 +24,11 @@ async function getMedicineByIdController(req, res) {
                 ...result,
                 ...result.dropdownData
             });
+            // res.json( {
+            //     ...result,
+            //     ...result.dropdownData
+            // });
+            
         } catch (error) {
             httpError(res, error);
         }

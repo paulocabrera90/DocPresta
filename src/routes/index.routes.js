@@ -12,6 +12,7 @@ const { goHome } = require("../controllers/home.controller");
 const checkAuth = require("../middleware/auth.middle");
 const storage = require("../storage/session");
 const { verifyToken } = require("../utils/generateToken");
+const { goAdmin } = require("../controllers/admin.controller");
 
 const routes_init = () => {
   const router = Router();
@@ -25,6 +26,8 @@ const routes_init = () => {
   router.use('/medicine', medicineRoutes);
 
   router.get('/home', checkAuth, goHome);
+
+  router.get('/admin', checkAuth, goAdmin);
 
   router.use('/logout', async (req, res) => { 
 
@@ -43,9 +46,14 @@ const routes_init = () => {
 
   router.use('/', async  (req, res) => {
       const very = await verifyToken(storage.state.token)
-        console.log("login", very)
+        
+      console.log("login", very)
         if(very && very.id){
-          res.redirect('/api/medical-record');  
+          if(very.rol === 'ADMIN'){
+            res.redirect('/api/admin');  
+          }else{
+            res.redirect('/api/medical-record');  
+          }
         } else {
           res.render('login');
         }

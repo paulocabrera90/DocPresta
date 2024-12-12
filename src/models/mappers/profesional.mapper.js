@@ -1,3 +1,5 @@
+const { hasPassedThreshold } = require("../../utils/expirationDateProfesional");
+
 const mapProfesionalData = (originalObject) => {
     return {
         id: originalObject.id,
@@ -20,7 +22,8 @@ const mapProfesionalData = (originalObject) => {
         username: originalObject.User.username,
         userRole: originalObject.User.rol,
         profesionId: originalObject.Speciality.profesionId,
-        specialityId: originalObject.specialityId
+        specialityId: originalObject.specialityId,
+        profesionalInactive: hasPassedThreshold(originalObject.creationDate)
     };
 };
 

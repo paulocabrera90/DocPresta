@@ -20,7 +20,7 @@ const checkRoleAuth = (roles, flagBo) => async (req, res, next) => {
     } catch (e) {
         console.log(e)
         res.status(401)
-        res.send({ error: 'El usuario no tiene permisos.' })
+        res.send({ error: 'El usuario no tiene permisos. Error:' + e.message })
     }
 }
 
